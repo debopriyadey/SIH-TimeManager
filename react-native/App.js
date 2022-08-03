@@ -1,44 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Image } from 'react-native';
-import Onboarding from 'react-native-onboarding-swiper';
+import 'react-native-gesture-handler';
+import React, {useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import OnboardingScreen from './screens/OnboardingScreen';
+import HomeScreen from './screens/HomeScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const Stack = createStackNavigator();
 
+const App = () => {
+  const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(true);
 
+  // useEffect(() => {
+  //   async function setData () {
+  //     const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+  //     if (appData == null) {
+  //       setIsAppFirstLaunched(true);
+  //       AsyncStorage.setItem('isAppFirstLaunched', 'false');
+  //     } else {
+  //       setIsAppFirstLaunched(false);
+  //     }
+  //   }
+  
+  //   setData()
+  // }, [])
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-     <Onboarding
-  pages={[
-    {
-      backgroundColor: '#fff',
-      image: <Image source={require('./assets/favicon.png')} />,
-      title: 'Onboarding',
-      subtitle: 'Done with React Native Onboarding Swiper',
-    },
-    {
-      backgroundColor: '#fff',
-      image: <Image source={require('./assets/adaptive-icon.png')} />,
-      title: 'Onboarding',
-      subtitle: 'Done with React Native Onboarding Swiper',
-    },
-    {
-      backgroundColor: '#fff',
-      image: <Image source={require('./assets/icon.png')} />,
-      title: 'Onboarding',
-      subtitle: 'Done with React Native Onboarding Swiper',
+  React.useEffect(async () => {
+    const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+    if (appData == null) {
+      setIsAppFirstLaunched(true);
+      AsyncStorage.setItem('isAppFirstLaunched', 'false');
+    } else {
+      setIsAppFirstLaunched(false);
     }
-  ]}
-/>
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    // AsyncStorage.removeItem('isAppFirstLaunched');
+  }, []);
+  
+  return (
+    isAppFirstLaunched != null && (
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          {isAppFirstLaunched && (
+            <Stack.Screen
+              name="OnboardingScreen"
+              component={OnboardingScreen}
+            />
+          )}
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  );
+};
+
+export default App;
