@@ -12,9 +12,9 @@ import {
     StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
+import {LinearGradient} from 'expo-linear-gradient';
+//  import FontAwesome from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf';
+// import Feather from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf';
 
 const SignInScreen = ({navigation}) => {
 
@@ -84,11 +84,11 @@ const SignInScreen = ({navigation}) => {
             <ScrollView>
             <Text style={styles.text_footer}>Username</Text>
             <View style={styles.action}>
-                <FontAwesome 
+                {/* <FontAwesome 
                     name="user-o"
                     color="#05375a"
                     size={20}
-                />
+                /> */}
                 <TextInput 
                     placeholder="Your Username"
                     style={styles.textInput}
@@ -99,11 +99,11 @@ const SignInScreen = ({navigation}) => {
                 <Animatable.View
                     animation="bounceIn"
                 >
-                    <Feather 
+                    {/* <Feather 
                         name="check-circle"
                         color="green"
                         size={20}
-                    />
+                    /> */}
                 </Animatable.View>
                 : null}
             </View>
@@ -112,11 +112,11 @@ const SignInScreen = ({navigation}) => {
                 marginTop: 35
             }]}>Password</Text>
             <View style={styles.action}>
-                <Feather 
+                {/* <Feather 
                     name="lock"
                     color="#05375a"
                     size={20}
-                />
+                /> */}
                 <TextInput 
                     placeholder="Your Password"
                     secureTextEntry={data.secureTextEntry ? true : false}
@@ -128,17 +128,8 @@ const SignInScreen = ({navigation}) => {
                     onPress={updateSecureTextEntry}
                 >
                     {data.secureTextEntry ? 
-                    <Feather 
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                    />
-                    :
-                    <Feather 
-                        name="eye"
-                        color="grey"
-                        size={20}
-                    />
+                    <Text > eye</Text>: <Text > eye-off</Text>
+                    
                     }
                 </TouchableOpacity>
             </View>
@@ -147,11 +138,11 @@ const SignInScreen = ({navigation}) => {
                 marginTop: 35
             }]}>Confirm Password</Text>
             <View style={styles.action}>
-                <Feather 
+                {/* <Feather 
                     name="lock"
                     color="#05375a"
                     size={20}
-                />
+                /> */}
                 <TextInput 
                     placeholder="Confirm Your Password"
                     secureTextEntry={data.confirm_secureTextEntry ? true : false}
@@ -163,17 +154,7 @@ const SignInScreen = ({navigation}) => {
                     onPress={updateConfirmSecureTextEntry}
                 >
                     {data.secureTextEntry ? 
-                    <Feather 
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                    />
-                    :
-                    <Feather 
-                        name="eye"
-                        color="grey"
-                        size={20}
-                    />
+                    <Text > eye-off</Text>: <Text > eye</Text>
                     }
                 </TouchableOpacity>
             </View>

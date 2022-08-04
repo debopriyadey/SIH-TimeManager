@@ -10,9 +10,9 @@ import {
     Alert
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
+import {LinearGradient} from 'expo-linear-gradient';
+// //  import FontAwesome from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf';
+//// import Feather from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf';
 
 import { useTheme } from 'react-native-paper';
 
@@ -128,11 +128,11 @@ const SignInScreen = ({navigation}) => {
                 color: colors.text
             }]}>Username</Text>
             <View style={styles.action}>
-                <FontAwesome 
+                {/* <FontAwesome 
                     name="user-o"
                     color={colors.text}
                     size={20}
-                />
+                /> */}
                 <TextInput 
                     placeholder="Your Username"
                     placeholderTextColor="#666666"
@@ -147,11 +147,11 @@ const SignInScreen = ({navigation}) => {
                 <Animatable.View
                     animation="bounceIn"
                 >
-                    <Feather 
+                    {/* <Feather 
                         name="check-circle"
                         color="green"
                         size={20}
-                    />
+                    /> */}
                 </Animatable.View>
                 : null}
             </View>
@@ -167,11 +167,11 @@ const SignInScreen = ({navigation}) => {
                 marginTop: 35
             }]}>Password</Text>
             <View style={styles.action}>
-                <Feather 
+                {/* <Feather 
                     name="lock"
                     color={colors.text}
                     size={20}
-                />
+                /> */}
                 <TextInput 
                     placeholder="Your Password"
                     placeholderTextColor="#666666"
@@ -186,18 +186,8 @@ const SignInScreen = ({navigation}) => {
                     onPress={updateSecureTextEntry}
                 >
                     {data.secureTextEntry ? 
-                    <Feather 
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                    />
-                    :
-                    <Feather 
-                        name="eye"
-                        color="grey"
-                        size={20}
-                    />
-                    }
+                    <Text > eye-off</Text> : <Text > eye</Text>}
+                  
                 </TouchableOpacity>
             </View>
             { data.isValidPassword ? null : 

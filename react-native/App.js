@@ -1,19 +1,31 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DrawerContent } from './screens/DrawerContent';
+
 import MainTabScreen from './screens/MainTabScreen';
 import SupportScreen from './screens/SupportScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import BookmarkScreen from './screens/BookmarkScreen';
 import { AuthContext } from './components/context';
 import RootStackScreen from './screens/RootStackScreen';
+import { 
+  NavigationContainer, 
+  DefaultTheme as NavigationDefaultTheme,
+  DarkTheme as NavigationDarkTheme
+} from '@react-navigation/native';
 
-const Stack = createStackNavigator();
+import { 
+  Provider as PaperProvider, 
+  DefaultTheme as PaperDefaultTheme,
+  DarkTheme as PaperDarkTheme 
+} from 'react-native-paper';
 
+const Drawer = createDrawerNavigator();
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
 
@@ -126,15 +138,6 @@ const App = () => {
       }
       // console.log('user token: ', userToken);
       dispatch({ type: 'RETRIEVE_TOKEN', token: userToken });
-
-      const appData = await AsyncStorage.getItem('isAppFirstLaunched');
-      if (appData === null) {
-        await AsyncStorage.setItem('isAppFirstLaunched', 'true');
-        setIsAppFirstLaunched(true);
-      } else {
-        await AsyncStorage.setItem('isAppFirstLaunched', 'false');
-        setIsAppFirstLaunched(false);
-      }
     }
   
     setData()
