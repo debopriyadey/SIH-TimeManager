@@ -8,33 +8,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Stack = createStackNavigator();
 
 const App = () => {
-  const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(true);
+  const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(null);
 
-  // useEffect(() => {
-  //   async function setData () {
-  //     const appData = await AsyncStorage.getItem('isAppFirstLaunched');
-  //     if (appData == null) {
-  //       setIsAppFirstLaunched(true);
-  //       AsyncStorage.setItem('isAppFirstLaunched', 'false');
-  //     } else {
-  //       setIsAppFirstLaunched(false);
-  //     }
-  //   }
-  
-  //   setData()
-  // }, [])
-
-  React.useEffect(async () => {
-    const appData = await AsyncStorage.getItem('isAppFirstLaunched');
-    if (appData == null) {
-      setIsAppFirstLaunched(true);
-      AsyncStorage.setItem('isAppFirstLaunched', 'false');
-    } else {
-      setIsAppFirstLaunched(false);
+  useEffect(() => {
+    async function setData () {
+      const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+      if (appData === null) {
+        await AsyncStorage.setItem('isAppFirstLaunched', 'true');
+        setIsAppFirstLaunched(true);
+      } else {
+        await AsyncStorage.setItem('isAppFirstLaunched', 'false');
+        setIsAppFirstLaunched(false);
+      }
     }
+  
+    setData()
+  }, [])
 
-    // AsyncStorage.removeItem('isAppFirstLaunched');
-  }, []);
+  // React.useEffect(async () => {
+  //   const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+  //   if (appData == null) {
+  //     setIsAppFirstLaunched(true);
+  //     AsyncStorage.setItem('isAppFirstLaunched', 'false');
+  //   } else {
+  //     setIsAppFirstLaunched(false);
+  //   }
+
+  //   // AsyncStorage.removeItem('isAppFirstLaunched');
+  // }, []);
   
   return (
     isAppFirstLaunched != null && (
