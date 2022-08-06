@@ -17,7 +17,7 @@ import {
 } from '@react-navigation/drawer';
 
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import{ AuthContext } from '../components/context';
 
 export function DrawerContent(props) {
@@ -58,57 +58,37 @@ export function DrawerContent(props) {
 
                     <Drawer.Section style={styles.drawerSection}>
                         <DrawerItem 
-                            // icon={({color, size}) => (
-                            //     <Icon 
-                            //     name="home-outline" 
-                            //     color={color}
-                            //     size={size}
-                            //     />
-                            // )}
+                            icon={({color, size}) => (
+                                <Entypo name="home" size={24} color="black" />
+                            )}
                             label="Home"
                             onPress={() => {props.navigation.navigate('Home')}}
                         />
                         <DrawerItem 
-                            // icon={({color, size}) => (
-                            //     <Icon 
-                            //     name="account-outline" 
-                            //     color={color}
-                            //     size={size}
-                            //     />
-                            // )}
+                            icon={({color, size}) => (
+                                <Ionicons name="person-circle-outline" size={24} color="black" />
+                            )}
                             label="Profile"
                             onPress={() => {props.navigation.navigate('Profile')}}
                         />
                         <DrawerItem 
-                            // icon={({color, size}) => (
-                            //     <Icon 
-                            //     name="bookmark-outline" 
-                            //     color={color}
-                            //     size={size}
-                            //     />
-                            // )}
+                            icon={({color, size}) => (
+                                <Entypo name="bookmark" size={24} color="black" />
+                            )}
                             label="Bookmarks"
                             onPress={() => {props.navigation.navigate('BookmarkScreen')}}
                         />
                         <DrawerItem 
-                            // icon={({color, size}) => (
-                            //     <Icon 
-                            //     name="settings-outline" 
-                            //     color={color}
-                            //     size={size}
-                            //     />
-                            // )}
+                            icon={({color, size}) => (
+                                <Ionicons name="settings" size={24} color="black" />
+                            )}
                             label="Settings"
                             onPress={() => {props.navigation.navigate('SettingsScreen')}}
                         />
                         <DrawerItem 
-                            // icon={({color, size}) => (
-                            //     <Icon 
-                            //     name="account-check-outline" 
-                            //     color={color}
-                            //     size={size}
-                            //     />
-                            // )}
+                            icon={({color, size}) => (
+                                <Ionicons name="checkmark-circle" size={24} color="black" />
+                            )}
                             label="Support"
                             onPress={() => {props.navigation.navigate('SupportScreen')}}
                         />
@@ -127,13 +107,9 @@ export function DrawerContent(props) {
             </DrawerContentScrollView>
             <Drawer.Section style={styles.bottomDrawerSection}>
                 <DrawerItem 
-                    // icon={({color, size}) => (
-                    //     <Icon 
-                    //     name="exit-to-app" 
-                    //     color={color}
-                    //     size={size}
-                    //     />
-                    // )}
+                    icon={({color, size}) => (
+                        <MaterialIcons name="logout" size={24} color="black" />
+                    )}
                     label="Sign Out"
                     onPress={() => {signOut()}}
                 />
