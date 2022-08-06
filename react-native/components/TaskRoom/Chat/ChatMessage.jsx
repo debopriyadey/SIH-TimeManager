@@ -2,13 +2,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { View, ViewPropTypes, StyleSheet } from 'react-native'
 import { Avatar, Day, utils } from 'react-native-gifted-chat'
+import ChatBubble from './ChatBubble'
 
 const { isSameUser, isSameDay } = utils
 
 const Message = (props) => {
 
     const getInnerComponentProps = () => {
-        const { containerStyle, ...props } = props;
         return {
             ...props,
             position: 'left',
@@ -28,13 +28,13 @@ const Message = (props) => {
         return null
     }
 
-    // const renderBubble = () => {
-    //     const bubbleProps = getInnerComponentProps()
-    //     if (props.renderBubble) {
-    //         return props.renderBubble(bubbleProps)
-    //     }
-    //     return <Bubble {...bubbleProps} />
-    // }
+    const renderBubble = () => {
+        const bubbleProps = getInnerComponentProps()
+        if (props.renderBubble) {
+            return props.renderBubble(bubbleProps)
+        }
+        return <ChatBubble {...bubbleProps} />
+    }
 
     const renderAvatar = () => {
         let extraStyle;
@@ -75,7 +75,7 @@ const Message = (props) => {
                 ]}
             >
                 {renderAvatar()}
-                {/* {renderBubble()} */}
+                {renderBubble()}
             </View>
         </View>
     )
@@ -97,29 +97,5 @@ const styles = StyleSheet.create({
     },
 })
 
-Message.defaultProps = {
-    renderAvatar: undefined,
-    renderBubble: null,
-    renderDay: null,
-    currentMessage: {},
-    nextMessage: {},
-    previousMessage: {},
-    user: {},
-    containerStyle: {},
-}
-
-Message.propTypes = {
-    renderAvatar: PropTypes.func,
-    renderBubble: PropTypes.func,
-    renderDay: PropTypes.func,
-    currentMessage: PropTypes.object,
-    nextMessage: PropTypes.object,
-    previousMessage: PropTypes.object,
-    user: PropTypes.object,
-    containerStyle: PropTypes.shape({
-        left: ViewPropTypes.style,
-        right: ViewPropTypes.style,
-    }),
-}
 
 export default Message;

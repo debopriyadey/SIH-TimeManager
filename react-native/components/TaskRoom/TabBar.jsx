@@ -4,15 +4,25 @@ import {
     TabScreen,
 } from 'react-native-paper-tabs';
 import Chat from './Chat';
+import { useEffect } from 'react';
+import Tasks from './Tasks';
 
 function TabBar() {
+    useEffect(() => {
+        renderChat();
+    }, []);
+
+    function renderChat() {
+        return <Chat />
+    }
+
     return (
         <Tabs>
             <TabScreen label="Chats" icon="message">
-                <View></View>              
+                {renderChat()}
             </TabScreen>
             <TabScreen label="Tasks" icon="checkbox-marked-circle-plus-outline">
-                <View style={{ backgroundColor: 'black', flex: 1 }} />
+                <Tasks />
             </TabScreen>
         </Tabs>
     )

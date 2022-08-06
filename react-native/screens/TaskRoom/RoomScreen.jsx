@@ -6,10 +6,10 @@ import TabBar from '../../components/TaskRoom/TabBar';
 const MyComponent = () => {
 
   return (
-    <View>
+    <>
       <AppBar />
       <TabBar />
-    </View>
+    </>
   );
 };
 
