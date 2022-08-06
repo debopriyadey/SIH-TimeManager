@@ -1,60 +1,113 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Button, TextInput, Checkbox } from "react-native-paper";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
+import { Checkbox } from "react-native-paper";
+import * as Animatable from "react-native-animatable";
 
 function TodoForm() {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [time, setTime] = useState({
-    start: null,
-    end: null,
+    hours: 0,
+    minutes: 0,
   });
-  const [checked, setChecked] = React.useState(false);
+  const [todoData, setTodoData] = useState({
+    name: "",
+    desc: "",
+    tags: "",
+    smart_desc: "",
+    checked: false,
+  });
   const date = new Date().toDateString();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Today: {date}</Text>
-      <TextInput label="Task name" style={styles.input} />
-      <TextInput
-        label="Task description"
-        style={styles.input}
-        numberOfLines={5}
-      />
-      <View style={styles.start_end}>
-        <View style={styles.btn}>
-          <Button mode="contained">Start Time</Button>
-          <Text>{time.start}</Text>
-        </View>
-        <View style={styles.btn}>
-          <Button mode="contained">End Time</Button>
-          <Text>{time.end}</Text>
-        </View>
-      </View>
-      <View style={styles.start_end}>
-        <Text>Do you want to include it in SMART?</Text>
-        <Checkbox
-          status={checked ? "checked" : "unchecked"}
-          onPress={() => {
-            setChecked(!checked);
-          }}
-          color="blue"
+    <KeyboardAvoidingView style={styles.formWrapper}>
+      <Animatable.View style={styles.container} animation="fadeInUpBig">
+        <Text style={styles.heading}>Today: {date}</Text>
+        <TextInput
+          placeholder="Task name"
+          style={styles.input}
+          onChangeText={(val) =>
+            setTodoData((prev) => ({ ...prev, name: val }))
+          }
         />
-      </View>
-      {checked && (
-        <View>
-          <TextInput
-            label="Task description"
-            style={styles.input}
-            numberOfLines={5}
+        <TextInput
+          placeholder="Task description"
+          style={styles.input}
+          numberOfLines={5}
+          onChangeText={(val) =>
+            setTodoData((prev) => ({ ...prev, desc: val }))
+          }
+        />
+        <TextInput
+          placeholder="Tags"
+          style={styles.input}
+          onChangeText={(val) =>
+            setTodoData((prev) => ({ ...prev, tags: val }))
+          }
+        />
+        <View style={styles.start_end}>
+          <View style={styles.btn}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setShow(true)}
+            >
+              <Text style={{ color: "white" }}>Start Time</Text>
+            </TouchableOpacity>
+            {/* <Text>{time.start}</Text> */}
+            {/* <Text>
+            {time.hours}hr:{time.minutes}min
+          </Text> */}
+          </View>
+          <View style={styles.btn}>
+            <TouchableOpacity style={styles.button}>
+              <Text style={{ color: "white" }}>End Time</Text>
+            </TouchableOpacity>
+            {/* <Text>{time.end}</Text> */}
+          </View>
+        </View>
+        <View style={styles.check}>
+          <Text>Do you want to include it in SMART?</Text>
+          <Checkbox
+            status={todoData.checked ? "checked" : "unchecked"}
+            onPress={() => {
+              setTodoData((prev) => ({ ...prev, checked: !todoData.checked }));
+            }}
+            color="#009387"
           />
         </View>
-      )}
-    </View>
+        {todoData.checked && (
+          <View>
+            <TextInput
+              placeholder="Task description"
+              style={styles.input}
+              numberOfLines={5}
+              onChangeText={(val) =>
+                setTodoData((prev) => ({ ...prev, smart_desc: val }))
+              }
+            />
+          </View>
+        )}
+        <TouchableOpacity style={[styles.button, { marginVertical: 10 }]}>
+          <Text style={{ color: "white", fontSize: 20 }}>Add</Text>
+        </TouchableOpacity>
+      </Animatable.View>
+    </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
+  formWrapper: {
+    width: "100%",
+    backgroundColor: "#edebeb",
+  },
   container: {
     width: "100%",
-    height: "80%",
+    height: "auto",
     padding: 20,
   },
   heading: {
@@ -63,6 +116,11 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 10,
     height: 50,
+    paddingLeft: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "#C0C0C0",
+    backgroundColor: "white",
+    borderRadius: 5,
   },
   start_end: {
     width: "100%",
@@ -70,10 +128,25 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   btn: {
     width: "40%",
+    color: "white",
+  },
+  check: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  button: {
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#009387",
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 export default TodoForm;
