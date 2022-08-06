@@ -9,13 +9,13 @@ import {
 } from "react-native";
 import { Checkbox } from "react-native-paper";
 import * as Animatable from "react-native-animatable";
+import { AntDesign } from "@expo/vector-icons";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 function TodoForm() {
+  const date = new Date();
+  const [mode, setMode] = useState("time");
   const [show, setShow] = useState(false);
-  const [time, setTime] = useState({
-    hours: 0,
-    minutes: 0,
-  });
   const [todoData, setTodoData] = useState({
     name: "",
     desc: "",
@@ -23,12 +23,32 @@ function TodoForm() {
     smart_desc: "",
     checked: false,
   });
-  const date = new Date().toDateString();
-
+  const [datetext, setText] = useState(date.toDateString());
+  const [time, setTime] = useState(null);
+  const [newDate, setDate] = useState(date);
+  const showMode = (currentMode) => {
+    setMode(currentMode);
+    setShow(true);
+  };
+  const handleChange = (event, selectedDate) => {
+    const currentDate = selectedDate || newDate;
+    setShow(false);
+    setDate(currentDate);
+    let tempDate = new Date(currentDate);
+    let fdate = tempDate.toDateString();
+    setText(fdate);
+    let ftime = tempDate.getHours() + " : " + tempDate.getMinutes();
+    setTime(ftime);
+  };
   return (
     <KeyboardAvoidingView style={styles.formWrapper}>
       <Animatable.View style={styles.container} animation="fadeInUpBig">
-        <Text style={styles.heading}>Today: {date}</Text>
+        <View style={[styles.start_end, { justifyContent: "space-between" }]}>
+          <Text style={styles.heading}>Date: {datetext} </Text>
+          <TouchableOpacity onPress={() => showMode("date")}>
+            <AntDesign name="edit" size={20} color="#009387" />
+          </TouchableOpacity>
+        </View>
         <TextInput
           placeholder="Task name"
           style={styles.input}
@@ -55,21 +75,30 @@ function TodoForm() {
           <View style={styles.btn}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => setShow(true)}
+              onPress={() => showMode("time")}
             >
-              <Text style={{ color: "white" }}>Start Time</Text>
+              <Text style={{ color: "white" }}>Strat Time</Text>
             </TouchableOpacity>
-            {/* <Text>{time.start}</Text> */}
-            {/* <Text>
-            {time.hours}hr:{time.minutes}min
-          </Text> */}
+
+            {show && (
+              <RNDateTimePicker
+                value={date}
+                mode={mode}
+                onChange={handleChange}
+                minimumDate={date}
+                is24Hour={true}
+              />
+            )}
           </View>
           <View style={styles.btn}>
             <TouchableOpacity style={styles.button}>
               <Text style={{ color: "white" }}>End Time</Text>
             </TouchableOpacity>
-            {/* <Text>{time.end}</Text> */}
           </View>
+        </View>
+        <View style={[styles.start_end, { marginVertical: 5 }]}>
+          <Text>{time}</Text>
+          <Text>End time</Text>
         </View>
         <View style={styles.check}>
           <Text>Do you want to include it in SMART?</Text>
@@ -124,7 +153,7 @@ const styles = StyleSheet.create({
   },
   start_end: {
     width: "100%",
-    marginVertical: 20,
+    marginVertical: 10,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
