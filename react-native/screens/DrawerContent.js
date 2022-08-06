@@ -21,23 +21,23 @@ import {
 import{ AuthContext } from '../components/context';
 
 export function DrawerContent(props) {
-
+    
     const paperTheme = useTheme();
 
     const { signOut, toggleTheme } = React.useContext(AuthContext);
-
+    
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row',marginTop: 15}}>
-                            <Avatar.Image 
+                            {/* <Avatar.Image 
                                 source={{
                                     uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
                                 }}
                                 size={50}
-                            />
+                            /> */}
                             <View style={{marginLeft:15, flexDirection:'column'}}>
                                 <Title style={styles.title}>John Doe</Title>
                                 <Caption style={styles.caption}>@j_doe</Caption>
@@ -66,7 +66,7 @@ export function DrawerContent(props) {
                             //     />
                             // )}
                             label="Home"
-                            onPress={() => {props.navigation.navigate('Home')}}
+                            onPress={() => {props.navigation.navigate('HomeDrawer')}}
                         />
                         <DrawerItem 
                             // icon={({color, size}) => (
@@ -76,8 +76,8 @@ export function DrawerContent(props) {
                             //     size={size}
                             //     />
                             // )}
-                            label="Profile"
-                            onPress={() => {props.navigation.navigate('Profile')}}
+                            label="Details"
+                            onPress={() => {props.navigation.navigate('Details')}}
                         />
                         <DrawerItem 
                             // icon={({color, size}) => (

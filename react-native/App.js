@@ -96,8 +96,6 @@ const App = () => {
   
   const authContext = React.useMemo(() => ({
     signIn: async(foundUser) => {
-      // setUserToken('fgkj');
-      // setIsLoading(false);
       const userToken = String(foundUser[0].userToken);
       const userName = foundUser[0].username;
       
@@ -150,7 +148,7 @@ const App = () => {
         <AuthContext.Provider value={authContext}>
       <NavigationContainer  theme={theme}>
       { loginState.userToken !== null ? (
-        <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+        <Drawer.Navigator    drawerContent={props => <DrawerContent {...props} />}>
           <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />

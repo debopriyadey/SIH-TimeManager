@@ -23,7 +23,7 @@ const MainTabScreen = () => (
   >
     <Tab.Screen
       name="Home"
-      component={HomeStackScreen}
+      component={HomeScreen}
       options={{
         tabBarLabel: 'Home',
         tabBarColor: '#009387',
@@ -34,7 +34,7 @@ const MainTabScreen = () => (
     />
     <Tab.Screen
       name="Notifications"
-      component={DetailsStackScreen}
+      component={DetailsScreen}
       options={{
         tabBarLabel: 'Updates',
         tabBarColor: '#1f65ff',
@@ -70,43 +70,8 @@ const MainTabScreen = () => (
 
 export default MainTabScreen;
 
-const HomeStackScreen = ({ navigation }) => (
-  <HomeStack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#009387',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-    <HomeStack.Screen name="Home" component={HomeScreen} options={{
-      title: 'Overview',
-      headerLeft: () => (
-        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
-          <Entypo name="menu" size={24} color="black" />
-        </Button>
-      )
-    }} />
-  </HomeStack.Navigator>
-);
+ 
+     
+   
 
-const DetailsStackScreen = ({ navigation }) => (
-  <DetailsStack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#1f65ff',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-    <DetailsStack.Screen name="Details" component={DetailsScreen} options={{
-      headerLeft: () => (
-        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
-          <Entypo name="menu" size={24} color="black" />
-        </Button>
-      )
-    }} />
-  </DetailsStack.Navigator>
-);
+
