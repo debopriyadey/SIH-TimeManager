@@ -6,7 +6,6 @@ import HomeScreen from './screens/HomeScreen';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerContent } from './screens/DrawerContent';
-
 import MainTabScreen from './screens/MainTabScreen';
 import SupportScreen from './screens/SupportScreen';
 import SettingsScreen from './screens/SettingsScreen';
