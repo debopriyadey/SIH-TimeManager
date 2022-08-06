@@ -10,7 +10,7 @@ import DetailsScreen from './DetailsScreen';
 const RootStack = createStackNavigator();
 
 const RootStackScreen = ({navigation}) => (
-    <RootStack.Navigator headerMode='none'>
+    <RootStack.Navigator screenOptions = {{headerMode:'false'}}>
         <RootStack.Screen name="OnboardingScreen" component={OnboardingScreen}/>
         <RootStack.Screen name="Details" component={DetailsScreen}/>
         <RootStack.Screen name="SignInScreen" component={SignInScreen}/>

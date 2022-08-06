@@ -2,7 +2,6 @@ import React from 'react';
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import HomeScreen from './HomeScreen';
@@ -59,7 +58,7 @@ const MainTabScreen = () => (
   >
     <Tab.Screen
       name="Home"
-      component={HomeStackScreen}
+      component={HomeScreen}
       options={{
         tabBarLabel: 'Home',
         tabBarColor: '#009387',
@@ -70,7 +69,7 @@ const MainTabScreen = () => (
     />
     <Tab.Screen
       name="Notifications"
-      component={DetailsStackScreen}
+      component={DetailsScreen}
       options={{
         tabBarLabel: 'Updates',
         tabBarColor: '#1f65ff',
@@ -197,3 +196,4 @@ const styles = StyleSheet.create({
     elevation: 5
   },
 });
+
