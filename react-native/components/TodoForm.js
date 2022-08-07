@@ -24,21 +24,35 @@ function TodoForm() {
     checked: false,
   });
   const [datetext, setText] = useState(date.toDateString());
-  const [time, setTime] = useState(null);
+  const [time, setTime] = useState({
+    start: null,
+    end: null,
+  });
+  const [start_end, setStart_End] = useState("start");
   const [newDate, setDate] = useState(date);
   const showMode = (currentMode) => {
     setMode(currentMode);
     setShow(true);
   };
-  const handleChange = (event, selectedDate) => {
+  const handleChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || newDate;
     setShow(false);
     setDate(currentDate);
     let tempDate = new Date(currentDate);
     let fdate = tempDate.toDateString();
     setText(fdate);
-    let ftime = tempDate.getHours() + " : " + tempDate.getMinutes();
-    setTime(ftime);
+  };
+  const handleChangeTime = (event, selectedDate) => {
+    const currentDate = selectedDate || newDate;
+    setShow(false);
+    setDate(currentDate);
+    let tempDate = new Date(currentDate);
+    let ftime = tempDate.getHours() + ":" + tempDate.getMinutes();
+    if (start_end === "start") {
+      setTime((prev) => ({ ...prev, start: ftime }));
+    } else {
+      setTime((prev) => ({ ...prev, end: ftime }));
+    }
   };
   return (
     <KeyboardAvoidingView style={styles.formWrapper}>
@@ -75,7 +89,10 @@ function TodoForm() {
           <View style={styles.btn}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => showMode("time")}
+              onPress={() => {
+                showMode("time");
+                setStart_End("start");
+              }}
             >
               <Text style={{ color: "white" }}>Strat Time</Text>
             </TouchableOpacity>
@@ -84,21 +101,27 @@ function TodoForm() {
               <RNDateTimePicker
                 value={date}
                 mode={mode}
-                onChange={handleChange}
+                onChange={mode === "time" ? handleChangeTime : handleChangeDate}
                 minimumDate={date}
                 is24Hour={true}
               />
             )}
           </View>
           <View style={styles.btn}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                showMode("time");
+                setStart_End("end");
+              }}
+            >
               <Text style={{ color: "white" }}>End Time</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={[styles.start_end, { marginVertical: 5 }]}>
-          <Text>{time}</Text>
-          <Text>End time</Text>
+          <Text>{time.start}</Text>
+          <Text>{time.end}</Text>
         </View>
         <View style={styles.check}>
           <Text>Do you want to include it in SMART?</Text>
