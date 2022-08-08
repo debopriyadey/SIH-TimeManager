@@ -36,10 +36,6 @@ const Pomodoro = ({ navigation }) => {
     })
     const [isPlaying, setIsPlaying] = React.useState(false)
     const [timeIndex, setTimeIndex] = React.useState(-1)
-    // const [controlledValue, setControlledValue] = React.useState(
-    //     `${0}`
-    // )
-
 
     const { colors } = useTheme();
 
@@ -51,16 +47,6 @@ const Pomodoro = ({ navigation }) => {
 
     }
 
-    const completeHandler = () => {
-        // setTimeIndex((prevTimeIndex) => {
-        //     newTimeIndex = (prevTimeIndex + 1) %timeArray.length;
-        //     return newTimeIndex;
-        // }) 
-        let newTimeIndex = 0
-        setTimeIndex(timeIndex => newTimeIndex = (timeIndex + 1) % timeArray.length)
-    }
-
-    // ask for permissions in useEffect
    useEffect(() => {
         Permissions.getAsync(Permissions.NOTIFICATIONS).then((response) => {
             if (response.status !== 'granted') {
@@ -93,12 +79,10 @@ const Pomodoro = ({ navigation }) => {
         setTimeIndex(0)
     }
     const theme = useTheme();
-    //   const highlighted = inputType === inputTypes.picker ? pressed : inputFocused
     const highlighted = inputFocused
 
     const { color, backgroundColor } = useInputColors(highlighted)
     const [inputFocused, setInputFocused] = React.useState(false)
-    // let formattedValue = controlledValue
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
@@ -215,14 +199,7 @@ const Pomodoro = ({ navigation }) => {
             </ScrollView>
         </SafeAreaView>
 
-        //   <View style={styles.container}>
-        //   <StatusBar barStyle= { theme.dark ? "light-content" : "dark-content" }/>
-        //   <Text style={{color: colors.text}}>Home Screen</Text>
-        // <Button
-        //   title="Go to details screen"
-        //   onPress={() => navigation.navigate("Details")}
-        // />
-        // </View>
+     
     );
 };
 
