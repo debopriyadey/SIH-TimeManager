@@ -6,7 +6,7 @@ const ExploreScreen = () => {
     <View style={styles.container}>
       {/* <Text>ExploreScreen</Text> */}
       <TodoForm />
-      <Button title="Click Here" onPress={() => alert("Button Clicked!")} />
+      {/* <Button title="Click Here" onPress={() => alert("Button Clicked!")} /> */}
     </View>
   );
 };
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-
-    height: "auto",
+    height: "100%",
+    overflow: "scroll",
   },
 });
