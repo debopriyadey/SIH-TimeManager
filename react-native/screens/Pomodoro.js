@@ -19,9 +19,11 @@ const Pomodoro = ({ navigation }) => {
         <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
      
         <View style={styles.quickContainer}>
-          <Card style={styles.quickCard}>
+          <TextInput placeholder="Pomodoro timer" />
+          <TextInput placeholder="Pomodoro timer" />
+          <TextInput placeholder="Pomodoro timer" />
+          {/* <Card style={styles.quickCard}>
             
-            <TextInput placeholder="Pomodoro timer" />
            
           </Card> 
           <Card style={styles.quickCard}>
@@ -33,20 +35,11 @@ const Pomodoro = ({ navigation }) => {
             
             <TextInput placeholder="Pomodoro timer" />
            
-          </Card>
+          </Card> */}
         </View>
        
       </ScrollView>
     </SafeAreaView>
-
-    //   <View style={styles.container}>
-    //   <StatusBar barStyle= { theme.dark ? "light-content" : "dark-content" }/>
-    //   <Text style={{color: colors.text}}>Home Screen</Text>
-    // <Button
-    //   title="Go to details screen"
-    //   onPress={() => navigation.navigate("Details")}
-    // />
-    // </View>
   );
 };
 

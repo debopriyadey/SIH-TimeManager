@@ -1,142 +1,211 @@
-import React from 'react';
-import { View, Text, StyleSheet, StatusBar, Image, ImageBackground } from 'react-native';
-import { Card, Title, Avatar, Button, Paragraph } from 'react-native-paper';
-import { useTheme } from '@react-navigation/native';
+import * as React from 'react';
+import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
-import meetup from '../assets/Meetup.svg'
+import Constants from 'expo-constants';
 
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
-const image = { uri: "../assets/Meetup.svg" };
+// You can import from local files
 
-const HomeScreen = ({ navigation }) => {
+// or any pure javascript modules available in npm
+import {
+  Searchbar,
+  Avatar,
+  Button,
+  Card,
+  Title,
+  Paragraph,
+  ProgressBar,
+  Badge,
+} from 'react-native-paper';
 
-  const { colors } = useTheme();
+export default function Search() {
+  const [searchQuery, setSearchQuery] = React.useState('');
 
-  const theme = useTheme();
+  const onChangeSearch = (query) => setSearchQuery(query);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
-        <View style={styles.header}>
-          <Avatar.Image size={50} />
-          <Text>
-            <View  >
-              <Text style={styles.textStyle}>Hi </Text>
+        <View style={[styles.inlineView, {backgroundColor: '#3D5CFF', padding: 10}]}>
+          <View style={[styles.inlineView, {justifyContent: 'flex-start'}]}>
+            <Avatar.Icon size={40} icon="file" />
+            <View>
+              <Text style={styles.heading}>Hi Krishna</Text>
+              <Text style={styles.paragraph}>Lets start working</Text>
             </View>
-          </Text>
+          </View>
+          <Avatar.Icon size={40} icon="search" />
+        </View>
+        <View style={styles.taskCardCont}>
+          <Card style={styles.resCard}>
+            <Card.Content>
+              <View style={styles.inlineView}>
+                <Text style={styles.helperText}>My Streak</Text>
+                <Text style={styles.badge}>300</Text>
+              </View>
+              <Title>🔥 2 day streak</Title>
+              <ProgressBar progress={0.5} />
+            </Card.Content>
+            <View style={{ marginVertical: 15 }}></View>
+            <Card.Content>
+              <View style={styles.inlineView}>
+                <Text style={styles.helperText}>Task Completed</Text>
+              </View>
+              <View style={styles.inlineView}>
+                <Title>10</Title>
+                <Text style={styles.helperText}>/ 15 tasks</Text>
+              </View>
+              <ProgressBar progress={0.7} />
+            </Card.Content>
+          </Card>
+        </View>
+        <View style={styles.taskCardCont}>
+          <Card style={styles.resCard}>
+            <Card.Content>
+              <View style={styles.inlineView}>
+                <Text style={styles.helperText}>Upcomming Task</Text>
+                <Text style={styles.helperText}>View Schedule</Text>
+              </View>
+              <View style={{ marginVertical: 10 }}></View>
+              <View style={styles.inlineView}>
+                <Title>Card title</Title>
+                <Text style={styles.helperText}>12:00 pm</Text>
+              </View>
+              <Paragraph>
+                task desc to make good desccription for.....
+              </Paragraph>
+            </Card.Content>
+          </Card>
+        </View>
+        <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
+          <Image
+            source={require('../assets/createTask.png')}
+            resizeMode="contain"
+            style={{
+              width: 180,
+              height: 120,
+            }}
+          />
+          <Image
+            source={require('../assets/createGoal.png')}
+            resizeMode="contain"
+            style={{
+              width: 180,
+              height: 120,
+            }}
+          />
         </View>
         <View style={styles.quickContainer}>
-          <Card style={styles.quickCard}>
-            {/* <Card.Cover>
-              <Image
-                source={require('../assets/pomodoroImg.png')}
-                resizeMode="contain"
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
-              />
-            </Card.Cover> */}
-            <Image
-              source={require('../assets/pomodoroImg.png')}
-              resizeMode="contain"
-              style={{
-                width: 100,
-                height: 100,
-              }}
-            />
-            <Card.Title title="Pomodoro" subtitle="Card Subtitle" />
-          </Card>
-          <Card style={{ margin: '5%', width: '40%', backgroundColor: "skyblue" }}>
-            <Card.Title title="Focus Mode" subtitle="Card Subtitle" />
-          </Card>
-          <Card style={{ margin: '5%', width: '40%', backgroundColor: "skyblue" }}>
-            <Card.Title title="Progress Report" subtitle="Card Subtitle" />
-          </Card>
-          <Card style={{ margin: '5%', width: '40%', backgroundColor: "skyblue" }}>
-            <Card.Title title="Motivation" subtitle="Card Subtitle" />
-          </Card>
+          <Image
+            source={require('../assets/pomodoro.png')}
+            resizeMode="contain"
+            style={styles.quickCard}
+          />
+          <Image
+            source={require('../assets/focus.png')}
+            resizeMode="contain"
+            style={styles.quickCard}
+          />
+          <Image
+            source={require('../assets/progress.png')}
+            resizeMode="contain"
+            style={styles.quickCard}
+          />
+          <Image
+            source={require('../assets/goals.png')}
+            resizeMode="contain"
+            style={styles.quickCard}
+          />
         </View>
-        <Card style={styles.sessionCard}>
-          <ImageBackground source={meetup} resizeMode="cover" style={styles.image}>
-            <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
-          </ImageBackground>
-        </Card>
-        <View style={styles.container}>
-          <ImageBackground source={require('../assets/Meetup.png')} resizeMode="cover" style={styles.image}>
-            <Text style={styles.text}>Inside</Text>
-          </ImageBackground>
-        </View>
+        <ImageBackground
+          source={require('../assets/meetup.png')}
+          resizeMode="cover"
+          style={styles.image}>
+          <Text style={styles.text}>Counsell Session</Text>
+          <Text style={styles.textHelper}>connect with Counsellers one on one</Text>
+          <Button
+            mode="contained"
+            style={{width: 20}}
+            onPress={() => console.log('Pressed')}>
+            Apply Now!
+          </Button>
+        </ImageBackground>
       </ScrollView>
     </SafeAreaView>
-
-    //   <View style={styles.container}>
-    //   <StatusBar barStyle= { theme.dark ? "light-content" : "dark-content" }/>
-    //   <Text style={{color: colors.text}}>Home Screen</Text>
-    // <Button
-    //   title="Go to details screen"
-    //   onPress={() => navigation.navigate("Details")}
-    // />
-    // </View>
   );
-};
-
-export default HomeScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
+    justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: '#F5F7FF',
+  },
+  scrollView: { marginHorizontal: 5 },
+  heading: {
+    fontSize: 32, 
+    fontWeight: 'bold', 
+    color: '#ffffff', 
+    padding: 8
+  },
+  paragraph: {
+    color: '#ffffff', 
+    padding: 8, 
+    marginTop: -20
   },
   image: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   text: {
-    color: "white",
-    fontSize: 42,
-    lineHeight: 84,
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontSize: 22,
+    margin: 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
   },
-  scrollView: {
-    backgroundColor: 'pink',
-    marginHorizontal: 5,
+  textHelper: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: -24,
+    fontWeight: 'bold',
+    textAlign: 'left',
   },
-  header: {
+  helperText: {
+    fontSize: 15,
+  },
+  badge: {
+    fontSize: 15,
+    padding: 5,
+    backgroundColor: '#F5F7FF',
+  },
+  inlineView: {
+    flex: 1,
     flexDirection: 'row',
     width: '100%',
     alignSelf: 'baseline',
-    backgroundColor: '#385cff',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingInline: 10,
+  },
+  taskCardCont: {
+    margin: 8,
+  },
+  resCard: {
+    marginVertical: 5,
   },
   quickContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignSelf: 'baseline',
-    backgroundColor: '#385cff',
-    margin: 20,
-    padding: 20,
+    backgroundColor: '#fff',
+    margin: 10,
+    padding: 10,
     borderRadius: 20,
   },
   quickCard: {
     margin: '5%',
     width: '40%',
-    backgroundColor: "powderblue",
-    alignItems: 'center',
-    textAlign: 'center',
   },
-  sessionCard: {
-    
-  },
-  textStyle: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-
 });
