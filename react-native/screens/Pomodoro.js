@@ -35,7 +35,7 @@ const Pomodoro = ({ navigation }) => {
     const hideModal = () => setVisible(false);
     const showBreakModal = () => setBreakVisible(true);
     const hideBreakModal = () => setBreakVisible(false);
-    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 50, borderRadius: 20, alignSelf: 'baseline' };
+    const containerStyle = { backgroundColor: 'white' , padding: 20,  borderRadius: 20 };
 
     const [timeArray, setTimeArray] = React.useState([0, 0, 0, 0, 0, 0])
     const [timeInput, setTimeInput] = React.useState({
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#1f1f1f',
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
