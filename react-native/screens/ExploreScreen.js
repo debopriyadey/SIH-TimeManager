@@ -8,6 +8,10 @@ const ExploreScreen = () => {
       {/* <Text>ExploreScreen</Text>
       <Button title="Click Here" onPress={() => alert("Button Clicked!")} /> */}
       <TodoForm />
+<<<<<<< HEAD
+=======
+      {/* <Button title="Click Here" onPress={() => alert("Button Clicked!")} /> */}
+>>>>>>> 7bbd0f5985d50f277e4409f7047dd959d43fbf8d
     </View>
   );
 };
@@ -19,5 +23,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+<<<<<<< HEAD
+=======
+    height: "100%",
+    overflow: "scroll",
+>>>>>>> 7bbd0f5985d50f277e4409f7047dd959d43fbf8d
   },
 });
