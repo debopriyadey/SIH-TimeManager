@@ -38,7 +38,7 @@ const Pomodoro = ({ navigation }) => {
     const hideBreakModal = () => setBreakVisible(false);
     const showWorkModal = () => setWorkVisible(true);
     const hideWorkModal = () => setWorkVisible(false);
-    const containerStyle = { backgroundColor: 'white' , padding: 20,  borderRadius: 20 };
+    const containerStyle = { backgroundColor: 'white' , padding: 20,  borderRadius: 20, margin: 10 };
 
     const [timeArray, setTimeArray] = React.useState([0, 0, 0, 0, 0, 0])
     const [timeInput, setTimeInput] = React.useState({
@@ -81,7 +81,7 @@ const Pomodoro = ({ navigation }) => {
                     body: 'Time for a break!',
                 },
                 trigger: {
-                    seconds: 1,
+                    seconds: 0,
                 },
 
             })
@@ -200,7 +200,7 @@ const Pomodoro = ({ navigation }) => {
                                 }}
                             />
                             <Button mode="contained" onPress={hideWorkModal}>
-                                Relax
+                                Work
                             </Button>
                         </View>
                     </Modal>
@@ -213,8 +213,8 @@ const Pomodoro = ({ navigation }) => {
                                 source={require('../assets/breaksImg.png')}
                                 resizeMode="contain"
                                 style={{
-                                    width: 300,
-                                    height: 300,
+                                    width: 250,
+                                    height: 250,
                                 }}
                             />
                             <Button mode="contained" onPress={hideBreakModal}>
@@ -227,12 +227,11 @@ const Pomodoro = ({ navigation }) => {
                     Settings
                 </Button>
                 <View style={styles.countdownCont}>
-
                     <CountdownCircleTimer
                         style={styles.countdown}
                         isPlaying={isPlaying}
                         key={timeIndex}
-                        duration={timeIndex >= 0 ? parseInt(timeArray[timeIndex]) : 0}
+                        duration={timeIndex >= 0 ? parseInt(timeArray[timeIndex])*60 : 0}
                         colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
                         colorsTime={[10, 6, 3, 0]}
                         onComplete={() => {
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     heading: {
-        fontSize: 32,
+        fontSize: 25,
         fontWeight: 'bold',
         color: '#1f1f1f',
         padding: 8
@@ -309,6 +308,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        borderRadius: 20,
     },
     cards: {
         textAlign: 'center',
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 32,
         textAlign: 'center',
-        width: 50,
+        width: 80,
         height: 45,
     },
     modalCont: {
