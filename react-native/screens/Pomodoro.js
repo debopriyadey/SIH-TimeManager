@@ -30,11 +30,14 @@ Notification.setNotificationHandler({
 const Pomodoro = ({ navigation }) => {
     const [visible, setVisible] = React.useState(false);
     const [breakVisible, setBreakVisible] = React.useState(false);
+    const [workVisible, setWorkVisible] = React.useState(false);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
     const showBreakModal = () => setBreakVisible(true);
     const hideBreakModal = () => setBreakVisible(false);
+    const showWorkModal = () => setWorkVisible(true);
+    const hideWorkModal = () => setWorkVisible(false);
     const containerStyle = { backgroundColor: 'white' , padding: 20,  borderRadius: 20 };
 
     const [timeArray, setTimeArray] = React.useState([0, 0, 0, 0, 0, 0])
@@ -83,6 +86,7 @@ const Pomodoro = ({ navigation }) => {
 
             })
         } else {
+            showWorkModal()
             Notification.scheduleNotificationAsync({
                 content: {
                     title: 'Pomodoro',
@@ -112,6 +116,8 @@ const Pomodoro = ({ navigation }) => {
             <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
             <Provider style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Portal style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
+                    {/* Settings Modal */}
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                         <Text style={styles.heading}>Time (in minutes).</Text>
                         <View style={styles.quickContainer}>
@@ -180,6 +186,26 @@ const Pomodoro = ({ navigation }) => {
                             set
                         </Button>
                     </Modal>
+
+                    {/* Working Modal */}
+                    <Modal visible={workVisible} onDismiss={hideWorkModal} contentContainerStyle={containerStyle}>
+                        <View style={styles.modalCont}>
+                            <Text style={styles.heading}>Time for Pomodoro.</Text>
+                            <Image
+                                source={require('../assets/workingImg.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                }}
+                            />
+                            <Button mode="contained" onPress={hideWorkModal}>
+                                Relax
+                            </Button>
+                        </View>
+                    </Modal>
+
+                    {/* Break Modal */}
                     <Modal visible={breakVisible} onDismiss={hideBreakModal} contentContainerStyle={containerStyle}>
                         <View style={styles.modalCont}>
                             <Text style={styles.heading}>Time for your break.</Text>
@@ -281,11 +307,8 @@ const styles = StyleSheet.create({
     quickContainer: {
         display: 'flex',
         flexDirection: 'row',
-        margin: 10,
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 15,
-        borderRadius: 20,
     },
     cards: {
         textAlign: 'center',
@@ -294,7 +317,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 32,
         textAlign: 'center',
-        width: 100,
+        width: 50,
         height: 45,
     },
     modalCont: {
