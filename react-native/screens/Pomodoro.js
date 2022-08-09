@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, StatusBar, Image, ImageBackground } from 'react-native';
-import { Card, Title, Avatar, Button, Paragraph } from 'react-native-paper';
+import { Card, Modal, Portal, Button, Paragraph, Provider } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
@@ -28,6 +28,12 @@ Notification.setNotificationHandler({
 })
 
 const Pomodoro = ({ navigation }) => {
+    const [visible, setVisible] = React.useState(false);
+
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = { backgroundColor: 'white', padding: 20 };
+
     const [timeArray, setTimeArray] = React.useState([0, 0, 0, 0, 0, 0])
     const [timeInput, setTimeInput] = React.useState({
         pomodoroTime: 0,
@@ -47,7 +53,7 @@ const Pomodoro = ({ navigation }) => {
 
     }
 
-   useEffect(() => {
+    useEffect(() => {
         Permissions.getAsync(Permissions.NOTIFICATIONS).then((response) => {
             if (response.status !== 'granted') {
                 return Permissions.askAsync(Permissions.NOTIFICATIONS)
@@ -61,16 +67,30 @@ const Pomodoro = ({ navigation }) => {
         })
     }, []);
     const handleNotifications = () => {
-        Notification.scheduleNotificationAsync({
-            content: {
-                title: 'Pomodoro',
-                body: 'Time for a break!',
-            },
-            trigger: {
-                seconds: 1,
-            },
-
-        })
+        if (timeIndex%2 == 0) {
+            showModal()
+            Notification.scheduleNotificationAsync({
+                content: {
+                    title: 'Short Break',
+                    body: 'Time for a break!',
+                },
+                trigger: {
+                    seconds: 1,
+                },
+    
+            })
+        } else {
+            Notification.scheduleNotificationAsync({
+                content: {
+                    title: 'Pomodoro',
+                    body: 'Time for a Pomodoro!',
+                },
+                trigger: {
+                    seconds: 1,
+                },
+    
+            })
+        }
     }
 
     const setTimerHandler = () => {
@@ -85,89 +105,96 @@ const Pomodoro = ({ navigation }) => {
     const [inputFocused, setInputFocused] = React.useState(false)
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollView}>
-                <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
-
-                <View style={styles.quickContainer}>
-                    <Card style={styles.cards}>
-                        <Text>Pomodoro</Text>
-                        <TextInput
-                            style={[
-                                styles.input,
-                                {
-                                    color,
-                                    backgroundColor,
-                                    borderRadius: theme.roundness,
-                                },
-                            ]}
-                            value={timeInput.pomodoroTime.toString()}
-                            maxLength={2}
-                            onFocus={() => setInputFocused(true)}
-                            onBlur={() => setInputFocused(false)}
-                            keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                            keyboardType="number-pad"
-                            onChangeText={(text) => onInnerChange(text, 'pomodoroTime')}
-                        />
-                    </Card>
-                    <Card style={styles.cards}>
-                        <Text>short break</Text>
-                        <TextInput
-                            style={[
-                                styles.input,
-                                {
-                                    color,
-                                    backgroundColor,
-                                    borderRadius: theme.roundness,
-                                },
-                            ]}
-                            value={timeInput.shortBreakTime.toString()}
-                            maxLength={2}
-                            onFocus={() => setInputFocused(true)}
-                            onBlur={() => setInputFocused(false)}
-                            keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                            keyboardType="number-pad"
-                            onChangeText={(text) => onInnerChange(text, 'shortBreakTime')}
-                        />
-                    </Card>
-                    <Card style={styles.cards}>
-                        <Text>long break</Text>
-                        <TextInput
-                            style={[
-                                styles.input,
-                                {
-                                    color,
-                                    backgroundColor,
-                                    borderRadius: theme.roundness,
-                                },
-                            ]}
-                            value={timeInput.longBreakTime.toString()}
-                            maxLength={2}
-                            onFocus={() => setInputFocused(true)}
-                            onBlur={() => setInputFocused(false)}
-                            keyboardAppearance={theme.dark ? 'dark' : 'default'}
-                            keyboardType="number-pad"
-                            onChangeText={(text) => onInnerChange(text, 'longBreakTime')}
-                        />
-                    </Card>
-
-
-                </View>
-                <View >
-                    <Button mode="contained" onPress={setTimerHandler}>
-                        set
+            <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
+            <Provider>
+                <Portal>
+                    <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                        <Text style={styles.heading}>Time (in minutes).</Text>
+                        <View style={styles.quickContainer}>
+                            <View style={styles.cards}>
+                                <Text>Pomodoro</Text>
+                                <TextInput
+                                    style={[
+                                        styles.input,
+                                        {
+                                            color,
+                                            backgroundColor,
+                                            borderRadius: theme.roundness,
+                                        },
+                                    ]}
+                                    value={timeInput.pomodoroTime.toString()}
+                                    maxLength={2}
+                                    onFocus={() => setInputFocused(true)}
+                                    onBlur={() => setInputFocused(false)}
+                                    keyboardAppearance={theme.dark ? 'dark' : 'default'}
+                                    keyboardType="number-pad"
+                                    onChangeText={(text) => onInnerChange(text, 'pomodoroTime')}
+                                />
+                            </View>
+                            <View style={styles.cards}>
+                                <Text>short break</Text>
+                                <TextInput
+                                    style={[
+                                        styles.input,
+                                        {
+                                            color,
+                                            backgroundColor,
+                                            borderRadius: theme.roundness,
+                                        },
+                                    ]}
+                                    value={timeInput.shortBreakTime.toString()}
+                                    maxLength={2}
+                                    onFocus={() => setInputFocused(true)}
+                                    onBlur={() => setInputFocused(false)}
+                                    keyboardAppearance={theme.dark ? 'dark' : 'default'}
+                                    keyboardType="number-pad"
+                                    onChangeText={(text) => onInnerChange(text, 'shortBreakTime')}
+                                />
+                            </View>
+                            <View style={styles.cards}>
+                                <Text>long break</Text>
+                                <TextInput
+                                    style={[
+                                        styles.input,
+                                        {
+                                            color,
+                                            backgroundColor,
+                                            borderRadius: theme.roundness,
+                                        },
+                                    ]}
+                                    value={timeInput.longBreakTime.toString()}
+                                    maxLength={2}
+                                    onFocus={() => setInputFocused(true)}
+                                    onBlur={() => setInputFocused(false)}
+                                    keyboardAppearance={theme.dark ? 'dark' : 'default'}
+                                    keyboardType="number-pad"
+                                    onChangeText={(text) => onInnerChange(text, 'longBreakTime')}
+                                />
+                            </View>
+                        </View>
+                        <Button mode="contained" onPress={setTimerHandler}>
+                            set
                         </Button>
+                    </Modal>
+                </Portal>
+                <Button style={{ marginTop: 30 }} onPress={showModal}>
+                    Settings
+                </Button>
+                <View style={styles.countdownCont}>
+
                     <CountdownCircleTimer
+                        style={styles.countdown}
                         isPlaying={isPlaying}
                         key={timeIndex}
-                        duration={ timeIndex>=0 ? parseInt(timeArray[timeIndex]) : 0}
+                        duration={timeIndex >= 0 ? parseInt(timeArray[timeIndex]) : 0}
                         colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
                         colorsTime={[10, 6, 3, 0]}
-                        onComplete = {() => {
+                        onComplete={() => {
                             setTimeout(() => {
-                             let newTimeIndex = 0;
-                             setTimeIndex((timeIndex) => newTimeIndex = (timeIndex + 1) % timeArray.length);
-                             setIsPlaying(false);
-                             handleNotifications();
+                                let newTimeIndex = 0;
+                                setTimeIndex((timeIndex) => newTimeIndex = (timeIndex + 1) % timeArray.length);
+                                setIsPlaying(false);
+                                handleNotifications();
                             }, 0)
                         }}
                     >
@@ -183,60 +210,70 @@ const Pomodoro = ({ navigation }) => {
 
                         }}
                     </CountdownCircleTimer>
-                    <Button mode="contained" style={styles.button}  onPress={() => setIsPlaying(prev => !prev)} >
+                </View>
+                <View >
+                    <Button mode="contained" style={styles.button} onPress={() => setIsPlaying(prev => !prev)} >
                         {isPlaying ? 'Pause' : 'Play'}
                     </Button>
-                     <Button mode="contained" style={styles.button}  onPress={() => {
+                    <Button mode="contained" style={styles.button} onPress={() => {
                         setIsPlaying(false)
                         setTimeIndex(-1)
-                     }} >
+                    }} >
                         Reset
                     </Button>
-                <Button mode="contained" style={styles.button}  onPress={handleNotifications} >
+                    <Button mode="contained" style={styles.button} onPress={handleNotifications} >
                         notification
                     </Button>
                 </View>
-            </ScrollView>
+            </Provider>
+
+
         </SafeAreaView>
 
-     
+
     );
 };
 
 export default Pomodoro;
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
     },
-
     scrollView: {
-        backgroundColor: 'pink',
         marginHorizontal: 5,
     },
-
+    heading: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#1f1f1f',
+        padding: 8
+    },
     quickContainer: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#385cff',
         margin: 10,
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 15,
         borderRadius: 20,
     },
-
     input: {
-        fontSize: 22,
+        fontSize: 32,
         textAlign: 'center',
-        width: 80,
-        height: 30,
+        width: 100,
+        height: 45,
         margin: 'auto',
     },
-
-    cards: {
-        width: '30%',
+    countdownCont: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    countdown: {
+        width: '100%',
         margin: 5,
         flexDirection: 'row',
         backgroundColor: '#555',
