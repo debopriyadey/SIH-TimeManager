@@ -7,7 +7,7 @@ export default function GoalModal({ modal, changeModal }) {
     <Modal animationType="slide" transparent={true} visible={modal}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Entypo name="circle-with-cross" size={70} color="red" />
+          {/* <Entypo name="circle-with-cross" size={70} color="red" /> */}
           <Text style={styles.modalText}>
             This is not a SMART Task You may break it into sub tasks or set it
             as a goal.

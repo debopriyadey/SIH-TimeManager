@@ -28,7 +28,7 @@ function TodoForm() {
     tags: "",
     smart_desc: "",
     date: date.toDateString(),
-    duration: 0,
+    duration: "",
     startTime: "Start Time",
     endTime: "End time",
     checked: false,
@@ -37,12 +37,32 @@ function TodoForm() {
     repeat: false,
   });
   const [selectedTime, setSelectedTime] = useState();
+  const [drt, setDrt] = useState("");
   const [modal, setModal] = useState(false);
+  let oldTimeObj = date;
   useEffect(() => {
     if (todoData.duration >= 24 && selectedTime === "Hours") {
       setModal(true);
+    } else {
+      if (todoData.duration < 24 && selectedTime === "Hours") {
+        oldTimeObj.setHours(oldTimeObj.getHours() + Number(todoData.duration));
+        setTodoData((prev) => ({
+          ...prev,
+          endTime: oldTimeObj.toLocaleTimeString(),
+        }));
+        console.log(todoData);
+      } else {
+        oldTimeObj.setMinutes(
+          oldTimeObj.getMinutes() + Number(todoData.duration)
+        );
+        setTodoData((prev) => ({
+          ...prev,
+          endTime: oldTimeObj.toLocaleTimeString(),
+        }));
+        console.log(todoData);
+      }
     }
-  }, [todoData.duration, selectedTime]);
+  }, [todoData.duration, selectedTime, oldTimeObj]);
   const showMode = (currentMode) => {
     setMode(currentMode);
     setShow(true);
@@ -58,9 +78,16 @@ function TodoForm() {
     const currentDate = selectedDate || date;
     setShow(false);
     let tempDate = new Date(currentDate);
-    oldDateObj = tempDate;
-    let ftime = tempDate.toLocaleTimeString();
-    setTodoData((prev) => ({ ...prev, startTime: ftime }));
+    console.log(tempDate);
+    console.log(date);
+    if (tempDate.getDate() !== date.getDate()) {
+      alert("This this not today");
+      setTodoData((prev) => ({ ...prev, startTime: "Start Time" }));
+    } else {
+      oldTimeObj = tempDate;
+      let ftime = tempDate.toLocaleTimeString();
+      setTodoData((prev) => ({ ...prev, startTime: ftime }));
+    }
   };
   const clearForm = () => {
     setModal(false);
@@ -79,6 +106,7 @@ function TodoForm() {
       repeat: false,
     });
     setSelectedTime("Minutes");
+    setDrt("");
   };
 
   return (
@@ -140,13 +168,14 @@ function TodoForm() {
           <View style={styles.pickerView}>
             <TextInput
               placeholder="Duration"
-              value={todoData.duration}
+              value={drt}
               style={[styles.input, { width: "40%" }]}
               keyboardType="numeric"
               maxLength={2}
-              onChangeText={(val) =>
-                setTodoData((prev) => ({ ...prev, duration: val.toString() }))
-              }
+              onChangeText={(val) => {
+                setDrt(val);
+                setTodoData((prev) => ({ ...prev, duration: val }));
+              }}
             />
             <Picker
               style={styles.picker}
