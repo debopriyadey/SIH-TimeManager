@@ -29,12 +29,13 @@ function TodoForm() {
     date: date.toDateString(),
     duration: 0,
     startTime: "Start Time",
+    endTime: "End time",
     checked: false,
     importance: 0,
     urgent: 0,
+    repeat: false,
   });
   const [selectedTime, setSelectedTime] = useState();
-
   const showMode = (currentMode) => {
     setMode(currentMode);
     setShow(true);
@@ -50,9 +51,11 @@ function TodoForm() {
     const currentDate = selectedDate || date;
     setShow(false);
     let tempDate = new Date(currentDate);
+    oldDateObj = tempDate;
     let ftime = tempDate.toLocaleTimeString();
     setTodoData((prev) => ({ ...prev, startTime: ftime }));
   };
+
   return (
     <ScrollView style={styles.formWrapper}>
       <KeyboardAvoidingView>
@@ -105,25 +108,37 @@ function TodoForm() {
               </TouchableOpacity>
             </View>
           </View>
+
           <View style={styles.pickerView}>
             <TextInput
               placeholder="Duration"
               style={[styles.input, { width: "40%" }]}
               keyboardType="numeric"
               maxLength={2}
+              onChangeText={(val) =>
+                setTodoData((prev) => ({ ...prev, duration: val }))
+              }
             />
             <Picker
               style={styles.picker}
               selectedValue={selectedTime}
-              onValueChange={(value, valueIndex) => setSelectedTime(value)}
+              onValueChange={(value, valueIndex) => selectedTime(value)}
             >
               <Picker.Item label="Minutes" value="Minutes" />
               <Picker.Item label="Hours" value="Hours" />
             </Picker>
           </View>
+
           <View style={[styles.input, styles.switch]}>
             <Text>Do you want the task to repeat? </Text>
-            <Switch />
+            <Switch
+              value={todoData.repeat}
+              onValueChange={(newValue) =>
+                setTodoData((prev) => ({ ...prev, repeat: newValue }))
+              }
+              trackColor={{ false: "#C0C0C0", true: "#97e8e1" }}
+              thumbColor="#009387"
+            />
           </View>
           <View style={{ marginTop: 10 }}>
             <Text style={styles.sliderText}>
