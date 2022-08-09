@@ -6,7 +6,6 @@ import HomeScreen from './screens/HomeScreen';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerContent } from './screens/DrawerContent';
-
 import MainTabScreen from './screens/MainTabScreen';
 import SupportScreen from './screens/SupportScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -96,8 +95,6 @@ const App = () => {
   
   const authContext = React.useMemo(() => ({
     signIn: async(foundUser) => {
-      // setUserToken('fgkj');
-      // setIsLoading(false);
       const userToken = String(foundUser[0].userToken);
       const userName = foundUser[0].username;
       
@@ -153,6 +150,7 @@ const App = () => {
         <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
           <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
+          <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
           <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />

@@ -24,10 +24,30 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "notification":
+    {
+      "icon": "./assets/favicon.png",
+      "color": "#3D5CFF"
+      
+    },
+       "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/pomodoroImg.png",
+          "color": "#3D5CFF",
+          "sounds": [
+            "./assets/notification.wav"
+          ]
+        }
+      ]
+    ]
+
   }
 }
