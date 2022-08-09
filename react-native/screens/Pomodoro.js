@@ -29,10 +29,13 @@ Notification.setNotificationHandler({
 
 const Pomodoro = ({ navigation }) => {
     const [visible, setVisible] = React.useState(false);
+    const [breakVisible, setBreakVisible] = React.useState(false);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-    const containerStyle = { backgroundColor: 'white', padding: 20 };
+    const showBreakModal = () => setBreakVisible(true);
+    const hideBreakModal = () => setBreakVisible(false);
+    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 50, borderRadius: 20, alignSelf: 'baseline' };
 
     const [timeArray, setTimeArray] = React.useState([0, 0, 0, 0, 0, 0])
     const [timeInput, setTimeInput] = React.useState({
@@ -67,8 +70,8 @@ const Pomodoro = ({ navigation }) => {
         })
     }, []);
     const handleNotifications = () => {
-        if (timeIndex%2 == 0) {
-            showModal()
+        if (timeIndex % 2 == 0) {
+            showBreakModal()
             Notification.scheduleNotificationAsync({
                 content: {
                     title: 'Short Break',
@@ -77,7 +80,7 @@ const Pomodoro = ({ navigation }) => {
                 trigger: {
                     seconds: 1,
                 },
-    
+
             })
         } else {
             Notification.scheduleNotificationAsync({
@@ -88,12 +91,13 @@ const Pomodoro = ({ navigation }) => {
                 trigger: {
                     seconds: 1,
                 },
-    
+
             })
         }
     }
 
     const setTimerHandler = () => {
+        hideModal()
         const timeArray = [timeInput.pomodoroTime, timeInput.shortBreakTime, timeInput.pomodoroTime, timeInput.shortBreakTime, timeInput.pomodoroTime, timeInput.longBreakTime]
         setTimeArray(timeArray)
         setTimeIndex(0)
@@ -106,13 +110,13 @@ const Pomodoro = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
-            <Provider>
-                <Portal>
+            <Provider style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Portal style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                         <Text style={styles.heading}>Time (in minutes).</Text>
                         <View style={styles.quickContainer}>
                             <View style={styles.cards}>
-                                <Text>Pomodoro</Text>
+                                <Text style={styles.text}>Pomodoro</Text>
                                 <TextInput
                                     style={[
                                         styles.input,
@@ -132,7 +136,7 @@ const Pomodoro = ({ navigation }) => {
                                 />
                             </View>
                             <View style={styles.cards}>
-                                <Text>short break</Text>
+                                <Text style={styles.text}>Short break</Text>
                                 <TextInput
                                     style={[
                                         styles.input,
@@ -152,7 +156,7 @@ const Pomodoro = ({ navigation }) => {
                                 />
                             </View>
                             <View style={styles.cards}>
-                                <Text>long break</Text>
+                                <Text style={styles.text}>Long break</Text>
                                 <TextInput
                                     style={[
                                         styles.input,
@@ -175,6 +179,22 @@ const Pomodoro = ({ navigation }) => {
                         <Button mode="contained" onPress={setTimerHandler}>
                             set
                         </Button>
+                    </Modal>
+                    <Modal visible={breakVisible} onDismiss={hideBreakModal} contentContainerStyle={containerStyle}>
+                        <View style={styles.modalCont}>
+                            <Text style={styles.heading}>Time for your break.</Text>
+                            <Image
+                                source={require('../assets/breaksImg.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                }}
+                            />
+                            <Button mode="contained" onPress={hideBreakModal}>
+                                Relax
+                            </Button>
+                        </View>
                     </Modal>
                 </Portal>
                 <Button style={{ marginTop: 30 }} onPress={showModal}>
@@ -251,6 +271,13 @@ const styles = StyleSheet.create({
         color: '#1f1f1f',
         padding: 8
     },
+    text: {
+        color: '#1f1f1f',
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 10,
+    },
     quickContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -260,12 +287,19 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 20,
     },
+    cards: {
+        textAlign: 'center',
+        margin: 10,
+    },
     input: {
         fontSize: 32,
         textAlign: 'center',
         width: 100,
         height: 45,
-        margin: 'auto',
+    },
+    modalCont: {
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     countdownCont: {
         flex: 1,
