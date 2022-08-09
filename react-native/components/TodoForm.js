@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./TodoFormStyle.js";
 import {
   Text,
@@ -16,6 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
+import GoalModal from "./GoalModal.js";
 
 function TodoForm() {
   const date = new Date();
@@ -36,6 +37,12 @@ function TodoForm() {
     repeat: false,
   });
   const [selectedTime, setSelectedTime] = useState();
+  const [modal, setModal] = useState(false);
+  useEffect(() => {
+    if (todoData.duration >= 24 && selectedTime === "Hours") {
+      setModal(true);
+    }
+  }, [todoData.duration, selectedTime]);
   const showMode = (currentMode) => {
     setMode(currentMode);
     setShow(true);
@@ -55,6 +62,24 @@ function TodoForm() {
     let ftime = tempDate.toLocaleTimeString();
     setTodoData((prev) => ({ ...prev, startTime: ftime }));
   };
+  const clearForm = () => {
+    setModal(false);
+    setTodoData({
+      name: "",
+      desc: "",
+      tags: "",
+      smart_desc: "",
+      date: date.toDateString(),
+      duration: "",
+      startTime: "Start Time",
+      endTime: "End time",
+      checked: false,
+      importance: 0,
+      urgent: 0,
+      repeat: false,
+    });
+    setSelectedTime("Minutes");
+  };
 
   return (
     <ScrollView style={styles.formWrapper}>
@@ -68,6 +93,7 @@ function TodoForm() {
           </View>
           <TextInput
             placeholder="Task name"
+            value={todoData.name}
             style={styles.input}
             onChangeText={(val) =>
               setTodoData((prev) => ({ ...prev, name: val }))
@@ -75,6 +101,7 @@ function TodoForm() {
           />
           <TextInput
             placeholder="Task description"
+            value={todoData.desc}
             style={styles.input}
             numberOfLines={5}
             onChangeText={(val) =>
@@ -83,6 +110,7 @@ function TodoForm() {
           />
           <TextInput
             placeholder="Tags"
+            value={todoData.tags}
             style={styles.input}
             onChangeText={(val) =>
               setTodoData((prev) => ({ ...prev, tags: val }))
@@ -112,23 +140,24 @@ function TodoForm() {
           <View style={styles.pickerView}>
             <TextInput
               placeholder="Duration"
+              value={todoData.duration}
               style={[styles.input, { width: "40%" }]}
               keyboardType="numeric"
               maxLength={2}
               onChangeText={(val) =>
-                setTodoData((prev) => ({ ...prev, duration: val }))
+                setTodoData((prev) => ({ ...prev, duration: val.toString() }))
               }
             />
             <Picker
               style={styles.picker}
               selectedValue={selectedTime}
-              onValueChange={(value, valueIndex) => selectedTime(value)}
+              onValueChange={(value, valueIndex) => setSelectedTime(value)}
             >
               <Picker.Item label="Minutes" value="Minutes" />
               <Picker.Item label="Hours" value="Hours" />
             </Picker>
           </View>
-
+          <GoalModal modal={modal} changeModal={() => clearForm()} />
           <View style={[styles.input, styles.switch]}>
             <Text>Do you want the task to repeat? </Text>
             <Switch
