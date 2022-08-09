@@ -35,7 +35,7 @@ const Pomodoro = ({ navigation }) => {
     const hideModal = () => setVisible(false);
     const showBreakModal = () => setBreakVisible(true);
     const hideBreakModal = () => setBreakVisible(false);
-    const containerStyle = { backgroundColor: 'white' , padding: 20,  borderRadius: 20 };
+    const containerStyle = { backgroundColor: 'white' , padding: 20,  borderRadius: 20, margin: 10 };
 
     const [timeArray, setTimeArray] = React.useState([0, 0, 0, 0, 0, 0])
     const [timeInput, setTimeInput] = React.useState({
@@ -78,7 +78,7 @@ const Pomodoro = ({ navigation }) => {
                     body: 'Time for a break!',
                 },
                 trigger: {
-                    seconds: 1,
+                    seconds: 0,
                 },
 
             })
@@ -187,8 +187,8 @@ const Pomodoro = ({ navigation }) => {
                                 source={require('../assets/breaksImg.png')}
                                 resizeMode="contain"
                                 style={{
-                                    width: 300,
-                                    height: 300,
+                                    width: 250,
+                                    height: 250,
                                 }}
                             />
                             <Button mode="contained" onPress={hideBreakModal}>
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     heading: {
-        fontSize: 32,
+        fontSize: 25,
         fontWeight: 'bold',
         color: '#1f1f1f',
         padding: 8
@@ -281,11 +281,10 @@ const styles = StyleSheet.create({
     quickContainer: {
         display: 'flex',
         flexDirection: 'row',
-        margin: 10,
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 15,
         borderRadius: 20,
+        
     },
     cards: {
         textAlign: 'center',
@@ -294,7 +293,7 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 32,
         textAlign: 'center',
-        width: 100,
+        width: 80,
         height: 45,
     },
     modalCont: {
