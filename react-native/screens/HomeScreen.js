@@ -108,12 +108,12 @@ export default function Search() {
           />
           <Image
             source={require('../assets/progress.png')}
-            resizeMode="cover"
+            resizeMode="contain"
             style={styles.quickCard}
           />
           <Image
             source={require('../assets/goals.png')}
-            resizeMode="cover"
+            resizeMode="contain"
             style={styles.quickCard}
           />
         </View>
@@ -207,6 +207,5 @@ const styles = StyleSheet.create({
   quickCard: {
     margin: '5%',
     width: '40%',
-    height: '40%',
   },
 });
