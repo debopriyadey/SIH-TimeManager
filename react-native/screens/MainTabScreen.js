@@ -10,6 +10,8 @@ import ExploreScreen from './ExploreScreen';
 import ProfileScreen from './ProfileScreen';
 import { Button } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import ProgressReport from './ProgressReport';
+import SessionScreen from './SessionScreen';
 
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
@@ -122,10 +124,10 @@ const MainTabScreen = () => (
       }}
     />
     <Tab.Screen
-      name="Explore"
-      component={ExploreScreen}
+      name="Session"
+      component={SessionScreen}
       options={{
-        tabBarLabel: 'Explore',
+        tabBarLabel: 'Session',
         tabBarColor: '#d02860',
         tabBarIcon: ({ color }) => (
           <Ionicons name="aperture" size={24} color="black" />
