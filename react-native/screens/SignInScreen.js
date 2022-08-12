@@ -11,19 +11,18 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // //  import FontAwesome from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf';
 //// import Feather from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf';
-
 import { useTheme } from 'react-native-paper';
+import { signin } from '../redux/slice/userSlice';
+import * as api from '../api'
+import { useDispatch, useSelector } from 'react-redux';
 
-import { AuthContext } from '../components/context';
-
-import Users from '../model/users';
 
 const SignInScreen = ({ navigation }) => {
-
     const [data, setData] = React.useState({
-        username: '',
+        email: '',
         password: '',
         check_textInputChange: false,
         secureTextEntry: true,
@@ -32,21 +31,20 @@ const SignInScreen = ({ navigation }) => {
     });
 
     const { colors } = useTheme();
-
-    const { signIn } = React.useContext(AuthContext);
+    const dispatch = useDispatch();
 
     const textInputChange = (val) => {
         if (val.trim().length >= 4) {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: true,
                 isValidUser: true
             });
         } else {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: false,
                 isValidUser: false
             });
@@ -90,17 +88,19 @@ const SignInScreen = ({ navigation }) => {
         }
     }
 
-    const loginHandle = (userName, password) => {
-
-        const foundUser = Users.filter(item => {
-            return userName == item.username && password == item.password;
-        });
-
-        if (data.username.length == 0 || data.password.length == 0) {
-            Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
+    const loginHandle = async () => {
+        const payload = data;
+        
+        try {
+            const { data } = await api.signin(payload);
+            console.log("got response for signin!", data)
+            await AsyncStorage.setItem('userToken', data.user.token);
+            dispatch(signin(data.user));
+        } catch (error) {
+            console.log("got error in signin!", error.response.data)
+            Alert.alert('Wrong Input!', error.response?.data?.error || "something went wrong.", [
                 { text: 'Okay' }
             ]);
-            return;
         }
 
         if (foundUser.length == 0) {
@@ -126,7 +126,7 @@ const SignInScreen = ({ navigation }) => {
             >
                 <Text style={[styles.text_footer, {
                     color: colors.text
-                }]}>Username</Text>
+                }]}>Email/username</Text>
                 <View style={styles.action}>
                     {/* <FontAwesome 
                     name="user-o"
@@ -134,7 +134,7 @@ const SignInScreen = ({ navigation }) => {
                     size={20}
                 /> */}
                     <TextInput
-                        placeholder="Your Username"
+                        placeholder="Your Email/username"
                         placeholderTextColor="#666666"
                         style={[styles.textInput, {
                             color: colors.text
@@ -157,7 +157,7 @@ const SignInScreen = ({ navigation }) => {
                 </View>
                 {data.isValidUser ? null :
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
+                        <Text style={styles.errorMsg}>Email/username must be 4 characters long.</Text>
                     </Animatable.View>
                 }
 
@@ -203,7 +203,7 @@ const SignInScreen = ({ navigation }) => {
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
-                        onPress={() => { loginHandle(data.username, data.password) }}
+                        onPress={loginHandle}
                     >
                         <LinearGradient
                             colors={['#08d4c4', '#01ab9d']}

@@ -5,8 +5,8 @@ const validator = require('validator');
 
 const signup = (req, res, next) => {
     const { name, email, password } = req.body;
-
     if (!email || !name || !password) {
+        console.log("Please enter all fields" )
         return res.status(422).json({ error: "Please enter all fields" });
     } else if (!validator.isEmail(email)) {
         return res.status(422).json({ error: "Enter valid email" })
@@ -21,6 +21,7 @@ const signup = (req, res, next) => {
                     const user = new Users({
                         name,
                         email,
+                        type: "normal",
                         password: hashedpassword
                     })
 
@@ -61,13 +62,6 @@ const signin = (req, res, next ) => {
                         const token = jwt.sign({ _id: savedUser._id, name: savedUser.name },process.env.JWT_SECRET);
                         savedUser.token = token;
                         savedUser.save().then((user) => {
-                            res.cookie('token', token, {
-                                maxAge: 60*24*60*60*1000,//setting cookie for 60 days
-                                httpOnly: true,
-                                sameSite: 'None',
-                                secure: true,
-                                path: '/',
-                            });
                             return res.json({ user });
                         }).catch((err) => {
                             next(err);
@@ -101,8 +95,7 @@ const getLoggedInUserInfo = (req, res, next) => {
 }
 
 const logout = async (req, res, next ) => {
-    const { token } = req.cookies;
-    res.clearCookie('token');
+    const { token } = req.body;
     Users.updateOne({token}, {token:''}).then((user)=>{
         return res.status(200).json({message: "Logged Out"});
     }).catch((err) => {

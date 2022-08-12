@@ -8,6 +8,6 @@ route.get('/user/:id', controller.getUserById);
 route.post('/signin', controller.signin);
 route.post('/signup', controller.signup);
 route.post('/userInfo',requiredLogin , controller.getLoggedInUserInfo);
-route.post('/logout', controller.logout);
+route.post('/signout', controller.logout);
 
 module.exports=route;

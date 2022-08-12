@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import {
     useTheme,
     Avatar,
@@ -15,16 +15,31 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { AuthContext } from '../components/context';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { signout } from '../redux/slice/userSlice';
+import * as api from '../api'
 export function DrawerContent(props) {
-
+    const dispatch = useDispatch()
+    const token = useSelector((state) => state.user.token)
     const paperTheme = useTheme();
-
-    const { signOut, toggleTheme } = React.useContext(AuthContext);
+    const handleSignout = async() => {
+        try {
+            const data = {token}
+            console.log("logged out handler")
+            await AsyncStorage.removeItem("userToken");
+            await api.signout(data)
+            dispatch(signout())
+        } catch (error) {
+            console.log("got error while signout!.",  error.response )
+            Alert.alert('Wrong Input!',  error.response?.data?.error || "something went wrong.", [
+                { text: 'Okay' }
+            ]);
+        }
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -118,7 +133,7 @@ export function DrawerContent(props) {
                         <MaterialIcons name="logout" size={24} color="black" />
                     )}
                     label="Sign Out"
-                    onPress={() => { signOut() }}
+                    onPress={handleSignout}
                 />
             </Drawer.Section>
         </View>

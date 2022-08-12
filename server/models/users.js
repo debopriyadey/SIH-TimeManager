@@ -5,6 +5,10 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    username: {
+        type: String,
+        require: true
+    },
     email: {
         type: String,
         require: true
@@ -13,7 +17,10 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+    type: {
+        type: String,
+        require: true
+    },
     token: {
         type: String, 
         default: ""
