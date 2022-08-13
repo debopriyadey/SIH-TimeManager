@@ -114,14 +114,14 @@ const SignInScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor='#009387' barStyle="light-content" />
+            <StatusBar backgroundColor='#3D5CFF' barStyle="light-content" />
             <View style={styles.header}>
                 <Text style={styles.text_header}>Welcome!</Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
                 style={[styles.footer, {
-                    backgroundColor: colors.background
+                    backgroundColor: 'colors.background'
                 }]}
             >
                 <Text style={[styles.text_footer, {
@@ -238,7 +238,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#009387'
+        backgroundColor: '#3D5CFF'
     },
     header: {
         flex: 1,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 3,
-        backgroundColor: '#fff',
+        backgroundColor: '#3D5CFF',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 20,

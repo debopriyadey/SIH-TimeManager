@@ -147,7 +147,7 @@ export default function ParentControl() {
         </Portal>
 
         <View style={{ flex: 1, flexDirection: 'column' }}>
-          {childData.map((child) => {
+          {childData.map((child) => (
             <Card style={styles.resCard}>
               <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
                 <View
@@ -181,41 +181,9 @@ export default function ParentControl() {
                 </View>
               </View>
             </Card>
-          })}
+          ))}
 
-          <Card style={styles.resCard}>
-            <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
-              <View
-                style={{
-                  backgroundColor: 'skyblue',
-                  margin: 3,
-                  padding: 7,
-                  borderRadius: 10,
-                  flex: 0.3,
-                  textAlign: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Avatar.Icon size={80} icon="search" />
-              </View>
-              <View style={{ flex: 0.8, padding: 5 }}>
-                <View style={styles.inlineView}>
-                  <Text style={styles.heading}>Child 2</Text>
-                  <Badge style={{ backgroundColor: '#800000' }}></Badge>
-                </View>
-                <View style={{ marginVertical: 10 }}></View>
-                <View
-                  style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
-                  <Button mode="contained" style={styles.btn}>
-                    Details
-                  </Button>
-                  <Button mode="contained" style={styles.btn}>
-                    Switch
-                  </Button>
-                </View>
-              </View>
-            </View>
-          </Card>
+         
         </View>
 
         <View

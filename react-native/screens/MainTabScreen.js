@@ -9,9 +9,10 @@ import DetailsScreen from './DetailsScreen';
 import ExploreScreen from './ExploreScreen';
 import ProfileScreen from './ProfileScreen';
 import { Button } from 'react-native-paper';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import ProgressReport from './ProgressReport';
 import SessionScreen from './SessionScreen';
+import Pomodoro from './Pomodoro';
 
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
@@ -40,7 +41,7 @@ const CustomTabButtom = ({ children, onPress }) => (
   </TouchableOpacity>
 )
 
-const MainTabScreen = () => (
+const MainTabScreen = ({navigation}) => (
   <Tab.Navigator
     // initialRouteName="Home"
     // activeColor="#fff"
@@ -58,25 +59,40 @@ const MainTabScreen = () => (
       }
     }}
   >
+    
     <Tab.Screen
       name="Home"
       component={HomeScreen}
       options={{
         tabBarLabel: 'Home',
-        tabBarColor: '#009387',
+        tabBarColor: '#3D5CFF',
         tabBarIcon: ({ color }) => (
-          <Entypo name="home" size={24} color="black" />
+          <Image
+            source={require('../icons/home.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
       }}
     />
     <Tab.Screen
-      name="Notifications"
+      name="Schedule"
       component={DetailsScreen}
       options={{
-        tabBarLabel: 'Updates',
+        tabBarLabel: 'Schedule',
         tabBarColor: '#1f65ff',
         tabBarIcon: ({ color }) => (
-          <Entypo name="notification" size={24} color="black" />
+          <Image
+            source={require('../icons/schedule.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
       }}
     />
@@ -85,7 +101,14 @@ const MainTabScreen = () => (
       component={DetailsScreen}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Ionicons name="person-circle" size={24} color={focused ? "#fff" : "#1f1f1f"} />
+          <Image
+            source={require('../icons/mic.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
         tabBarButton: (props) => (
           <CustomTabButtom {...props} />
@@ -113,24 +136,44 @@ const MainTabScreen = () => (
     // }}
     />
     <Tab.Screen
-      name="Profile"
+      name="Space"
       component={ProfileScreen}
       options={{
-        tabBarLabel: 'Profile',
+        tabBarLabel: 'Space',
         tabBarColor: '#694fad',
         tabBarIcon: ({ color }) => (
-          <Ionicons name="person-circle" size={24} color="black" />
+          <Image
+            source={require('../icons/space.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
       }}
     />
     <Tab.Screen
-      name="Session"
-      component={SessionScreen}
+      name="More"
+      component={() => null}
+      listeners={() => ({
+        tabPress: (e) => {
+          e.preventDefault(); // Prevents navigation
+          navigation.openDrawer()
+        },
+      })}
       options={{
-        tabBarLabel: 'Session',
+        tabBarLabel: 'More',
         tabBarColor: '#d02860',
         tabBarIcon: ({ color }) => (
-          <Ionicons name="aperture" size={24} color="black" />
+          <Image
+            source={require('../icons/more.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
       }}
     />
@@ -138,6 +181,49 @@ const MainTabScreen = () => (
 );
 
 export default MainTabScreen;
+
+const HomeStackScreen = ({ navigation }) => (
+  <HomeStack.Navigator screenOptions={{
+    headerStyle: {
+      backgroundColor: '#3D5CFF',
+      height: 100
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontSize: 30,
+      fontWeight: 'bold'
+    },
+  }}>
+    <HomeStack.Screen name="Home" component={HomeScreen} options={{
+      title: 'Hi Krishna',
+      headerRight: () => (
+        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
+          <Entypo name="menu" size={24} color="black" />
+        </Button>
+      )
+    }} />
+  </HomeStack.Navigator>
+);
+
+const DetailsStackScreen = ({ navigation }) => (
+  <DetailsStack.Navigator screenOptions={{
+    headerStyle: {
+      backgroundColor: '#1f65ff',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold'
+    }
+  }}>
+    <DetailsStack.Screen name="Details" component={DetailsScreen} options={{
+      headerLeft: () => (
+        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
+          <Entypo name="menu" size={24} color="black" />
+        </Button>
+      )
+    }} />
+  </DetailsStack.Navigator>
+);
 
 const styles = StyleSheet.create({
   container: {
