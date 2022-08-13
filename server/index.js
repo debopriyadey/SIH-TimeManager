@@ -44,7 +44,7 @@ app.use("/room", roomRoute);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-const dbURI = "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
+const dbURI = process.env.DB_URL ||  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
 
 
 
