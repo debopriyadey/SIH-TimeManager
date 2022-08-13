@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>
-          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("SessionScreen")}>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("SearchScreen")}>
             <Image
               source={require('../icons/search.png')}
               resizeMode="contain"
@@ -95,44 +95,52 @@ export default function HomeScreen({ navigation }) {
           </Card>
         </View>
         <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
-          <Image
-            source={require('../assets/createTask.png')}
-            resizeMode="contain"
-            style={{
-              width: 180,
-              height: 120,
-            }}
-          />
-          <Image
-            source={require('../assets/createGoal.png')}
-            resizeMode="contain"
-            style={{
-              width: 180,
-              height: 120,
-            }}
-          />
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("CreateTask")}>
+            <Image
+              source={require('../assets/createTask.png')}
+              resizeMode="contain"
+              style={{
+                width: 180,
+                height: 120,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("CreateGoal")}>
+            <Image
+              source={require('../assets/createGoal.png')}
+              resizeMode="contain"
+              style={{
+                width: 180,
+                height: 120,
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.quickContainer}>
-          <Image
-            source={require('../assets/pomodoro.png')}
-            resizeMode="contain"
-            style={styles.quickCard}
-          />
-          <Image
-            source={require('../assets/focus.png')}
-            resizeMode="contain"
-            style={styles.quickCard}
-          />
-          <Image
-            source={require('../assets/progress.png')}
-            resizeMode="contain"
-            style={styles.quickCard}
-          />
-          <Image
-            source={require('../assets/goals.png')}
-            resizeMode="contain"
-            style={styles.quickCard}
-          />
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("Pomodoro")} style={styles.quickCard}>
+            <Image
+              source={require('../assets/pomodoro.png')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("Focus")} style={styles.quickCard}>
+            <Image
+              source={require('../assets/focus.png')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("Progress")} style={styles.quickCard}>
+            <Image
+              source={require('../assets/progress.png')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("Goals")} style={styles.quickCard}>
+            <Image
+              source={require('../assets/goals.png')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
         </View>
         <ImageBackground
           source={require('../assets/meetup.png')}

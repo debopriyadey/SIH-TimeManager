@@ -12,8 +12,9 @@ import SupportScreen from './screens/SupportScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import BookmarkScreen from './screens/BookmarkScreen';
 import ParentControl from './screens/ParentControl';
-import SessionScreen from './screens/SessionScreen'; 
-import SearchScreen from './screens/SearchScreen'; 
+import SessionScreen from './screens/SessionScreen';
+import SearchScreen from './screens/SearchScreen';
+import Pomodoro from './screens/Pomodoro';
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
 import * as api from './api'
@@ -107,13 +108,16 @@ const Application = () => {
   return (
     <>
       {token ? (
-        <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-          <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+        <Drawer.Navigator
+          screenOptions={{headerShown: false}}
+          drawerContent={props => <DrawerContent {...props} />}
+        >
+          <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="ParentControl" component={ParentControl} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
+          <Drawer.Screen name="Pomodoro" component={Pomodoro} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
-          <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
           <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />

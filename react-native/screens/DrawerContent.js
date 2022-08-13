@@ -77,7 +77,7 @@ export function DrawerContent(props) {
                                 <Entypo name="home" size={24} color="black" />
                             )}
                             label="Home"
-                            onPress={() => { props.navigation.navigate('HomeDrawer') }}
+                            onPress={() => { props.navigation.navigate('Home') }}
                         />
                         <DrawerItem
                             icon={({ color, size }) => (
