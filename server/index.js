@@ -11,7 +11,7 @@ const createSocketServer = require("./services/socket");
 const app = express();
 const httpServer = new http.Server(app);
 
-createSockerServer(httpServer);
+createSocketServer(httpServer);
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");

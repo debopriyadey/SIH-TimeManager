@@ -13,4 +13,4 @@ const createSockerServer = (server) => {
   });
 };
 
-export default createSockerServer;
+module.exports = createSockerServer;
