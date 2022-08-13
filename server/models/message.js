@@ -10,9 +10,9 @@ const messageSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    chat: {
+    room: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Chat",
+      ref: "Room",
     },
   },
   {
