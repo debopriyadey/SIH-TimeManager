@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
@@ -42,7 +42,16 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>
-          <Button style={{backgroundColor: '#FFEBFO'}} icon={require('../icons/search.png')} onPress={() => navigation.navigate("SearchScreen")}></Button>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("SessionScreen")}>
+            <Image
+              source={require('../icons/search.png')}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={[styles.taskCardCont, { marginTop: -100, zIndex: 2 }]}>
           <Card style={styles.resCard}>

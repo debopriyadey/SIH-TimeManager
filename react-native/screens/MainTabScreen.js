@@ -63,20 +63,34 @@ const MainTabScreen = () => (
       component={HomeScreen}
       options={{
         tabBarLabel: 'Home',
-        tabBarColor: '#009387',
+        tabBarColor: '#3D5CFF',
         tabBarIcon: ({ color }) => (
-          <Entypo name="home" size={24} color="black" />
+          <Image
+            source={require('../icons/home.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
       }}
     />
     <Tab.Screen
-      name="Notifications"
+      name="Schedule"
       component={DetailsScreen}
       options={{
-        tabBarLabel: 'Updates',
+        tabBarLabel: 'Schedule',
         tabBarColor: '#1f65ff',
         tabBarIcon: ({ color }) => (
-          <Entypo name="notification" size={24} color="black" />
+          <Image
+            source={require('../icons/schedule.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
       }}
     />
@@ -85,7 +99,14 @@ const MainTabScreen = () => (
       component={DetailsStackScreen}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Ionicons name="person-circle" size={24} color={focused ? "#fff" : "#1f1f1f"} />
+          <Image
+            source={require('../icons/mic.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
         ),
         tabBarButton: (props) => (
           <CustomTabButtom {...props} />
