@@ -9,7 +9,7 @@ import DetailsScreen from './DetailsScreen';
 import ExploreScreen from './ExploreScreen';
 import ProfileScreen from './ProfileScreen';
 import { Button } from 'react-native-paper';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import ProgressReport from './ProgressReport';
 import SessionScreen from './SessionScreen';
 
@@ -60,7 +60,7 @@ const MainTabScreen = () => (
   >
     <Tab.Screen
       name="Home"
-      component={HomeStackScreen}
+      component={HomeScreen}
       options={{
         tabBarLabel: 'Home',
         tabBarColor: '#009387',
@@ -142,20 +142,21 @@ export default MainTabScreen;
 const HomeStackScreen = ({ navigation }) => (
   <HomeStack.Navigator screenOptions={{
     headerStyle: {
-      backgroundColor: '#009387',
+      backgroundColor: '#3D5CFF',
+      height: 100
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
+      fontSize: 30,
       fontWeight: 'bold'
-    }
+    },
   }}>
     <HomeStack.Screen name="Home" component={HomeScreen} options={{
-      title: 'Overview',
-      headerLeft: () => (
-        <Button title="Open drawer" onPress={() => navigation.openDrawer()} />
-        // <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
-        //   <Entypo name="menu" size={24} color="black" />
-        // </Button>
+      title: 'Hi Krishna',
+      headerRight: () => (
+        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
+          <Entypo name="menu" size={24} color="black" />
+        </Button>
       )
     }} />
   </HomeStack.Navigator>

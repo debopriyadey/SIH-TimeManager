@@ -5,8 +5,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 
 // You can import from local files
-import AssetExample from './components/AssetExample';
-
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
@@ -29,7 +27,7 @@ export default function SearchScreen() {
         />
         <View style={[styles.inlineView, { justifyContent: 'space-around', marginTop: 20 }]}>
           <Image
-            source={require('./assets/groupsImg.png')}
+            source={require('../assets/groupsImg.png')}
             resizeMode="contain"
             style={{
               width: 150,
@@ -37,7 +35,7 @@ export default function SearchScreen() {
             }}
           />
           <Image
-            source={require('./assets/taskImg.png')}
+            source={require('../assets/taskImg.png')}
             resizeMode="contain"
             style={{
               width: 150,

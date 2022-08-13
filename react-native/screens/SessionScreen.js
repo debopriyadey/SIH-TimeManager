@@ -11,91 +11,89 @@ import { Avatar, Button, Card } from 'react-native-paper';
 
 function TabBar() {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <Tabs>
-          <TabScreen label="Previous">
-          <View style={{margin: 100}}>
-            <Card style={styles.resCard}>
-              <View>
-                <View
-                  style={[
-                    styles.inlineView,
-                    { justifyContent: 'space-around' },
-                  ]}>
-                  <View
-                    style={{
-                      backgroundColor: 'skyblue',
-                      margin: 5,
-                      padding: 5,
-                      borderRadius: 10,
-                      flex: 0.3,
-                      textAlign: 'center',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Avatar.Icon size={40} icon="search" />
-                    <Text style={styles.helperText}>24th July,</Text>
-                    <Text style={styles.helperText}>2pm - 4pm</Text>
-                  </View>
-                  <View style={{ flex: 0.8, padding: 5 }}>
-                    <Text style={styles.text}>Mental Health due to stress</Text>
-                    <Text style={styles.helperText}>taken by Dr. Anirudh</Text>
-                    <View style={{ marginVertical: 10 }}></View>
-                    <View style={styles.inlineView}>
-                      <Button mode="contained" style={{ width: 70 }}>
-                        Rate
-                      </Button>
-                      <Button mode="contained" style={{ width: 140 }}>
-                        Suggestion
-                      </Button>
-                    </View>
-                  </View>
+    // <SafeAreaView style={styles.container}>
+    //   <ScrollView style={styles.scrollView}>
+    <Tabs>
+      <TabScreen label="Previous">
+        <Card style={styles.resCard}>
+          <View>
+            <View
+              style={[
+                styles.inlineView,
+                { justifyContent: 'space-around' },
+              ]}>
+              <View
+                style={{
+                  backgroundColor: 'skyblue',
+                  margin: 5,
+                  padding: 5,
+                  borderRadius: 10,
+                  flex: 0.3,
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Avatar.Icon size={40} icon="search" />
+                <Text style={styles.helperText}>24th July,</Text>
+                <Text style={styles.helperText}>2pm - 4pm</Text>
+              </View>
+              <View style={{ flex: 0.8, padding: 5 }}>
+                <Text style={styles.text}>Mental Health due to stress</Text>
+                <Text style={styles.helperText}>taken by Dr. Anirudh</Text>
+                <View style={{ marginVertical: 10 }}></View>
+                <View style={styles.inlineView}>
+                  <Button mode="contained" style={{ width: 70 }}>
+                    Rate
+                  </Button>
+                  <Button mode="contained" style={{ width: 140 }}>
+                    Suggestion
+                  </Button>
                 </View>
               </View>
-            </Card>
+            </View>
           </View>
-          </TabScreen>
-          <TabScreen label="Upcomming">
-            <Card style={styles.resCard}>
-              <View>
-                <View
-                  style={[
-                    styles.inlineView,
-                    { justifyContent: 'space-around' },
-                  ]}>
-                  <View
-                    style={{
-                      backgroundColor: 'skyblue',
-                      margin: 5,
-                      padding: 5,
-                      borderRadius: 10,
-                      flex: 0.3,
-                      textAlign: 'center',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Avatar.Icon size={40} icon="search" />
-                    <Text style={styles.helperText}>24th July,</Text>
-                    <Text style={styles.helperText}>2pm - 4pm</Text>
-                  </View>
-                  <View style={{ flex: 0.8, padding: 5 }}>
-                    <Text style={styles.text}>Mental Health due to stress</Text>
-                    <Text style={styles.helperText}>taken by Dr. Anirudh</Text>
-                    <View style={{ marginVertical: 10 }}></View>
-                    <View style={styles.inlineView}>
-                      <Button mode="contained" style={{ width: 70 }}>
-                        Join
-                      </Button>
-                    </View>
-                  </View>
+        </Card>
+      </TabScreen>
+      <TabScreen label="Upcomming">
+        <Card style={styles.resCard}>
+          <View>
+            <View
+              style={[
+                styles.inlineView,
+                { justifyContent: 'space-around' },
+              ]}>
+              <View
+                style={{
+                  backgroundColor: 'skyblue',
+                  margin: 5,
+                  padding: 5,
+                  borderRadius: 10,
+                  flex: 0.3,
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Avatar.Icon size={40} icon="search" />
+                <Text style={styles.helperText}>24th July,</Text>
+                <Text style={styles.helperText}>2pm - 4pm</Text>
+              </View>
+              <View style={{ flex: 0.8, padding: 5 }}>
+                <Text style={styles.text}>Mental Health due to stress</Text>
+                <Text style={styles.helperText}>taken by Dr. Anirudh</Text>
+                <View style={{ marginVertical: 10 }}></View>
+                <View style={styles.inlineView}>
+                  <Button mode="contained" style={{ width: 70 }}>
+                    Join
+                  </Button>
                 </View>
               </View>
-            </Card>
-          </TabScreen>
-        </Tabs>
-      </ScrollView>
-    </SafeAreaView>
+            </View>
+          </View>
+        </Card>
+      </TabScreen>
+    </Tabs>
+    //   </ScrollView>
+    // </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

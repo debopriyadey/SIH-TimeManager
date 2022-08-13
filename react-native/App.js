@@ -12,7 +12,8 @@ import SupportScreen from './screens/SupportScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import BookmarkScreen from './screens/BookmarkScreen';
 import ParentControl from './screens/ParentControl';
-import SessionScreen from './screens/SessionScreen';
+import SessionScreen from './screens/SessionScreen'; 
+import SearchScreen from './screens/SearchScreen'; 
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
 import * as api from './api'
@@ -110,6 +111,7 @@ const Application = () => {
           <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
           <Drawer.Screen name="ParentControl" component={ParentControl} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
+          <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />

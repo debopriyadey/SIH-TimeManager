@@ -17,8 +17,9 @@ import {
   ProgressBar,
   Badge,
 } from 'react-native-paper';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -26,17 +27,24 @@ export default function HomeScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <View style={[styles.inlineView, { backgroundColor: '#3D5CFF', padding: 10 }]}>
+        <View style={[styles.inlineView, { backgroundColor: '#3D5CFF', padding: 10, height: 200 }]}>
           <View style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
-            <Avatar.Icon size={40} icon="file" />
+            <Image
+              source={require('../assets/Avatar.png')}
+              resizeMode="contain"
+              style={{
+                width: 50,
+                height: 50,
+              }}
+            />
             <View>
               <Text style={styles.heading}>Hi Krishna</Text>
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>
-          <Avatar.Icon size={40} icon="search" />
+          <Button style={{backgroundColor: '#FFEBFO'}} icon={require('../icons/search.png')} onPress={() => navigation.navigate("SearchScreen")}></Button>
         </View>
-        <View style={styles.taskCardCont}>
+        <View style={[styles.taskCardCont, { marginTop: -100, zIndex: 2 }]}>
           <Card style={styles.resCard}>
             <Card.Content>
               <View style={styles.inlineView}>
@@ -120,16 +128,16 @@ export default function HomeScreen({navigation}) {
         <ImageBackground
           source={require('../assets/meetup.png')}
           resizeMode="cover"
-          style={[styles.image, {padding: 15}]}>
-            <Text style={{fontSize: 30, color: '#440687', marginBottom: 10, fontWeight: 'bold' }}>Counsell Session</Text>
-            <Text style={[styles.helperText, {color: '#440687'}]}>Connect with Counsellers</Text>
-            <Text style={[styles.helperText, {color: '#440687', marginBottom: 25}]}>for one on one Sessions</Text>
-            <Button
-              mode="contained"
-              style={{width: 230}}
-              onPress={() => navigation.push("SessionScreen")}>
-              Connect Now!
-            </Button>
+          style={[styles.image, { padding: 15 }]}>
+          <Text style={{ fontSize: 30, color: '#440687', marginBottom: 10, fontWeight: 'bold' }}>Counsell Session</Text>
+          <Text style={[styles.helperText, { color: '#440687' }]}>Connect with Counsellers</Text>
+          <Text style={[styles.helperText, { color: '#440687', marginBottom: 25 }]}>for one on one Sessions</Text>
+          <Button
+            mode="contained"
+            style={{ width: 230 }}
+            onPress={() => navigation.navigate("SessionScreen")}>
+            Connect Now!
+          </Button>
         </ImageBackground>
       </ScrollView>
     </SafeAreaView>
@@ -140,10 +148,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
     backgroundColor: '#F5F7FF',
   },
-  scrollView: { marginHorizontal: 5 },
+  scrollView: { marginHorizontal: 0 },
   heading: {
     fontSize: 32,
     fontWeight: 'bold',
