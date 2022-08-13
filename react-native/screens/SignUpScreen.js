@@ -84,6 +84,7 @@ const SignInScreen = ({ navigation }) => {
     const registerHandler = async () => {
         try {
             const { password, username, email } = data;
+            console.log(data)
             const payload = {
                 name: username,
                 password,
@@ -92,7 +93,7 @@ const SignInScreen = ({ navigation }) => {
             await api.signup(payload);
             navigation.navigate('SignInScreen')
         } catch (error) {
-            console.log("error while signup ..", error);
+            console.log("error while signup ..", error.message);
         }
     }
 

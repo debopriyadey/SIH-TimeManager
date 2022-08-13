@@ -11,7 +11,7 @@ const createSocketServer = require("./services/socket");
 const app = express();
 const httpServer = new http.Server(app);
 
-createSockerServer(httpServer);
+createSocketServer(httpServer);
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -44,8 +44,11 @@ app.use("/room", roomRoute);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-const dbURI =
-  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
+const dbURI = process.env.DB_URL ||  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
+
+
+
+
 
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })

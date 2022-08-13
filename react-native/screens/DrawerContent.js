@@ -77,7 +77,7 @@ export function DrawerContent(props) {
                                 <Entypo name="home" size={24} color="black" />
                             )}
                             label="Home"
-                            onPress={() => { props.navigation.navigate('HomeDrawer') }}
+                            onPress={() => { props.navigation.navigate('Home') }}
                         />
                         <DrawerItem
                             icon={({ color, size }) => (
@@ -113,6 +113,13 @@ export function DrawerContent(props) {
                             )}
                             label="Support"
                             onPress={() => { props.navigation.navigate('SupportScreen') }}
+                        />
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Ionicons name="checkmark-circle" size={24} color="black" />
+                            )}
+                            label="Child"
+                            onPress={() => { props.navigation.navigate('ParentControl') }}
                         />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
