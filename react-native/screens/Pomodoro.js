@@ -223,6 +223,7 @@ const Pomodoro = ({ navigation }) => {
                         </View>
                     </Modal>
                 </Portal>
+                
                 <Button style={{ marginTop: 30 }} onPress={showModal}>
                     Settings
                 </Button>

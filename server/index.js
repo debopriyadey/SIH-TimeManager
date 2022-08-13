@@ -32,7 +32,8 @@ app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 5000
-const dbURI = "mongodb://localhost:27017/sih";
+// const dbURI = "mongodb://localhost:27017/sih";
+const dbURI = "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
 
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })

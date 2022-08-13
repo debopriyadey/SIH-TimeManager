@@ -18,7 +18,7 @@ import {
   Badge,
 } from 'react-native-paper';
 
-export default function Search() {
+export default function HomeScreen({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -26,8 +26,8 @@ export default function Search() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <View style={[styles.inlineView, {backgroundColor: '#3D5CFF', padding: 10}]}>
-          <View style={[styles.inlineView, {justifyContent: 'flex-start'}]}>
+        <View style={[styles.inlineView, { backgroundColor: '#3D5CFF', padding: 10 }]}>
+          <View style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
             <Avatar.Icon size={40} icon="file" />
             <View>
               <Text style={styles.heading}>Hi Krishna</Text>
@@ -120,15 +120,16 @@ export default function Search() {
         <ImageBackground
           source={require('../assets/meetup.png')}
           resizeMode="cover"
-          style={styles.image}>
-          <Text style={styles.text}>Counsell Session</Text>
-          <Text style={styles.textHelper}>connect with Counsellers one on one</Text>
-          <Button
-            mode="contained"
-            style={{width: 20}}
-            onPress={() => console.log('Pressed')}>
-            Apply Now!
-          </Button>
+          style={[styles.image, {padding: 15}]}>
+            <Text style={{fontSize: 30, color: '#440687', marginBottom: 10, fontWeight: 'bold' }}>Counsell Session</Text>
+            <Text style={[styles.helperText, {color: '#440687'}]}>Connect with Counsellers</Text>
+            <Text style={[styles.helperText, {color: '#440687', marginBottom: 25}]}>for one on one Sessions</Text>
+            <Button
+              mode="contained"
+              style={{width: 230}}
+              onPress={() => navigation.push("SessionScreen")}>
+              Connect Now!
+            </Button>
         </ImageBackground>
       </ScrollView>
     </SafeAreaView>
@@ -144,19 +145,22 @@ const styles = StyleSheet.create({
   },
   scrollView: { marginHorizontal: 5 },
   heading: {
-    fontSize: 32, 
-    fontWeight: 'bold', 
-    color: '#ffffff', 
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#ffffff',
     padding: 8
   },
   paragraph: {
-    color: '#ffffff', 
-    padding: 8, 
+    color: '#ffffff',
+    padding: 8,
     marginTop: -20
   },
   image: {
     flex: 1,
     justifyContent: 'center',
+    height: 180,
+    margin: 10,
+    borderRadius: 50
   },
   text: {
     color: 'white',
@@ -193,6 +197,7 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   resCard: {
+    padding: 10,
     marginVertical: 5,
   },
   quickContainer: {

@@ -114,6 +114,13 @@ export function DrawerContent(props) {
                             label="Support"
                             onPress={() => { props.navigation.navigate('SupportScreen') }}
                         />
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Ionicons name="checkmark-circle" size={24} color="black" />
+                            )}
+                            label="Child"
+                            onPress={() => { props.navigation.navigate('ParentControl') }}
+                        />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple onPress={() => { toggleTheme() }}>

@@ -11,11 +11,13 @@ import MainTabScreen from './screens/MainTabScreen';
 import SupportScreen from './screens/SupportScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import BookmarkScreen from './screens/BookmarkScreen';
+import ParentControl from './screens/ParentControl';
+import SessionScreen from './screens/SessionScreen';
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
 import * as api from './api'
-import { 
-  NavigationContainer, 
+import {
+  NavigationContainer,
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme
 } from '@react-navigation/native';
@@ -60,40 +62,40 @@ const App = () => {
 
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
- 
 
- 
+
+
   return (
     <StoreProvider store={store}>
-    <PaperProvider theme={theme}>
-    <NavigationContainer  theme={theme}>
-        <Application />
-    </NavigationContainer>
+      <PaperProvider theme={theme}>
+        <NavigationContainer theme={theme}>
+          <Application />
+        </NavigationContainer>
 
       </PaperProvider>
-      </StoreProvider>
+    </StoreProvider>
   );
 };
 
 const Application = () => {
 
   const dispatch = useDispatch();
-  
+
   const token = useSelector((state) => state.user.token)
 
   useEffect(() => {
-    async function setData () {
-      let userToken = null; 
+    async function setData() {
+      let userToken = null;
       try {
         userToken = await AsyncStorage.getItem('userToken');
         console.log("Got userToken", userToken)
-        if(userToken) {
-          const data = {token: userToken}
+        if (userToken) {
+          const data = { token: userToken }
           const response = await api.getUserInfo(data)
           console.log("got loggedIn userInfo!", response.data)
           dispatch(saveUserInfo(response.data));
         }
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       }
     }
@@ -102,21 +104,23 @@ const Application = () => {
   }, [])
 
   return (
-   <>
-  { token? (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-      <Drawer.Screen name="Details" component={DetailsScreen} />
-      <Drawer.Screen name="Home" component={MainTabScreen} />
-      <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-      <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-      <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
-    </Drawer.Navigator>
-   ) 
-  : 
-  <RootStackScreen/>
-} 
-</>
+    <>
+      {token ? (
+        <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+          <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+          <Drawer.Screen name="ParentControl" component={ParentControl} />
+          <Drawer.Screen name="SessionScreen" component={SessionScreen} />
+          <Drawer.Screen name="Details" component={DetailsScreen} />
+          <Drawer.Screen name="Home" component={MainTabScreen} />
+          <Drawer.Screen name="SupportScreen" component={SupportScreen} />
+          <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
+          <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
+        </Drawer.Navigator>
+      )
+        :
+        <RootStackScreen />
+      }
+    </>
   )
 }
 
