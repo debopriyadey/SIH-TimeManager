@@ -1,6 +1,5 @@
 import axios from "axios";
-
-export const API_URL = "http://192.168.0.138:5000";
+export const API_URL = "http://192.168.28.33:5000";
 export const signup = (users) => axios.post(`${API_URL}/signup`, users);
 export const signin = (users) => axios.post(`${API_URL}/signin`, users);
 export const signout = (data) => axios.post(`${API_URL}/signout`, data);

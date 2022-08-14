@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 // You can import from local files
 
@@ -98,20 +99,20 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("CreateTask")}>
             <Image
               source={require('../assets/createTask.png')}
-              resizeMode="contain"
+              resizeMode="cover"
               style={{
-                width: 180,
-                height: 120,
+                width: wp('50%'),
+                height: hp('15%'),
               }}
             />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("CreateGoal")}>
             <Image
               source={require('../assets/createGoal.png')}
-              resizeMode="contain"
+              resizeMode="cover"
               style={{
-                width: 180,
-                height: 120,
+                width: wp('50%'),
+                height: hp('15%'),
               }}
             />
           </TouchableOpacity>
@@ -145,7 +146,7 @@ export default function HomeScreen({ navigation }) {
         <ImageBackground
           source={require('../assets/meetup.png')}
           resizeMode="cover"
-          style={[styles.image, { padding: 15 }]}>
+          style={[styles.image, { padding: wp('5%') }]}>
           <Text style={{ fontSize: 30, color: '#440687', marginBottom: 10, fontWeight: 'bold' }}>Counsell Session</Text>
           <Text style={[styles.helperText, { color: '#440687' }]}>Connect with Counsellers</Text>
           <Text style={[styles.helperText, { color: '#440687', marginBottom: 25 }]}>for one on one Sessions</Text>
@@ -236,5 +237,6 @@ const styles = StyleSheet.create({
   quickCard: {
     margin: '5%',
     width: '40%',
+    height: '40%',
   },
 });

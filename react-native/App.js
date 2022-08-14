@@ -1,3 +1,4 @@
+
 import "react-native-gesture-handler";
 import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -19,6 +20,7 @@ import ParentControl from "./screens/ParentControl";
 import SessionScreen from "./screens/SessionScreen";
 import SearchScreen from "./screens/SearchScreen";
 import Pomodoro from "./screens/Pomodoro";
+import Focus from "./screens/Focus";
 import RootStackScreen from "./screens/RootStackScreen";
 import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
 import RoomScreen from "./screens/TaskRoom/RoomScreen";
@@ -118,6 +120,7 @@ const Application = () => {
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
+          <Drawer.Screen name="Focus" component={Focus} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />

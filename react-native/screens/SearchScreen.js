@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 // You can import from local files
 // or any pure javascript modules available in npm
@@ -47,18 +48,18 @@ export default function SearchScreen({navigation}) {
         <View style={[styles.inlineView, { justifyContent: 'space-around', marginTop: 20 }]}>
           <Image
             source={require('../assets/groupsImg.png')}
-            resizeMode="contain"
+            resizeMode="cover"
             style={{
-              width: 150,
-              height: 100,
+              width: wp('45%'),
+              height: hp('16%'),
             }}
           />
           <Image
             source={require('../assets/taskImg.png')}
-            resizeMode="contain"
+            resizeMode="cover"
             style={{
-              width: 150,
-              height: 100,
+              width: wp('45%'),
+              height: hp('16%'),
             }}
           />
         </View>
