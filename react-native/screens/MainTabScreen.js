@@ -12,6 +12,7 @@ import { Button } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import ProgressReport from './ProgressReport';
 import SessionScreen from './SessionScreen';
+import RoomScreen from './TaskRoom/RoomScreen';
 import Pomodoro from './Pomodoro';
 
 const HomeStack = createStackNavigator();
@@ -114,30 +115,10 @@ const MainTabScreen = ({navigation}) => (
           <CustomTabButtom {...props} />
         )
       }}
-    // options={{
-    //   tabBarIcon: ({ focused }) => (
-    //     <View style={{ alignItems: 'center', justifyContent: 'center', top: 20 }}>
-    //       <Image
-    //         source={require('../...')}
-    //         resizeMode="contain"
-    //         style={{
-    //           width: 25,
-    //           height: 25,
-    //           tintColor: focused ? "#fff" : "#1f1f1f",
-    //         }}
-    //       />
-    //       <Text
-    //         style={{ color: focused ? '#fff' : '#1f1f1f', fontSize: 12 }}>
-    //         Speak
-    //       </Text>
-
-    //     </View>
-    //   )
-    // }}
     />
     <Tab.Screen
       name="Space"
-      component={ProfileScreen}
+      component={RoomScreen}
       options={{
         tabBarLabel: 'Space',
         tabBarColor: '#694fad',
@@ -197,7 +178,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen name="Home" component={HomeScreen} options={{
       title: 'Hi Krishna',
       headerRight: () => (
-        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
+        <Button name="ios-menu" size={25} backgroundColor="#3D5CFF" onPress={() => navigation.openDrawer()}>
           <Entypo name="menu" size={24} color="black" />
         </Button>
       )
@@ -217,7 +198,7 @@ const DetailsStackScreen = ({ navigation }) => (
   }}>
     <DetailsStack.Screen name="Details" component={DetailsScreen} options={{
       headerLeft: () => (
-        <Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}>
+        <Button name="ios-menu" size={25} backgroundColor="#3D5CFF" onPress={() => navigation.openDrawer()}>
           <Entypo name="menu" size={24} color="black" />
         </Button>
       )

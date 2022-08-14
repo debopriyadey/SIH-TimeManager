@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    backgroundColor: "#009387",
+    backgroundColor: "#3D5CFF",
   },
   btn_text: {
     textAlign: "center",
