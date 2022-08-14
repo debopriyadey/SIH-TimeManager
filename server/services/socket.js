@@ -22,7 +22,6 @@ const createSockerServer = (server) => {
   io.on("connection", async (socket) => {
     const user = await User.findById(socket.user);
     socket.user = user;
-    console.log(rooms);
 
     user.rooms.forEach((roomId) => {
       socket.join(roomId);
@@ -32,8 +31,12 @@ const createSockerServer = (server) => {
     socket.on("join-room", (roomCode, user, cb) => {
       joinRoom(socket, roomCode, user, cb);
     });
-    socket.on("message:send", sendMessage);
-    socket.on("message:fetch", fetchMessages);
+    socket.on("message:send", (message, roomId, cb) => {
+      sendMessage(socket, roomId, message, cb);
+    });
+    socket.on("messages:fetch", (roomId, cb) => {
+      fetchMessages(socket, roomId, cb);
+    });
     socket.on("task:fetch", fetchTasks);
     socket.on("task:create", createTask);
     socket.on("task:mark-complete", markTaskAsComplete);
