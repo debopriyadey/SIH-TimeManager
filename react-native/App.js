@@ -16,7 +16,7 @@ import SessionScreen from './screens/SessionScreen';
 import SearchScreen from './screens/SearchScreen';
 import Pomodoro from './screens/Pomodoro';
 import Focus from './screens/Focus';
-import Player from './screens/Player';
+import AudioS from './screens/Audio';
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
 import * as api from './api'
@@ -122,7 +122,7 @@ const Application = () => {
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
           <Drawer.Screen name="Focus" component={Focus} />
-          <Drawer.Screen name="Player" component={Player} />
+          <Drawer.Screen name="AudioS" component={AudioS} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />

@@ -124,7 +124,7 @@ export default function HomeScreen({ navigation }) {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("Player")} style={styles.quickCard}>
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate("AudioS")} style={styles.quickCard}>
             <Image
               source={require('../assets/focus.png')}
               resizeMode="contain"
