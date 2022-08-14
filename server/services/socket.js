@@ -29,7 +29,9 @@ const createSockerServer = (server) => {
       rooms[roomId].users[socket.id] = user._id;
     });
 
-    socket.on("join-room", joinRoom);
+    socket.on("join-room", (roomCode, user, cb) => {
+      joinRoom(socket, roomCode, user, cb);
+    });
     socket.on("message:send", sendMessage);
     socket.on("message:fetch", fetchMessages);
     socket.on("task:fetch", fetchTasks);

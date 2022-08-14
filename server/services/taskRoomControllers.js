@@ -3,7 +3,7 @@ const Message = require("../models/message");
 const Task = require("../models/task");
 const User = require("../models/users");
 
-const joinRoom = async (roomCode, user, cb) => {
+const joinRoom = async (socket, roomCode, user, cb) => {
   const room = await Room.findOne({ roomCode });
   const userExists = room.users.find((userId) => userId === user._id);
 
@@ -24,9 +24,7 @@ const joinRoom = async (roomCode, user, cb) => {
   room.users.push(user._id);
   await room.save();
 
-  socket
-    .to(room._id)
-    .broadcast.emit("join-room:notify", { user_name: user.name });
+  socket.to(room._id).emit("join-room:notify", { user_name: user.name });
 };
 
 const sendMessage = async (roomId, message) => {
