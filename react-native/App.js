@@ -16,7 +16,6 @@ import SessionScreen from './screens/SessionScreen';
 import SearchScreen from './screens/SearchScreen';
 import Pomodoro from './screens/Pomodoro';
 import Focus from './screens/Focus';
-import AudioS from './screens/Audio';
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
 import * as api from './api'
@@ -25,7 +24,6 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme
 } from '@react-navigation/native';
-import TrackPlayer from 'react-native-track-player';
 
 import {
   Provider as PaperProvider,
@@ -66,10 +64,6 @@ const App = () => {
   }
 
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
-
-
-  // TrackPlayer.registerPlaybackService(() => require('./service.js'));
-
 
   return (
     <StoreProvider store={store}>
@@ -122,7 +116,6 @@ const Application = () => {
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
           <Drawer.Screen name="Focus" component={Focus} />
-          <Drawer.Screen name="AudioS" component={AudioS} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
