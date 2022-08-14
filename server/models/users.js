@@ -11,7 +11,6 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        require: true
     },
     password: {
         type: String,
@@ -24,9 +23,15 @@ const userSchema = mongoose.Schema({
     token: {
         type: String, 
         default: ""
-    }
+    },
+    childs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    restricted: {}
 });
 
 const Users = mongoose.model('Users', userSchema);
 
 module.exports = Users;
+

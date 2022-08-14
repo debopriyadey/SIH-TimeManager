@@ -14,6 +14,7 @@ import BookmarkScreen from './screens/BookmarkScreen';
 import ParentControl from './screens/ParentControl';
 import SessionScreen from './screens/SessionScreen';
 import SearchScreen from './screens/SearchScreen';
+import AudioScreen from './screens/AudioScreen';
 import Pomodoro from './screens/Pomodoro';
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
@@ -92,8 +93,7 @@ const Application = () => {
         userToken = await AsyncStorage.getItem('userToken');
         console.log("Got userToken", userToken)
         if (userToken) {
-          const data = { token: userToken }
-          const response = await api.getUserInfo(data)
+          const response = await api.getUserInfo(userToken)
           console.log("got loggedIn userInfo!", response.data)
           dispatch(saveUserInfo(response.data));
         }
@@ -115,6 +115,7 @@ const Application = () => {
           <Drawer.Screen name="ParentControl" component={ParentControl} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
+          <Drawer.Screen name="AudioScreen" component={AudioScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />

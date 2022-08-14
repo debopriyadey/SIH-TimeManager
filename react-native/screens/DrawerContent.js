@@ -87,6 +87,13 @@ export function DrawerContent(props) {
                             onPress={() => { props.navigation.navigate('Profile') }}
                         />
                         <DrawerItem
+                            icon={({ color, size }) => (
+                                <Ionicons name="person-circle-outline" size={24} color="black" />
+                            )}
+                            label="Audio"
+                            onPress={() => { props.navigation.navigate('AudioScreen') }}
+                        />
+                        <DrawerItem
                             icon={({color, size}) => (
                                 <Ionicons name="person-circle-outline" size={24} color="black" />
                             )}

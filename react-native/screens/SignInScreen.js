@@ -24,69 +24,47 @@ const SignInScreen = ({ navigation }) => {
     const [data, setData] = React.useState({
         email: '',
         password: '',
-        check_textInputChange: false,
-        secureTextEntry: true,
-        isValidUser: true,
-        isValidPassword: true,
+        hidePassword: true,
+        isLoading: false,
     });
 
     const { colors } = useTheme();
     const dispatch = useDispatch();
 
-    const textInputChange = (val) => {
-        if (val.trim().length >= 4) {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: true,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: false,
-                isValidUser: false
-            });
-        }
+    const handleEmailChange = (val) => {
+        setData((data) => ({
+            ...data,
+            email: val
+        }));
     }
 
     const handlePasswordChange = (val) => {
-        if (val.trim().length >= 8) {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: true
-            });
-        } else {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: false
-            });
-        }
-    }
-
-    const updateSecureTextEntry = () => {
-        setData({
+        setData((data) => ({
             ...data,
-            secureTextEntry: !data.secureTextEntry
-        });
+            password: val
+            }));
     }
 
-    const handleValidUser = (val) => {
-        if (val.trim().length >= 4) {
-            setData({
-                ...data,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                isValidUser: false
-            });
-        }
+    const handlePasswordToggle = () => {
+        setData((data) => ({
+            ...data,
+            hidePassword: !data.hidePassword
+            }));
     }
+
+    // const handleValidUser = (val) => {
+    //     if (val.trim().length >= 4) {
+    //         setData({
+    //             ...data,
+    //             isValidUser: true
+    //         });
+    //     } else {
+    //         setData({
+    //             ...data,
+    //             isValidUser: false
+    //         });
+    //     }
+    // }
 
     const loginHandle = async () => {
         const payload = data;
@@ -98,7 +76,7 @@ const SignInScreen = ({ navigation }) => {
             dispatch(signin(data.user));
         } catch (error) {
             console.log("got error in signin!", error.response.data)
-            Alert.alert('Wrong Input!', error.response?.data?.error || "something went wrong.", [
+            Alert.alert('Wrong Input!', error.response?.data?.message || "something went wrong.", [
                 { text: 'Okay' }
             ]);
         }
@@ -140,26 +118,11 @@ const SignInScreen = ({ navigation }) => {
                             color: colors.text
                         }]}
                         autoCapitalize="none"
-                        onChangeText={(val) => textInputChange(val)}
-                        onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
+                        onChangeText={(val) => handleEmailChange(val)}
                     />
-                    {data.check_textInputChange ?
-                        <Animatable.View
-                            animation="bounceIn"
-                        >
-                            {/* <Feather 
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                    /> */}
-                        </Animatable.View>
-                        : null}
+                   
                 </View>
-                {data.isValidUser ? null :
-                    <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Email/username must be 4 characters long.</Text>
-                    </Animatable.View>
-                }
+              
 
 
                 <Text style={[styles.text_footer, {
@@ -183,18 +146,14 @@ const SignInScreen = ({ navigation }) => {
                         onChangeText={(val) => handlePasswordChange(val)}
                     />
                     <TouchableOpacity
-                        onPress={updateSecureTextEntry}
+                        onPress={handlePasswordToggle}
                     >
                         {data.secureTextEntry ?
                             <Text > eye-off</Text> : <Text > eye</Text>}
 
                     </TouchableOpacity>
                 </View>
-                {data.isValidPassword ? null :
-                    <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
-                    </Animatable.View>
-                }
+                
 
 
                 <TouchableOpacity>
@@ -204,6 +163,8 @@ const SignInScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={styles.signIn}
                         onPress={loginHandle}
+                        disabled={data.isLoading ||  !data.email || !data.password }
+
                     >
                         <LinearGradient
                             colors={['#08d4c4', '#01ab9d']}

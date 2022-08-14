@@ -7,7 +7,10 @@ const requiredLogin = require('../middleware/requireAuth');
 route.get('/user/:id', controller.getUserById);
 route.post('/signin', controller.signin);
 route.post('/signup', controller.signup);
-route.post('/userInfo',requiredLogin , controller.getLoggedInUserInfo);
+route.get('/userInfo',requiredLogin , controller.getLoggedInUserInfo);
 route.post('/signout', controller.logout);
+route.get('/usernameExist/:username', controller.isUsernameExist)
+route.post('/addChild', requiredLogin, controller.addChild);
+route.get('/childs', requiredLogin,controller.getChilds);
 
 module.exports=route;
