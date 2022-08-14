@@ -9,35 +9,20 @@ import Message from "./ChatMessage";
 export default function Chat() {
   const user = useSelector((state) => state.user);
   const room = useSelector((state) => state.room);
-  const messages = [];
-
-  room.messages.forEach((msg) => {
-    messages.push(mapMessage(msg));
-  });
-
-  console.log(user);
+  const { messages } = room;
 
   useLayoutEffect(() => {
-    console.log("hi");
     fetchMessage(room.roomId);
   }, []);
 
   const onSend = useCallback((newMessages = []) => {
+    sendMessage(newMessages[0].text, room.roomId); 
     GiftedChat.append(messages, newMessages);
-    console.log(newMessages[0]);
-    sendMessage(newMessages[0].text, room.roomId);
   }, []);
 
-  function mapMessage(message) {
-    return {
-      _id: message._id,
-      text: message.content,
-      createdAt: new Date(message.createdAt),
-      user: mapUser(message.sender),
-    };
-  }
 
   function mapUser(user) {
+    console.log(user);
     return {
       _id: user._id,
       name: user.name,
@@ -64,6 +49,7 @@ export default function Chat() {
 
   return (
     <GiftedChat
+      inverted={false}
       messages={messages}
       showAvatarForEveryMessage={true}
       onSend={(messages) => onSend(messages)}

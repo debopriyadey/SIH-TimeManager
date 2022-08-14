@@ -20,8 +20,8 @@ const connectWithSocketServer = (userToken) => {
   });
 
   socket.on("messages:all", (data) => {
-    console.log("hi", data);
-    store.dispatch(setMessages(data));
+    const msgs = data.map(mapMessage);
+    store.dispatch(setMessages(msgs));
   });
 };
 
@@ -42,5 +42,22 @@ const sendMessage = (message, roomId) => {
     console.log(err);
   });
 };
+
+function mapMessage(message) {
+  return {
+    _id: message._id,
+    text: message.content,
+    createdAt: new Date(message.createdAt),
+    user: mapUser(message.sender),
+  };
+}
+
+function mapUser(user) {
+  return {
+    _id: user._id,
+    name: user.name,
+    avatar: `https://i.pravatar.cc/140?u=${user._id}`,
+  };
+}
 
 export { connectWithSocketServer, joinRoom, fetchMessage, sendMessage };
