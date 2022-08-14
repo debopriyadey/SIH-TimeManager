@@ -181,19 +181,16 @@ export default function HomeScreen({ navigation }) {
               </Text>
               <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Improve</Text>
             </View>
-            <Card
-              style={{
-                margin: 20,
-                padding: 10,
-                height: 100,
-                flex: 1,
-                alignItems: 'center',
-              }}>
+            <View style={{ margin: 20, padding: 10, height: 110, width: 110, flex: 1, justifyContent: 'flex-end', backgroundColor: '#C43D28', borderRadius: 10 }}>
               <Text>Planing Your Task</Text>
-            </Card>
-            <Card style={{ margin: 20, padding: 10, height: 100 }}>
-              <Text>Planing Your Task</Text>
-            </Card>
+            </View>
+            <View style={{ margin: 20, padding: 10, height: 110, width: 110, flex: 1, justifyContent: 'flex-end', backgroundColor: '#F99A3D', borderRadius: 10 }}>
+              <Text>Deal with procastination</Text>
+            </View>
+            <View style={{ margin: 20, padding: 10, height: 110, width: 110, flex: 1, justifyContent: 'flex-end', backgroundColor: '#4671C6', borderRadius: 10 }}>
+              <Text>How to be
+                self motivated</Text>
+            </View>
           </ScrollView>
         </View>
         <View style={{ margin: 20, marginBottom: -10 }}>
@@ -201,7 +198,7 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View
           style={{ flex: 1, flexDirection: 'row', height: 150, margin: 20 }}>
-          <View style={{ flex: 0.5, flexWrap: 'wrap' }}>
+          <View style={{ flex: 0.5, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
             <View>
               <Image
                 source={require('../assets/storage.png')}
@@ -229,8 +226,8 @@ export default function HomeScreen({ navigation }) {
                 source={require('../assets/video.png')}
                 resizeMode="contain"
                 style={{
-                  width: 60,
-                  height: 60,
+                  width: 50,
+                  height: 50,
                   margin: 5,
                 }}
               />
@@ -240,8 +237,8 @@ export default function HomeScreen({ navigation }) {
                 source={require('../assets/room.png')}
                 resizeMode="contain"
                 style={{
-                  width: 60,
-                  height: 60,
+                  width: 50,
+                  height: 50,
                   margin: 5,
                 }}
               />
