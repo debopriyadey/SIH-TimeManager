@@ -34,6 +34,7 @@ import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
 
 import DetailsScreen from './screens/DetailsScreen';
 import { saveUserInfo } from './redux/slice/userSlice';
+import { connectWithSocketServer } from './socket/socketConnection';
 
 const Drawer = createDrawerNavigator();
 const App = () => {
@@ -96,6 +97,7 @@ const Application = () => {
           const response = await api.getUserInfo(data)
           console.log("got loggedIn userInfo!", response.data)
           dispatch(saveUserInfo(response.data));
+          connectWithSocketServer(userToken);
         }
       } catch (e) {
         console.log(e.message);

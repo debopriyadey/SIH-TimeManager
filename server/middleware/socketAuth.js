@@ -19,4 +19,4 @@ const socketAuth = (socket, next) => {
   return next();
 };
 
-module.exports = requireSocketAuth;
+module.exports = socketAuth;

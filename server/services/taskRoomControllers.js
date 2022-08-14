@@ -3,9 +3,7 @@ const Message = require("../models/message");
 const Task = require("../models/task");
 const User = require("../models/users");
 
-const joinRoom = async (roomInfo, cb) => {
-  const { roomCode, user } = roomInfo;
-
+const joinRoom = async (roomCode, user, cb) => {
   const room = await Room.findOne({ roomCode });
   const userExists = room.users.find((userId) => userId === user._id);
 

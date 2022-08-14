@@ -31,6 +31,12 @@ const userSchema = mongoose.Schema({
       ref: "Task",
     },
   ],
+  rooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+    },
+  ],
 });
 
 const Users = mongoose.model("Users", userSchema);

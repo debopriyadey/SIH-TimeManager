@@ -11,11 +11,7 @@ const socketAuth = require("../middleware/socketAuth");
 const User = require("../models/users");
 
 const createSockerServer = (server) => {
-  const io = new Server(server, {
-    cors: {
-      origin: ["http://localhost:3000"],
-    },
-  });
+  const io = new Server(server);
 
   io.use((socket, next) => {
     socketAuth(socket, next);
@@ -26,6 +22,7 @@ const createSockerServer = (server) => {
   io.on("connection", async (socket) => {
     const user = await User.findById(socket.user);
     socket.user = user;
+    console.log(rooms);
 
     user.rooms.forEach((roomId) => {
       socket.join(roomId);

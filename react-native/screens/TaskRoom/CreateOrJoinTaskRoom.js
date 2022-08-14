@@ -1,7 +1,9 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { View, Text, TextInput, StyleSheet, StatusBar } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useTheme, Button, Modal, Portal } from "react-native-paper";
+import api from "../../api";
 
 import CreateRoomModal from "../components/TaskRoom/CreateRoomModal";
 import JoinTaskRoomModal from "../components/TaskRoom/JoinTaskRoomModal";
@@ -10,7 +12,7 @@ const dummyCode = "https://meet.google.com/ruy-exui-wkz";
 
 export default function CreateOrJoinTaskRoom() {
   const [roomData, setRoomData] = React.useState({
-    roonName: "",
+    roomName: "",
     isValidRoomName: true,
   });
   const [showCreateRoomModal, setCreateRoomModal] = React.useState(false);
@@ -27,7 +29,7 @@ export default function CreateOrJoinTaskRoom() {
       });
     } else {
       setRoomData({
-        roonName: value,
+        roomName: value,
         isValidRoomName: false,
       });
     }
@@ -35,7 +37,11 @@ export default function CreateOrJoinTaskRoom() {
 
   const createRoomHandler = () => {
     // Generate the link or code in the backend
-    setRoomCode(dummyCode);
+    const { data: room } = api.createRoom({
+      token: await AsyncStorage.getItem('userToken'),
+      roomName: roomData.roomName
+    });
+    setRoomCode(room.code);
     setCreateRoomModal(true);
   };
 
