@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
@@ -9,7 +9,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
-export default function SearchScreen() {
+export default function SearchScreen({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -19,12 +19,31 @@ export default function SearchScreen() {
       <ScrollView style={styles.scrollView}>
         <View style={styles.inlineView}>
           <Text style={styles.paragraph}>Search Here</Text>
-          <Avatar.Icon size={24} icon="folder" />
+        <TouchableOpacity activeOpacity={.5} onPress={() => navigation.openDrawer()}>
+        <Image
+            source={require('../icons/more_blue.png')}
+            resizeMode="contain"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
+          </TouchableOpacity>
         </View>
         <Searchbar
           placeholder="Search"
           onChangeText={onChangeSearch}
           value={searchQuery}
+          icon={  
+          () => <Image
+          source={require('../icons/search_blue.png')}
+          resizeMode="contain"
+          style={{
+            width: 25,
+            height: 25,
+          }}
+        />
+     }
         />
         <View style={[styles.inlineView, { justifyContent: 'space-around', marginTop: 20 }]}>
           <Image
@@ -64,7 +83,7 @@ export default function SearchScreen() {
             onPress={() => console.log('Pressed')}>
             Priority
           </Button>
-        </View>
+        </View> 
         <View style={styles.resCardCont}>
         <Card style={styles.resCard}>
           <Card.Content>
@@ -85,8 +104,7 @@ export default function SearchScreen() {
           </Card.Content>
         </Card>
         </View>
-        
-      </ScrollView>
+      </ScrollView>  
     </SafeAreaView>
   );
 }

@@ -1,45 +1,52 @@
-import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import OnboardingScreen from './screens/OnboardingScreen';
-import HomeScreen from './screens/HomeScreen';
-import { Provider as StoreProvider, useDispatch, useSelector } from "react-redux";
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DrawerContent } from './screens/DrawerContent';
-import MainTabScreen from './screens/MainTabScreen';
-import SupportScreen from './screens/SupportScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import BookmarkScreen from './screens/BookmarkScreen';
-import ParentControl from './screens/ParentControl';
-import SessionScreen from './screens/SessionScreen';
-import SearchScreen from './screens/SearchScreen';
-import Pomodoro from './screens/Pomodoro';
-import Focus from './screens/Focus';
-import RootStackScreen from './screens/RootStackScreen';
+
+import "react-native-gesture-handler";
+import React, { useEffect } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import OnboardingScreen from "./screens/OnboardingScreen";
+import HomeScreen from "./screens/HomeScreen";
+import {
+  Provider as StoreProvider,
+  useDispatch,
+  useSelector,
+} from "react-redux";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DrawerContent } from "./screens/DrawerContent";
+import MainTabScreen from "./screens/MainTabScreen";
+import SupportScreen from "./screens/SupportScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import BookmarkScreen from "./screens/BookmarkScreen";
+import ParentControl from "./screens/ParentControl";
+import SessionScreen from "./screens/SessionScreen";
+import SearchScreen from "./screens/SearchScreen";
+import Pomodoro from "./screens/Pomodoro";
+import Focus from "./screens/Focus";
+import RootStackScreen from "./screens/RootStackScreen";
+import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
+import RoomScreen from "./screens/TaskRoom/RoomScreen";
 import store from "./redux/store";
-import * as api from './api'
+import * as api from "./api";
 import {
   NavigationContainer,
   DefaultTheme as NavigationDefaultTheme,
-  DarkTheme as NavigationDarkTheme
-} from '@react-navigation/native';
+  DarkTheme as NavigationDarkTheme,
+} from "@react-navigation/native";
 
 import {
   Provider as PaperProvider,
   DefaultTheme as PaperDefaultTheme,
-  DarkTheme as PaperDarkTheme
-} from 'react-native-paper';
-import { mapping, light as lightTheme } from '@eva-design/eva';
-import { ApplicationProvider, Layout } from 'react-native-ui-kitten';
+  DarkTheme as PaperDarkTheme,
+} from "react-native-paper";
+import { mapping, light as lightTheme } from "@eva-design/eva";
+import { ApplicationProvider, Layout } from "react-native-ui-kitten";
 
-import DetailsScreen from './screens/DetailsScreen';
-import { saveUserInfo } from './redux/slice/userSlice';
+import DetailsScreen from "./screens/DetailsScreen";
+import { saveUserInfo } from "./redux/slice/userSlice";
+import { connectWithSocketServer } from "./socket/socketConnection";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
-
 
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,
@@ -47,10 +54,10 @@ const App = () => {
     colors: {
       ...NavigationDefaultTheme.colors,
       ...PaperDefaultTheme.colors,
-      background: '#ffffff',
-      text: '#333333'
-    }
-  }
+      background: "#ffffff",
+      text: "#333333",
+    },
+  };
 
   const CustomDarkTheme = {
     ...NavigationDarkTheme,
@@ -58,10 +65,10 @@ const App = () => {
     colors: {
       ...NavigationDarkTheme.colors,
       ...PaperDarkTheme.colors,
-      background: '#333333',
-      text: '#ffffff'
-    }
-  }
+      background: "#333333",
+      text: "#ffffff",
+    },
+  };
 
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
@@ -71,44 +78,42 @@ const App = () => {
         <NavigationContainer theme={theme}>
           <Application />
         </NavigationContainer>
-
       </PaperProvider>
     </StoreProvider>
   );
 };
 
 const Application = () => {
-
   const dispatch = useDispatch();
 
-  const token = useSelector((state) => state.user.token)
+  const token = useSelector((state) => state.user.token);
 
   useEffect(() => {
     async function setData() {
       let userToken = null;
       try {
-        userToken = await AsyncStorage.getItem('userToken');
-        console.log("Got userToken", userToken)
+        userToken = await AsyncStorage.getItem("userToken");
+        console.log("Got userToken", userToken);
         if (userToken) {
-          const data = { token: userToken }
-          const response = await api.getUserInfo(data)
-          console.log("got loggedIn userInfo!", response.data)
+          const data = { token: userToken };
+          const response = await api.getUserInfo(data);
+          console.log("got loggedIn userInfo!", response.data);
           dispatch(saveUserInfo(response.data));
+          connectWithSocketServer(userToken);
         }
       } catch (e) {
-        console.log(e);
+        console.log(e.message);
       }
     }
 
-    setData()
-  }, [])
-
+    setData();
+  }, []);
   return (
     <>
       {token ? (
         <Drawer.Navigator
-          screenOptions={{ headerShown: false }}
-          drawerContent={props => <DrawerContent {...props} />}
+          screenOptions={{ headerShown: false, drawerPosition: "right" }}
+          drawerContent={(props) => <DrawerContent {...props} />}
         >
           <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="ParentControl" component={ParentControl} />
@@ -120,13 +125,17 @@ const Application = () => {
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
           <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
+          <Drawer.Screen
+            name="CreateOrJoinTaskRoom"
+            component={CreateOrJoinTaskRoom}
+          />
+          <Drawer.Screen name="RoomScreen" component={RoomScreen} />
         </Drawer.Navigator>
-      )
-        :
+      ) : (
         <RootStackScreen />
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
 export default App;

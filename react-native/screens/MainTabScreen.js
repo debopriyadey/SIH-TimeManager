@@ -59,6 +59,7 @@ const MainTabScreen = ({navigation}) => (
       }
     }}
   >
+
     <Tab.Screen
       name="Home"
       component={HomeScreen}
@@ -97,7 +98,7 @@ const MainTabScreen = ({navigation}) => (
     />
     <Tab.Screen
       name="Voice"
-      component={DetailsStackScreen}
+      component={DetailsScreen}
       options={{
         tabBarIcon: ({ focused }) => (
           <Image
