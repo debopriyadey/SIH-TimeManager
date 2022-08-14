@@ -60,24 +60,6 @@ const MainTabScreen = ({navigation}) => (
     }}
   >
     <Tab.Screen
-      name="Pomo"
-      component={Pomodoro}
-      options={{
-        tabBarLabel: 'POmo',
-        tabBarColor: '#3D5CFF',
-        tabBarIcon: ({ color }) => (
-          <Image
-            source={require('../icons/home.png')}
-            resizeMode="contain"
-            style={{
-              width: 25,
-              height: 25,
-            }}
-          />
-        ),
-      }}
-    />
-    <Tab.Screen
       name="Home"
       component={HomeScreen}
       options={{

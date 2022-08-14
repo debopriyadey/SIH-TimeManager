@@ -121,7 +121,7 @@ const SignInScreen = ({ navigation }) => {
             <Animatable.View
                 animation="fadeInUpBig"
                 style={[styles.footer, {
-                    backgroundColor: 'colors.background'
+                    backgroundColor: colors.background
                 }]}
             >
                 <Text style={[styles.text_footer, {
@@ -198,7 +198,7 @@ const SignInScreen = ({ navigation }) => {
 
 
                 <TouchableOpacity>
-                    <Text style={{ color: '#009387', marginTop: 15 }}>Forgot password?</Text>
+                    <Text style={{ color: '#3D5CFF', marginTop: 15 }}>Forgot password?</Text>
                 </TouchableOpacity>
                 <View style={styles.button}>
                     <TouchableOpacity
@@ -206,7 +206,7 @@ const SignInScreen = ({ navigation }) => {
                         onPress={loginHandle}
                     >
                         <LinearGradient
-                            colors={['#08d4c4', '#01ab9d']}
+                            colors={['#3D5CFF', '#3D5CFF']}
                             style={styles.signIn}
                         >
                             <Text style={[styles.textSign, {
@@ -218,13 +218,13 @@ const SignInScreen = ({ navigation }) => {
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignUpScreen')}
                         style={[styles.signIn, {
-                            borderColor: '#009387',
+                            borderColor: '#3D5CFF',
                             borderWidth: 1,
                             marginTop: 15
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#009387'
+                            color: '#3D5CFF'
                         }]}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 3,
-        backgroundColor: '#3D5CFF',
+        backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 20,

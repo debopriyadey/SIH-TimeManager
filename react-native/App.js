@@ -15,6 +15,8 @@ import ParentControl from './screens/ParentControl';
 import SessionScreen from './screens/SessionScreen';
 import SearchScreen from './screens/SearchScreen';
 import Pomodoro from './screens/Pomodoro';
+import Focus from './screens/Focus';
+import Player from './screens/Player';
 import RootStackScreen from './screens/RootStackScreen';
 import store from "./redux/store";
 import * as api from './api'
@@ -23,6 +25,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme
 } from '@react-navigation/native';
+import TrackPlayer from 'react-native-track-player';
 
 import {
   Provider as PaperProvider,
@@ -65,6 +68,7 @@ const App = () => {
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
 
+  // TrackPlayer.registerPlaybackService(() => require('./service.js'));
 
 
   return (
@@ -109,7 +113,7 @@ const Application = () => {
     <>
       {token ? (
         <Drawer.Navigator
-          screenOptions={{headerShown: false}}
+          screenOptions={{ headerShown: false }}
           drawerContent={props => <DrawerContent {...props} />}
         >
           <Drawer.Screen name="Home" component={MainTabScreen} />
@@ -117,6 +121,8 @@ const Application = () => {
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
+          <Drawer.Screen name="Focus" component={Focus} />
+          <Drawer.Screen name="Player" component={Player} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
