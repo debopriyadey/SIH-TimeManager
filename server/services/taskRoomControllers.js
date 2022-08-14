@@ -9,14 +9,12 @@ const joinRoom = async (socket, roomCode, user, cb) => {
 
   if (!room) {
     cb({
-      status: 400,
       msg: "Room doesn't exist",
     });
   }
 
   if (userExists) {
     cb({
-      status: 400,
       msg: "You are already in this room",
     });
   }
@@ -27,30 +25,39 @@ const joinRoom = async (socket, roomCode, user, cb) => {
   socket.to(room._id).emit("join-room:notify", { user_name: user.name });
 };
 
-const sendMessage = async (roomId, message) => {
+const sendMessage = async (socket, roomId, message, cb) => {
   await Message.create({
     sender: socket.user,
     content: message,
     room: roomId,
   });
 
-  socket.to(roomId).broadcast.emit("message:receive", {
+  socket.to(roomId).emit("message:receive", {
     message,
     name: socket.user.name,
   });
 };
 
-const fetchMessages = async (roomId) => {
-  const messages = await (
-    await Message.find({ room: roomId })
-  )
-    .populate({
-      path: "sender",
-      select: "name",
-    })
-    .sort({ createdAt: 1 });
+const fetchMessages = async (socket, roomId, cb) => {
+  try {
+    let messages = await Message.find({ room: roomId }).sort({ createdAt: 1 });
 
-  socket.emit("messages:all", messages);
+    for (let i = 0; i < messages.length; i++) {
+      messages[i].sender = await User.findById(messages[i].sender);
+    }
+
+    console.log(messages);
+    if (!messages) {
+      throw new Error("Messages not found");
+    }
+
+    socket.emit("messages:all", messages);
+  } catch (error) {
+    console.log(error);
+    cb({
+      msg: error.message,
+    });
+  }
 };
 
 const fetchTasks = async (roomId) => {
