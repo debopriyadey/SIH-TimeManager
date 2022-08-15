@@ -23,16 +23,21 @@ const createSockerServer = (server) => {
     const user = await User.findById(socket.user);
     socket.user = user;
 
-    user.rooms.forEach((roomId) => {
-      socket.join(roomId);
+    user.rooms.forEach((room_id) => {
+      const roomId = room_id.toString();
+      if (!rooms[roomId]) {
+        rooms[roomId] = {
+          users: {},
+        };
+      }
       rooms[roomId].users[socket.id] = user._id;
     });
 
     socket.on("join-room", (roomCode, user, cb) => {
-      joinRoom(socket, roomCode, user, cb);
+      joinRoom(rooms, socket, roomCode, user, cb);
     });
     socket.on("message:send", (message, roomId, cb) => {
-      sendMessage(socket, roomId, message, cb);
+      sendMessage(io, rooms, socket, roomId, message, cb);
     });
     socket.on("messages:fetch", (roomId, cb) => {
       fetchMessages(socket, roomId, cb);

@@ -1,25 +1,26 @@
-import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import OnboardingScreen from './screens/OnboardingScreen';
-import HomeScreen from './screens/HomeScreen';
-import { Provider as StoreProvider, useDispatch, useSelector } from "react-redux";
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DrawerContent } from './screens/DrawerContent';
-import MainTabScreen from './screens/MainTabScreen';
-import SupportScreen from './screens/SupportScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import BookmarkScreen from './screens/BookmarkScreen';
-import ParentControl from './screens/ParentControl';
-import SessionScreen from './screens/SessionScreen';
-import SearchScreen from './screens/SearchScreen';
-import AudioScreen from './screens/AudioScreen';
-import Profile from './screens/AccountScreen';
-import FocusScreen from './screens/Focus';
-import Pomodoro from './screens/Pomodoro';
-import Loading from './screens/Loading';
-import RootStackScreen from './screens/RootStackScreen';
+import "react-native-gesture-handler";
+import React, { useEffect } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import OnboardingScreen from "./screens/OnboardingScreen";
+import HomeScreen from "./screens/HomeScreen";
+import {
+  Provider as StoreProvider,
+  useDispatch,
+  useSelector,
+} from "react-redux";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DrawerContent } from "./screens/DrawerContent";
+import MainTabScreen from "./screens/MainTabScreen";
+import SupportScreen from "./screens/SupportScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import BookmarkScreen from "./screens/BookmarkScreen";
+import ParentControl from "./screens/ParentControl";
+import SessionScreen from "./screens/SessionScreen";
+import SearchScreen from "./screens/SearchScreen";
+import Pomodoro from "./screens/Pomodoro";
+import Focus from "./screens/Focus";
+import RootStackScreen from "./screens/RootStackScreen";
 import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
 import RoomScreen from "./screens/TaskRoom/RoomScreen";
 import store from "./redux/store";
@@ -41,7 +42,7 @@ import { ApplicationProvider, Layout } from "react-native-ui-kitten";
 import DetailsScreen from "./screens/DetailsScreen";
 import { saveUserInfo } from "./redux/slice/userSlice";
 import { connectWithSocketServer } from "./socket/socketConnection";
-import { Text } from 'react-native';
+import { Text } from "react-native";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
@@ -92,10 +93,11 @@ const Application = () => {
       let userToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log("Got userToken", userToken);
+        //console.log("Got userToken", userToken);
         if (userToken) {
-          const response = await api.getUserInfo(userToken)
-          console.log("got loggedIn userInfo!", response.data)
+          const data = { token: userToken };
+          const response = await api.getUserInfo(data);
+          console.log("got loggedIn userInfo!", response.data);
           dispatch(saveUserInfo(response.data));
           connectWithSocketServer(userToken);
         } else setIsLoading(false);
@@ -107,15 +109,16 @@ const Application = () => {
     setData();
   }, []);
 
-
   useEffect(() => {
-    if(token) {
+    if (token) {
       setIsLoading(false);
     }
-  }, [token])
+  }, [token]);
   return (
     <>
-      { isLoading? <Loading />: token ? (
+      {isLoading ? (
+        <Loading />
+      ) : token ? (
         <Drawer.Navigator
           screenOptions={{ headerShown: false, drawerPosition: "right" }}
           drawerContent={(props) => <DrawerContent {...props} />}

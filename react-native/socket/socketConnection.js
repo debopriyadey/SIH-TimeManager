@@ -1,9 +1,9 @@
 import { io, Socket } from "socket.io-client";
 import { API_URL } from "../api";
-import { setMessages } from "../redux/slice/roomSlice";
+import { setMessages, setRoom, addMessage } from "../redux/slice/roomSlice";
 import store from "../redux/store";
 
-let socket;
+var socket;
 
 const connectWithSocketServer = (userToken) => {
   socket = io(API_URL, {
@@ -19,16 +19,16 @@ const connectWithSocketServer = (userToken) => {
     );
   });
 
-  socket.on("messages:all", (data) => {
-    const msgs = data.map(mapMessage);
-    store.dispatch(setMessages(msgs));
+  socket.on("room:set", (data) => {
+    console.log("line 28", data);
+    store.dispatch(setRoom(data));
   });
 
   // socket.to(roomId).emit("message:receive", {
-  socket.on("message:receive", (data) => {});
 };
 
 const joinRoom = (roomCode, user) => {
+  console.log(user);
   socket.emit("join-room", roomCode, user, (err) => {
     console.log(err);
   });
@@ -46,14 +46,6 @@ const sendMessage = (message, roomId) => {
   });
 };
 
-function mapMessage(message) {
-  return {
-    _id: message._id,
-    text: message.content,
-    user: mapUser(message.sender),
-  };
-}
-
 function mapUser(user) {
   return {
     _id: user._id,
@@ -62,4 +54,4 @@ function mapUser(user) {
   };
 }
 
-export { connectWithSocketServer, joinRoom, fetchMessage, sendMessage };
+export { connectWithSocketServer, joinRoom, fetchMessage, sendMessage, socket };
