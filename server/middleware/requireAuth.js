@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 const Users = require("../models/users.js");
 
 const requiredLogin = (req, res, next) => {
+  if (req.body.password) {
+   return   next()
+  }
   let token = "";
   token =  req.headers.authorization.split(" ")[1];
   console.log(token)

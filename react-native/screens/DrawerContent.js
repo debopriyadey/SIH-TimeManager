@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveUserInfo, signout } from "../redux/slice/userSlice";
 import * as api from "../api";
 import { saveSuperUserInfo } from "../redux/slice/superUser";
+import { USER_TYPE } from "../constants";
 export function DrawerContent(props) {
   const dispatch = useDispatch();
   const superUser = useSelector((state) => state.superUser)
@@ -27,7 +28,7 @@ export function DrawerContent(props) {
   const paperTheme = useTheme();
   const handleSignout = async () => {
     try {
-      const data = { token:user.token };
+      const data = { token: user.token };
       await AsyncStorage.removeItem("userToken");
       await api.signout(data);
       dispatch(signout());
@@ -82,12 +83,6 @@ export function DrawerContent(props) {
               </View>
             </View>
           </View>
-          {
-            superUser.username? (
-
-              <Button onPress={handleRevert}>Switch to root</Button>
-            ): null
-          }
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({ color, size }) => (
@@ -121,22 +116,25 @@ export function DrawerContent(props) {
                 props.navigation.navigate("Profile");
               }}
             />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Image
-                  source={require('../icons/child_blue.png')}
-                  resizeMode="contain"
-                  style={{
-                    width: 25,
-                    height: 25,
+            {
+              user.type === USER_TYPE.NORMAL ? (
+                <DrawerItem
+                  icon={({ color, size }) => (
+                    <Image
+                      source={require('../icons/child_blue.png')}
+                      resizeMode="contain"
+                      style={{
+                        width: 25,
+                        height: 25,
+                      }}
+                    />
+                  )}
+                  label="Child"
+                  onPress={() => {
+                    props.navigation.navigate("ParentControl");
                   }}
-                />
-              )}
-              label="Child"
-              onPress={() => {
-                props.navigation.navigate("ParentControl");
-              }}
-            />
+                /> ) : null
+            }
             <DrawerItem
               icon={({ color, size }) => (
                 <Image
@@ -169,7 +167,7 @@ export function DrawerContent(props) {
                 props.navigation.navigate("SupportScreen");
               }}
             />
-            
+
             <DrawerItem
               icon={({ color, size }) => (
                 <Image
@@ -219,24 +217,27 @@ export function DrawerContent(props) {
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
-      {/* {  
-      <Drawer.Section style={styles.bottomDrawerSection}>
-        <DrawerItem
-          icon={({ color, size }) => (
-            <Image
-              source={require('../icons/signout_blue.png')}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-              }}
+      {
+        superUser.username ? (
+          <Drawer.Section style={[styles.bottomDrawerSection, {marginBottom: 5}]}>
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Image
+                  source={require('../icons/switch.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
+              )}
+              label="Switch to Parent"
+              onPress={handleRevert}
             />
-          )}
-          label="Sign Out From"
-          onPress={handleSignout}
-        />
-      </Drawer.Section>
-      } */}
+          </Drawer.Section>
+        ) : null
+      }
+
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({ color, size }) => (
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   bottomDrawerSection: {
-    marginBottom: 15,
+    marginBottom: 10,
     borderTopColor: "#f4f4f4",
     borderTopWidth: 1,
   },
