@@ -3,7 +3,7 @@ const Users = require("../models/users.js");
 
 const requiredLogin = (req, res, next) => {
   let token = "";
-  token = req.body?.token;
+  token =  req.headers.authorization.split(" ")[1];
   if (!token) return res.status(401).json({ error: "Token not found" });
   jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
     if (err) {

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 // You can import from local files
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
-export default function SearchScreen({navigation}) {
+export default function SearchScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);
@@ -17,33 +17,33 @@ export default function SearchScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.inlineView}>
+        <View style={[styles.inlineView, { marginBottom: 10 }]}>
           <Text style={styles.paragraph}>Search Here</Text>
-        <TouchableOpacity activeOpacity={.5} onPress={() => navigation.openDrawer()}>
-        <Image
-            source={require('../icons/more_blue.png')}
-            resizeMode="contain"
-            style={{
-              width: 25,
-              height: 25,
-            }}
-          />
+          <TouchableOpacity activeOpacity={.5} onPress={() => navigation.openDrawer()}>
+            <Image
+              source={require('../icons/more_blue.png')}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+              }}
+            />
           </TouchableOpacity>
         </View>
         <Searchbar
           placeholder="Search"
           onChangeText={onChangeSearch}
           value={searchQuery}
-          icon={  
-          () => <Image
-          source={require('../icons/search_blue.png')}
-          resizeMode="contain"
-          style={{
-            width: 25,
-            height: 25,
-          }}
-        />
-     }
+          icon={
+            () => <Image
+              source={require('../icons/search_blue.png')}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+              }}
+            />
+          }
         />
         <View style={[styles.inlineView, { justifyContent: 'space-around', marginTop: 20 }]}>
           <Image
@@ -83,28 +83,34 @@ export default function SearchScreen({navigation}) {
             onPress={() => console.log('Pressed')}>
             Priority
           </Button>
-        </View> 
-        <View style={styles.resCardCont}>
-        <Card style={styles.resCard}>
-          <Card.Content>
-            <Title>Card title</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-        </Card>
-        <Card style={styles.resCard}>
-          <Card.Content>
-            <Title>Card title</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-        </Card>
-        <Card style={styles.resCard}>
-          <Card.Content>
-            <Title>Card title</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-        </Card>
         </View>
-      </ScrollView>  
+        <View style={styles.resCardCont}>
+          <Card style={styles.resCard}>
+            <Card.Content>
+              <Title>Card title</Title>
+              <Paragraph>Card content</Paragraph>
+            </Card.Content>
+          </Card>
+          <Card style={styles.resCard}>
+            <Card.Content>
+              <Title>Card title</Title>
+              <Paragraph>Card content</Paragraph>
+            </Card.Content>
+          </Card>
+          <Card style={styles.resCard}>
+            <Card.Content>
+              <Title>Card title</Title>
+              <Paragraph>Card content</Paragraph>
+            </Card.Content>
+          </Card>
+          <Card style={styles.resCard}>
+            <Card.Content>
+              <Title>Card title</Title>
+              <Paragraph>Card content</Paragraph>
+            </Card.Content>
+          </Card>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -121,8 +127,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   paragraph: {
-    margin: 24,
-    fontSize: 18,
+    margin: 0,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   heading: {

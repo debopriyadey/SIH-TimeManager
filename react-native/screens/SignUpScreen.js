@@ -9,11 +9,13 @@ import {
     Platform,
     StyleSheet,
     ScrollView,
-    StatusBar
+    StatusBar,
+    Alert
 } from 'react-native';
 import * as api from '../api';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
+import { debounce, isValidEmail } from '../extras';
 //  import FontAwesome from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf';
 // import Feather from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf';
 
@@ -25,75 +27,120 @@ const SignInScreen = ({ navigation }) => {
         username: '',
         password: '',
         email: '',
-        confirm_password: '',
-        check_textInputChange: false,
-        secureTextEntry: true,
-        confirm_secureTextEntry: true,
+        confirmPassword: '',
+        usernameError: '',
+        confirmPasswordError: '',
+        passwordError: '',
+        emailError: '',
+        hidePassword: true,
+        hideConfirmPassword: true,
+        isLoading: false,
     });
 
+    
+   
     const handleEmailChange = (value) => {
-        setData({
+        const email = value.trim();
+        setData((data) => ({
             ...data,
-            email: value
-        })
+            email,
+            emailError: email.length === 0 ? 'Email is required' : isValidEmail(email) ? '' : 'Please add valid email'
+        }))
     }
 
-    const textInputChange = (val) => {
-        if (val.length !== 0) {
-            setData({
+    const isUsernameExist = debounce(async (username) => {
+        try {
+            const { data } = await api.isUsernameExist(username);
+            console.log(data)
+        } catch (error) {
+            setData((data) => ({
                 ...data,
-                username: val,
-                check_textInputChange: true
-            });
+                usernameError: error.response?.data?.message || error.message
+            }))
+        }
+
+    }, 200)
+
+    const handleUsernameChange = (val) => {
+        let username = val.trim();
+        setData((data) => ({
+            ...data,
+            username,
+            usernameError: ''
+        }));
+        if (username.trim().length >= 4) {
+            isUsernameExist(username);
         } else {
-            setData({
+            setData((data) => ({
                 ...data,
-                username: val,
-                check_textInputChange: false
-            });
+                usernameError: "Username must be at least 4 characters",
+            }));
         }
     }
 
     const handlePasswordChange = (val) => {
-        setData({
+        setData((data) => ({
             ...data,
-            password: val
-        });
+            password: val,
+            passwordError: val.length === 0 ? 'Password is required' : val.length < 4 ? 'Password must be at least 4 characters long' : ''
+        }));
     }
 
     const handleConfirmPasswordChange = (val) => {
-        setData({
+        setData((data) => ({
             ...data,
-            confirm_password: val
-        });
+            confirmPassword: val,
+            confirmPasswordError: val !== data.password ? 'Password does not match' : ''
+        }));
     }
 
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        });
+    const handlePasswordToggle = () => {
+        setData((data) => (
+            {
+                ...data,
+                hidePassword: !data.hidePassword
+            }
+        ));
     }
 
-    const updateConfirmSecureTextEntry = () => {
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
-        });
+    const handleConfirmPasswordToggle = () => {
+        setData((data) => (
+            {
+                ...data,
+                hidePassword: !data.hidePassword
+            }
+        ));
     }
+
+
     const registerHandler = async () => {
         try {
-            const { password, username, email } = data;
-            console.log(data)
+            setData((data) => ({
+                ...data,
+                isLoading: true
+            }));
+            const { password, username, name, email } = data;
             const payload = {
-                name: username,
+                name,
+                username,
                 password,
                 email
             };
             await api.signup(payload);
+            setData((data) => ({
+                ...data,
+                isLoading: false
+            }));
             navigation.navigate('SignInScreen')
         } catch (error) {
             console.log("error while signup ..", error.message);
+            Alert.alert('Wrong Input!', error.response?.data?.message || error.message || "something went wrong.", [
+                { text: 'Okay' }
+            ]);
+            setData((data) => ({
+                ...data,
+                isLoading: false
+            }));
         }
     }
 
@@ -108,7 +155,24 @@ const SignInScreen = ({ navigation }) => {
                 style={styles.footer}
             >
                 <ScrollView>
-                    <Text style={styles.text_footer}>Username</Text>
+                    <Text style={styles.text_footer}>Name</Text>
+                    <View style={styles.action}>
+                        {/* <FontAwesome 
+                    name="user-o"
+                    color="#05375a"
+                    size={20}
+                /> */}
+                        <TextInput
+                            placeholder="Your Name"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => setData({ ...data, name: val })}
+                        />
+
+                    </View>
+                    <Text style={[styles.text_footer, {
+                        marginTop: 25
+                    }]}>Username</Text>
                     <View style={styles.action}>
                         {/* <FontAwesome 
                     name="user-o"
@@ -119,22 +183,17 @@ const SignInScreen = ({ navigation }) => {
                             placeholder="Your Username"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => handleUsernameChange(val)}
                         />
-                        {data.check_textInputChange ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                {/* <Feather 
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                    /> */}
-                            </Animatable.View>
-                            : null}
+
                     </View>
+                    {data.usernameError ?
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                            <Text style={styles.errorMsg}>{data.usernameError}</Text>
+                        </Animatable.View> : null
+                    }
                     <Text style={[styles.text_footer, {
-                        marginTop: 35
+                        marginTop: 25
                     }]}>Email</Text>
                     <View style={styles.action}>
                         {/* <FontAwesome 
@@ -148,23 +207,20 @@ const SignInScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             onChangeText={(val) => handleEmailChange(val)}
                         />
-                        {data.check_textInputChange ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                {/* <Feather 
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                    /> */}
-                            </Animatable.View>
-                            : null}
+
                     </View>
 
+                    {data.emailError ?
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                            <Text style={styles.errorMsg}>{data.emailError}</Text>
+                        </Animatable.View> : null
+                    }
+
                     <Text style={[styles.text_footer, {
-                        marginTop: 35
+                        marginTop: 25
                     }]}>Password</Text>
                     <View style={styles.action}>
+
                         {/* <Feather 
                     name="lock"
                     color="#05375a"
@@ -172,23 +228,27 @@ const SignInScreen = ({ navigation }) => {
                 /> */}
                         <TextInput
                             placeholder="Your Password"
-                            secureTextEntry={data.secureTextEntry ? true : false}
+                            secureTextEntry={data.hidePassword}
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handlePasswordChange(val)}
                         />
                         <TouchableOpacity
-                            onPress={updateSecureTextEntry}
+                            onPress={handlePasswordToggle}
                         >
-                            {data.secureTextEntry ?
+                            {data.hidePassword ?
                                 <Text > eye</Text> : <Text > eye-off</Text>
 
                             }
                         </TouchableOpacity>
                     </View>
-
+                    {data.passwordError ?
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                            <Text style={styles.errorMsg}>{data.passwordError}</Text>
+                        </Animatable.View> : null
+                    }
                     <Text style={[styles.text_footer, {
-                        marginTop: 35
+                        marginTop: 25
                     }]}>Confirm Password</Text>
                     <View style={styles.action}>
                         {/* <Feather 
@@ -198,19 +258,24 @@ const SignInScreen = ({ navigation }) => {
                 /> */}
                         <TextInput
                             placeholder="Confirm Your Password"
-                            secureTextEntry={data.confirm_secureTextEntry ? true : false}
+                            secureTextEntry={data.hideConfirmPassword}
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handleConfirmPasswordChange(val)}
                         />
                         <TouchableOpacity
-                            onPress={updateConfirmSecureTextEntry}
+                            onPress={handleConfirmPasswordToggle}
                         >
-                            {data.secureTextEntry ?
-                                <Text > eye-off</Text> : <Text > eye</Text>
+                            {data.hideConfirmPassword ?
+                                <Text > eye</Text> : <Text > eye-off</Text>
                             }
                         </TouchableOpacity>
                     </View>
+                    {data.confirmPasswordError ?
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                            <Text style={styles.errorMsg}>{data.confirmPasswordError}</Text>
+                        </Animatable.View> : null
+                    }
                     <View style={styles.textPrivate}>
                         <Text style={styles.color_textPrivate}>
                             By signing up you agree to our
@@ -223,6 +288,7 @@ const SignInScreen = ({ navigation }) => {
                         <TouchableOpacity
                             style={styles.signIn}
                             onPress={registerHandler}
+                            disabled={data.isLoading || data.emailError || data.passwordError || data.confirmPasswordError || data.usernameError || !data.email || !data.password || !data.confirmPassword || !data.username}
                         >
                             <LinearGradient
                                 colors={['#3D5CFF', '#3D5CFF']}
@@ -259,6 +325,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#3D5CFF'
+    },
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: 14,
     },
     header: {
         flex: 1,

@@ -19,10 +19,11 @@ import {
   Badge,
 } from 'react-native-paper';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
 
 export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
-
+  const user = useSelector((state) => state.user)
   const onChangeSearch = (query) => setSearchQuery(query);
 
   return (
@@ -40,7 +41,7 @@ export default function HomeScreen({ navigation }) {
               }}
             />
             <View>
-              <Text style={styles.heading}>Hi Krishna</Text>
+              <Text style={styles.heading}>Hi {user.name}</Text>
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>

@@ -42,11 +42,11 @@ import { ApplicationProvider, Layout } from "react-native-ui-kitten";
 import DetailsScreen from "./screens/DetailsScreen";
 import { saveUserInfo } from "./redux/slice/userSlice";
 import { connectWithSocketServer } from "./socket/socketConnection";
+import { Text } from "react-native";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
-
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,
     ...PaperDefaultTheme,
@@ -84,6 +84,7 @@ const App = () => {
 
 const Application = () => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
   const token = useSelector((state) => state.user.token);
 
@@ -96,10 +97,10 @@ const Application = () => {
         if (userToken) {
           const data = { token: userToken };
           const response = await api.getUserInfo(data);
-          //console.log("got loggedIn userInfo!", response.data);
+          console.log("got loggedIn userInfo!", response.data);
           dispatch(saveUserInfo(response.data));
           connectWithSocketServer(userToken);
-        }
+        } else setIsLoading(false);
       } catch (e) {
         console.log(e.message);
       }
@@ -107,19 +108,29 @@ const Application = () => {
 
     setData();
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      setIsLoading(false);
+    }
+  }, [token]);
   return (
     <>
-      {token ? (
+      {isLoading ? (
+        <Loading />
+      ) : token ? (
         <Drawer.Navigator
           screenOptions={{ headerShown: false, drawerPosition: "right" }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
           <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="ParentControl" component={ParentControl} />
+          <Drawer.Screen name="Profile" component={Profile} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
+          <Drawer.Screen name="AudioScreen" component={AudioScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
-          <Drawer.Screen name="Focus" component={Focus} />
+          <Drawer.Screen name="Focus" component={FocusScreen} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
           <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />

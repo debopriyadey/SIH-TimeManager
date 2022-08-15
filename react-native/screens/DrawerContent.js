@@ -19,12 +19,11 @@ import { signout } from "../redux/slice/userSlice";
 import * as api from "../api";
 export function DrawerContent(props) {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
+  const user = useSelector((state) => state.user);
   const paperTheme = useTheme();
   const handleSignout = async () => {
     try {
-      const data = { token };
-      console.log("logged out handler");
+      const data = { token:user.token };
       await AsyncStorage.removeItem("userToken");
       await api.signout(data);
       dispatch(signout());
@@ -53,8 +52,8 @@ export function DrawerContent(props) {
                 }}
               />
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>John Doe</Title>
-                <Caption style={styles.caption}>@j_doe</Caption>
+                <Title style={styles.title}>{user.name}</Title>
+                <Caption style={styles.caption}>@{user.username}</Caption>
               </View>
             </View>
 

@@ -19,95 +19,65 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const SignInScreen = ({ navigation }) => {
-  const [data, setData] = React.useState({
-    email: '',
-    password: '',
-    check_textInputChange: false,
-    secureTextEntry: true,
-    isValidUser: true,
-    isValidPassword: true,
-  });
+    const [data, setData] = React.useState({
+        email: '',
+        password: '',
+        hidePassword: true,
+        isLoading: false,
+    });
 
   const { colors } = useTheme();
   const dispatch = useDispatch();
 
-  const textInputChange = (val) => {
-    if (val.trim().length >= 4) {
-      setData({
-        ...data,
-        email: val,
-        check_textInputChange: true,
-        isValidUser: true
-      });
-    } else {
-      setData({
-        ...data,
-        email: val,
-        check_textInputChange: false,
-        isValidUser: false
-      });
-    }
-  }
-
-  const handlePasswordChange = (val) => {
-    if (val.trim().length >= 8) {
-      setData({
-        ...data,
-        password: val,
-        isValidPassword: true
-      });
-    } else {
-      setData({
-        ...data,
-        password: val,
-        isValidPassword: false
-      });
-    }
-  }
-
-  const updateSecureTextEntry = () => {
-    setData({
-      ...data,
-      secureTextEntry: !data.secureTextEntry
-    });
-  }
-
-  const handleValidUser = (val) => {
-    if (val.trim().length >= 4) {
-      setData({
-        ...data,
-        isValidUser: true
-      });
-    } else {
-      setData({
-        ...data,
-        isValidUser: false
-      });
-    }
-  }
-
-  const loginHandle = async () => {
-    const payload = data;
-
-    try {
-      const { data } = await api.signin(payload);
-      console.log("got response for signin!", data)
-      await AsyncStorage.setItem('userToken', data.user.token);
-      dispatch(signin(data.user));
-    } catch (error) {
-      console.log("got error in signin!", error.response.data)
-      Alert.alert('Wrong Input!', error.response?.data?.error || "something went wrong.", [
-        { text: 'Okay' }
-      ]);
+    const handleEmailChange = (val) => {
+        setData((data) => ({
+            ...data,
+            email: val
+        }));
     }
 
-    // if (foundUser.length == 0) {
-    //     Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-    //         { text: 'Okay' }
-    //     ]);
-    //     return;
+    const handlePasswordChange = (val) => {
+        setData((data) => ({
+            ...data,
+            password: val
+            }));
+    }
+
+    const handlePasswordToggle = () => {
+        setData((data) => ({
+            ...data,
+            hidePassword: !data.hidePassword
+            }));
+    }
+
+    // const handleValidUser = (val) => {
+    //     if (val.trim().length >= 4) {
+    //         setData({
+    //             ...data,
+    //             isValidUser: true
+    //         });
+    //     } else {
+    //         setData({
+    //             ...data,
+    //             isValidUser: false
+    //         });
+    //     }
     // }
-    // signIn(foundUser);
+
+    const loginHandle = async () => {
+        const payload = data;
+        
+        try {
+            const { data } = await api.signin(payload);
+            console.log("got response for signin!", data)
+            await AsyncStorage.setItem('userToken', data.user.token);
+            dispatch(signin(data.user));
+        } catch (error) {
+            console.log("got error in signin!", error.response.data)
+            Alert.alert('Wrong Input!', error.response?.data?.message || "something went wrong.", [
+                { text: 'Okay' }
+            ]);
+        }
   }
 
   return (
@@ -131,33 +101,18 @@ const SignInScreen = ({ navigation }) => {
                     color={colors.text}
                     size={20}
                 /> */}
-          <TextInput
-            placeholder="Your Email/username"
-            placeholderTextColor="#666666"
-            style={[styles.textInput, {
-              color: colors.text
-            }]}
-            autoCapitalize="none"
-            onChangeText={(val) => textInputChange(val)}
-            onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
-          />
-          {data.check_textInputChange ?
-            <Animatable.View
-              animation="bounceIn"
-            >
-              {/* <Feather 
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                    /> */}
-            </Animatable.View>
-            : null}
-        </View>
-        {data.isValidUser ? null :
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>Email/username must be 4 characters long.</Text>
-          </Animatable.View>
-        }
+                    <TextInput
+                        placeholder="Your Email/username"
+                        placeholderTextColor="#666666"
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => handleEmailChange(val)}
+                    />
+                   
+                </View>
+              
 
 
         <Text style={[styles.text_footer, {
@@ -170,48 +125,46 @@ const SignInScreen = ({ navigation }) => {
                     color={colors.text}
                     size={20}
                 /> */}
-          <TextInput
-            placeholder="Your Password"
-            placeholderTextColor="#666666"
-            secureTextEntry={data.secureTextEntry ? true : false}
-            style={[styles.textInput, {
-              color: colors.text
-            }]}
-            autoCapitalize="none"
-            onChangeText={(val) => handlePasswordChange(val)}
-          />
-          <TouchableOpacity
-            onPress={updateSecureTextEntry}
-          >
-            {data.secureTextEntry ?
-              <Text > eye-off</Text> : <Text > eye</Text>}
+                    <TextInput
+                        placeholder="Your Password"
+                        placeholderTextColor="#666666"
+                        secureTextEntry={data.secureTextEntry ? true : false}
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => handlePasswordChange(val)}
+                    />
+                    <TouchableOpacity
+                        onPress={handlePasswordToggle}
+                    >
+                        {data.secureTextEntry ?
+                            <Text > eye-off</Text> : <Text > eye</Text>}
 
-          </TouchableOpacity>
-        </View>
-        {data.isValidPassword ? null :
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
-          </Animatable.View>
-        }
+                    </TouchableOpacity>
+                </View>
+                
 
 
-        <TouchableOpacity>
-          <Text style={{ color: '#3D5CFF', marginTop: 15 }}>Forgot password?</Text>
-        </TouchableOpacity>
-        <View style={styles.button}>
-          <TouchableOpacity
-            style={styles.signIn}
-            onPress={loginHandle}
-          >
-            <LinearGradient
-              colors={['#3D5CFF', '#3D5CFF']}
-              style={styles.signIn}
-            >
-              <Text style={[styles.textSign, {
-                color: '#fff'
-              }]}>Sign In</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+                <TouchableOpacity>
+                    <Text style={{ color: '#3D5CFF', marginTop: 15 }}>Forgot password?</Text>
+                </TouchableOpacity>
+                <View style={styles.button}>
+                    <TouchableOpacity
+                        style={styles.signIn}
+                        onPress={loginHandle}
+                        disabled={data.isLoading ||  !data.email || !data.password }
+
+                    >
+                        <LinearGradient
+                            colors={['#3D5CFF', '#3D5CFF']}
+                            style={styles.signIn}
+                        >
+                            <Text style={[styles.textSign, {
+                                color: '#fff'
+                            }]}>Sign In</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => navigation.navigate('SignUpScreen')}
