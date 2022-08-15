@@ -18,6 +18,7 @@ import AudioScreen from './screens/AudioScreen';
 import Profile from './screens/AccountScreen';
 import FocusScreen from './screens/Focus';
 import Pomodoro from './screens/Pomodoro';
+import Loading from './screens/Loading';
 import RootStackScreen from './screens/RootStackScreen';
 import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
 import RoomScreen from "./screens/TaskRoom/RoomScreen";
@@ -114,7 +115,7 @@ const Application = () => {
   }, [token])
   return (
     <>
-      { isLoading? <Text>Loading</Text>: token ? (
+      { isLoading? <Loading />: token ? (
         <Drawer.Navigator
           screenOptions={{ headerShown: false, drawerPosition: "right" }}
           drawerContent={(props) => <DrawerContent {...props} />}
