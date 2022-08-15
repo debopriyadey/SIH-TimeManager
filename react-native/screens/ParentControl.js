@@ -12,9 +12,9 @@ import {
   Modal,
   Portal,
   Provider,
+  TextInput,
   IconButton,
   MD3Colors,
-  TextInput,
 } from 'react-native-paper';
 import * as api from '../api';
 import { debounce } from '../extras';
@@ -28,35 +28,13 @@ export default function ParentControl() {
   const hideModal = () => setVisible(false);
 
 
-
   const [childData, setChildData] = React.useState([
-    {
-      username: 'Child 1',
-      password: 'pass',
-      profileImg: '',
-      logedin: true,
-      restricted: {
-        updateAcc: false,
-        updateTask: false,
-        usePomodoro: false,
-        connectCounsel: false
-      }
-    },
-    {
-      username: 'Child 2',
-      password: 'word',
-      profileImg: '',
-      logedin: false,
-      restricted: {
-        updateAcc: false,
-        updateTask: false,
-        usePomodoro: false,
-        connectCounsel: false
-      }
-    }
+   
   ])
 
   const [addChild, setAddChild] = React.useState({
+    _id: '',
+    isNewChild: true,
     name: '',
     username: '',
     password: '',
@@ -103,6 +81,26 @@ export default function ParentControl() {
     }
   }
 
+  const handleNewChild = () => {
+    setAddChild({
+      _id: '',
+      username: '',
+      password: '',
+      usernameError: '',
+      formSubmitError: '',
+      hidePassword: false,
+      isLoading: false,
+      isNewChild: true,
+      restricted: {
+        updateAcc: false,
+        updateTask: false,
+        usePomodoro: false,
+        connectCounsel: false
+      }
+    })
+    showModal()
+  }
+
   const handleAddChild = async () => {
     try {
       setAddChild((addChild) => ({
@@ -118,25 +116,68 @@ export default function ParentControl() {
       const response  = await api.addChild(data, token);
       console.log("created child ", response.data)
       setChildData((childData) => [...childData, response.data]);
-      setAddChild({
-        username: '',
-        password: '',
-        usernameError: '',
-        formSubmitError: '',
-        hidePassword: false,
-        isLoading: false,
-        restricted: {
-          updateAcc: false,
-          updateTask: false,
-          usePomodoro: false,
-          connectCounsel: false
-        }
-      })
+      setAddChild({...addChild, isLoading: false})
     
       hideModal()
     } catch (error) {
       setAddChild((addChild) => ({
         ...addChild,
+        isLoading: false,
+        formSubmitError: error.response?.data?.message || error.message
+      }))
+    }
+
+  }
+
+  const handleDetails = (child) => {
+    setAddChild({...child, isNewChild: false});
+    showModal()
+  }
+  React.useEffect(() => {
+    console.log(addChild)
+
+  }, [addChild])
+
+  const handleUpdateChild = async() => {
+    try {
+      setAddChild((addChild) => ({
+        ...addChild,
+        isLoading: true
+      }))
+      const data = {
+        _id: addChild._id,
+        username: addChild.username,
+        name: addChild.name,
+        password: addChild.password,
+        restricted: addChild.restricted
+      }
+      const response  = await api.updateChild(data, token);
+      console.log("created child ", response.data)
+      let temp = [...childData]
+      let prevIndex = temp.findIndex(x => x._id === response.data._id);
+      if(prevIndex>=0) {
+        temp[prevIndex] = response.data
+        console.log(temp)
+        setChildData(temp)
+      }
+      // setChildData((childData) => {
+      //   const newChilds = childData.map((child) => {
+      //     console.log(child._id, response._id)
+      //     if(child._id === response.data._id) {
+      //       console.log("Got update.. ")
+      //       return  response.data;
+      //     } 
+      //     return child
+      //   })
+      //   return newChilds
+      // });
+     setAddChild({...addChild, isLoading: false})
+    
+      hideModal()
+    } catch (error) {
+      setAddChild((addChild) => ({
+        ...addChild,
+        isLoading: false,
         formSubmitError: error.response?.data?.message || error.message
       }))
     }
@@ -168,8 +209,13 @@ export default function ParentControl() {
             visible={visible}
             onDismiss={hideModal}
             contentContainerStyle={styles.containerStyle}>
-            <Text style={styles.heading}>Child 1.</Text>
-            <Text style={styles.helperText}>logged in</Text>
+            <Text style={styles.heading}>{addChild.isNewChild? "New Child": addChild.username}</Text>
+            {
+              addChild.isNewChild ? (
+                <Text style={styles.helperText}>logged in</Text>
+
+              ): null
+            }
             <View>
               <TextInput
                 mode="outlined"
@@ -190,6 +236,7 @@ export default function ParentControl() {
                 style={styles.inputStyle}
                 value={addChild.username}
                 onChangeText={handleUsernameChange}
+                disabled={!addChild.isNewChild}
               />
               {addChild.usernameError ?
                 <Animatable.View animation="fadeInLeft" duration={500}>
@@ -230,10 +277,10 @@ export default function ParentControl() {
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={() => setAddChild((child) => ({
                       ...child,
+                      formSubmitError: '',
                       restricted: {
                         ...child.restricted,
                         updateAcc: !child.restricted.updateAcc,
-                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.updateAcc}
@@ -247,10 +294,10 @@ export default function ParentControl() {
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={() => setAddChild((child) => ({
                       ...child,
+                      formSubmitError: '',
                       restricted: {
                         ...child.restricted,
                         connectCounsel: !child.restricted.connectCounsel,
-                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.connectCounsel}
@@ -264,10 +311,10 @@ export default function ParentControl() {
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={() => setAddChild((child) => ({
                       ...child,
+                      formSubmitError: '',
                       restricted: {
                         ...child.restricted,
                         updateTask: !child.restricted.updateTask,
-                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.updateTask}
@@ -281,10 +328,10 @@ export default function ParentControl() {
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={() => setAddChild((child) => ({
                       ...child,
+                      formSubmitError: '',
                       restricted: {
                         ...child.restricted,
                         usePomodoro: !child.restricted.usePomodoro,
-                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.usePomodoro}
@@ -297,8 +344,8 @@ export default function ParentControl() {
                 <Text style={styles.errorMsg}>{addChild.formSubmitError}</Text>
               </Animatable.View> : null
             }
-            <Button mode="contained" onPress={handleAddChild} disabled={addChild.usernameError || !addChild.password || !addChild.username}>
-              Add
+            <Button mode="contained" onPress={addChild.isNewChild? handleAddChild: handleUpdateChild} disabled={addChild.usernameError || !addChild.password || !addChild.username}>
+              {addChild.isNewChild? "Add" : "Update Account"}
             </Button>
           </Modal>
         </Portal>
@@ -328,7 +375,7 @@ export default function ParentControl() {
                   <View style={{ marginVertical: 10 }}></View>
                   <View
                     style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
-                    <Button mode="contained" style={styles.btn}>
+                    <Button mode="contained" style={styles.btn} onPress={() => handleDetails(child)} >
                     <Text style={styles.btnText}>Detail</Text>
                     </Button>
                     <Button mode="contained" style={styles.btn}>
@@ -357,7 +404,7 @@ export default function ParentControl() {
               height: 40,
             }}
           /> */}
-          <Button onPress={showModal}  style={styles.addBtn} color='#ffffff'>
+          <Button onPress={handleNewChild}  style={styles.addBtn} color='#ffffff'>
             <Text>
             add
             </Text>

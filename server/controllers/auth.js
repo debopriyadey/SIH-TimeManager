@@ -141,7 +141,7 @@ const addChild = async (req, res, next) => {
                 username,
                 type: "child",
                 password: hashedpassword,
-                parent: parentId,
+                parentId: parentId,
                 restricted
             })
 
@@ -189,7 +189,7 @@ const updateChild = async (req, res, next) => {
     }
 
     bcrypt.hash(password, 12).then((hashedpassword) => {
-        Users.findOneAndUpdate({ _id }, { name: name, username: username, password: hashedpassword, restricted }, { new: true }).then((user) => {
+        Users.findOneAndUpdate({ _id, parentId }, { name: name, password: hashedpassword, restricted }, { new: true }).then((user) => {
             if (!user) {
                 return res.status(422).json({ message: "Account not found." });
             }
