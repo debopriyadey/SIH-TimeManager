@@ -1,32 +1,34 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useLayoutEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 import emojiUtils from "emoji-utils";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMessage, sendMessage } from "../../../socket/socketConnection";
 
 import Message from "./ChatMessage";
 
 export default function Chat() {
-  const [messages, setMessages] = useState([]);
+  const user = useSelector((state) => state.user);
+  const room = useSelector((state) => state.room);
+  const { messages } = room;
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-    ]);
+  useLayoutEffect(() => {
+    fetchMessage(room.roomId);
   }, []);
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
+  const onSend = useCallback((newMessages = []) => {
+    sendMessage(newMessages[0].text, room.roomId); 
+    GiftedChat.append(messages, newMessages);
   }, []);
+
+
+  function mapUser(user) {
+    console.log(user);
+    return {
+      _id: user._id,
+      name: user.name,
+      avatar: `https://i.pravatar.cc/140?u=${user._id}`,
+    };
+  }
 
   const renderMessage = (props) => {
     const {
@@ -47,14 +49,11 @@ export default function Chat() {
 
   return (
     <GiftedChat
+      inverted={false}
       messages={messages}
       showAvatarForEveryMessage={true}
       onSend={(messages) => onSend(messages)}
-      user={{
-        _id: 1,
-        name: "John Doe",
-        avatar: "https://placeimg.com/140/140/any",
-      }}
+      user={mapUser(user)}
       renderMessage={renderMessage}
     />
   );

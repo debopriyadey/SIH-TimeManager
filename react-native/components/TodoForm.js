@@ -195,7 +195,7 @@ function TodoForm() {
                 setTodoData((prev) => ({ ...prev, repeat: newValue }))
               }
               trackColor={{ false: "#C0C0C0", true: "#97e8e1" }}
-              thumbColor="#009387"
+              thumbColor="#3D5CFF"
             />
           </View>
           <View style={{ marginTop: 10 }}>
@@ -206,9 +206,9 @@ function TodoForm() {
               style={{ width: "100%", height: 40 }}
               maximumValue={100}
               minimumValue={0}
-              minimumTrackTintColor="#009387"
+              minimumTrackTintColor="#3D5CFF"
               maximumTrackTintColor="#636262"
-              thumbTintColor="#009387"
+              thumbTintColor="#3D5CFF"
               value={todoData.importance}
               step={25}
               onValueChange={(value) =>
@@ -222,9 +222,9 @@ function TodoForm() {
               style={{ width: "100%", height: 40 }}
               maximumValue={100}
               minimumValue={0}
-              minimumTrackTintColor="#009387"
+              minimumTrackTintColor="#3D5CFF"
               maximumTrackTintColor="#636262"
-              thumbTintColor="#009387"
+              thumbTintColor="#3D5CFF"
               value={todoData.urgent}
               step={20}
               onValueChange={(value) =>
@@ -243,7 +243,7 @@ function TodoForm() {
                   checked: !todoData.checked,
                 }));
               }}
-              color="#009387"
+              color="#3D5CFF"
             />
           </View>
           {todoData.checked && (

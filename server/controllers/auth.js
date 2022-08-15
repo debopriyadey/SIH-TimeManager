@@ -173,7 +173,6 @@ const getChilds = async (req, res, next) => {
     Users.findOne({ _id }).populate('childs').then((value) => {
         if (!value)
             return res.status(404).json({ message: "User not found." });
-        console.log(value)
         return res.status(201).json(value.childs);
 
     }).catch((err) => {

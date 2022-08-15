@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 // You can import from local files
 
@@ -19,14 +19,16 @@ import {
   Badge,
 } from 'react-native-paper';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useSelector } from 'react-redux';
 
 export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
-
+  const user = useSelector((state) => state.user)
   const onChangeSearch = (query) => setSearchQuery(query);
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor='#3D5CFF' barStyle="light-content" />
       <ScrollView style={styles.scrollView}>
         <View style={[styles.inlineView, { backgroundColor: '#3D5CFF', padding: 10, height: 200 }]}>
           <View style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
@@ -39,7 +41,7 @@ export default function HomeScreen({ navigation }) {
               }}
             />
             <View>
-              <Text style={styles.heading}>Hi Krishna</Text>
+              <Text style={styles.heading}>Hi {user.name}</Text>
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>
@@ -157,6 +159,111 @@ export default function HomeScreen({ navigation }) {
             Connect Now!
           </Button>
         </ImageBackground>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            height: 150,
+            backgroundColor: '#2F2F42',
+            alignItems: 'flex-end',
+          }}>
+          <ScrollView horizontal={true}>
+            <View style={{ margin: 20 }}>
+              <Image
+                source={require('../assets/edu.png')}
+                resizeMode="contain"
+                style={{
+                  width: 80,
+                  height: 80,
+                }}
+              />
+              <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
+                Learn and
+              </Text>
+              <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Improve</Text>
+            </View>
+            <View style={{ margin: 20, padding: 10, height: 110, width: 110, flex: 1, justifyContent: 'flex-end', backgroundColor: '#C43D28', borderRadius: 10 }}>
+              <Text>Planing Your Task</Text>
+            </View>
+            <View style={{ margin: 20, padding: 10, height: 110, width: 110, flex: 1, justifyContent: 'flex-end', backgroundColor: '#F99A3D', borderRadius: 10 }}>
+              <Text>Deal with procastination</Text>
+            </View>
+            <View style={{ margin: 20, padding: 10, height: 110, width: 110, flex: 1, justifyContent: 'flex-end', backgroundColor: '#4671C6', borderRadius: 10 }}>
+              <Text>How to be
+                self motivated</Text>
+            </View>
+          </ScrollView>
+        </View>
+        <View style={{ margin: 20, marginBottom: -10 }}>
+          <Text>Get Upgraded to <Text style={{ color: '#3D5CFF' }}>Premium Pack</Text></Text>
+        </View>
+        <View
+          style={{ flex: 1, flexDirection: 'row', height: 150, margin: 20 }}>
+          <View style={{ flex: 0.5, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+            <View>
+              <Image
+                source={require('../assets/storage.png')}
+                resizeMode="contain"
+                style={{
+                  width: 60,
+                  height: 60,
+                  margin: 5,
+                }}
+              />
+            </View>
+            <View>
+              <Image
+                source={require('../assets/music.png')}
+                resizeMode="contain"
+                style={{
+                  width: 60,
+                  height: 60,
+                  margin: 5,
+                }}
+              />
+            </View>
+            <View>
+              <Image
+                source={require('../assets/video.png')}
+                resizeMode="contain"
+                style={{
+                  width: 50,
+                  height: 50,
+                  margin: 5,
+                }}
+              />
+            </View>
+            <View>
+              <Image
+                source={require('../assets/room.png')}
+                resizeMode="contain"
+                style={{
+                  width: 50,
+                  height: 50,
+                  margin: 5,
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ flex: 0.5 }}>
+            <Card
+              style={{
+                backgroundColor: '#3D5CFF',
+                padding: 10,
+                borderRadius: 15,
+              }}>
+              <Image
+                source={require('../assets/upgrade.png')}
+                resizeMode="contain"
+                style={{
+                  width: 100,
+                  height: 100,
+                }}
+              />
+              <Button style={{ backgroundColor: '#fff' }}>Get It Now!</Button>
+            </Card>
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -166,7 +273,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#F5F7FF',
+    backgroundColor: '#DAE0FF',
   },
   scrollView: { marginHorizontal: 0 },
   heading: {

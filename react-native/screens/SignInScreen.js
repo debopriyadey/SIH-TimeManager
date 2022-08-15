@@ -147,7 +147,7 @@ const SignInScreen = ({ navigation }) => {
 
 
                 <TouchableOpacity>
-                    <Text style={{ color: '#009387', marginTop: 15 }}>Forgot password?</Text>
+                    <Text style={{ color: '#3D5CFF', marginTop: 15 }}>Forgot password?</Text>
                 </TouchableOpacity>
                 <View style={styles.button}>
                     <TouchableOpacity
@@ -157,7 +157,7 @@ const SignInScreen = ({ navigation }) => {
 
                     >
                         <LinearGradient
-                            colors={['#08d4c4', '#01ab9d']}
+                            colors={['#3D5CFF', '#3D5CFF']}
                             style={styles.signIn}
                         >
                             <Text style={[styles.textSign, {

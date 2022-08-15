@@ -3,17 +3,16 @@ import {
     View,
     Text,
     TouchableOpacity,
-    TextInput,
+    Image,
     Platform,
     StyleSheet,
     StatusBar,
-    Alert
+    Alert,
+    TextInput
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// //  import FontAwesome from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf';
-//// import Feather from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf';
 import { useTheme } from 'react-native-paper';
 import { signin } from '../redux/slice/userSlice';
 import * as api from '../api'
@@ -33,15 +32,18 @@ const Focus = ({ navigation }) => {
     const [musicList, setMusicList] = React.useState([
         {
             title: 'Motivation',
-            locked: false
+            locked: false,
+            image: require('../icons/abs1.png')
         },
         {
             title: 'Concentration',
-            locked: false
+            locked: false,
+            image: require('../icons/abs2.png')
         },
         {
             title: 'Relax',
-            locked: true
+            locked: true,
+            image: require('../icons/abs3.png')
         },
     ])
 
@@ -145,12 +147,40 @@ const Focus = ({ navigation }) => {
             >
                 <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 10 }}>Choose Your Music</Text>
                 <Text>Total Focus Time: 2 hours </Text>
-                <View>
-                    {musicList.map((music) => {
-                        <View style={{ flex: 1, justifyContent: 'space-around' }}>
-                            <Text>{music.title}</Text>
+                <View style={{ marginTop: 30 }}>
+                    {musicList.map((music) => (
+                        <View style={styles.action}>
+                            <Image
+                                source={music.image}
+                                resizeMode="contain"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    margin: 5
+                                }}
+                            />
+                            <Text style={styles.textInput}>{music.title}</Text>
+                            {music.locked ?
+                                <Image
+                                    source={require('../icons/locked.png')}
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        margin: 5
+                                    }}
+                                /> : <Image
+                                    source={require('../icons/play.png')}
+                                    resizeMode="contain"
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        margin: 5
+                                    }}
+                                />
+                            }
                         </View>
-                    })}
+                    ))}
                 </View>
             </Animatable.View>
         </View>
@@ -170,7 +200,7 @@ const styles = StyleSheet.create({
         paddingBottom: 50
     },
     footer: {
-        flex: 3,
+        flex: 2,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -178,9 +208,8 @@ const styles = StyleSheet.create({
         paddingVertical: 30
     },
     text_header: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 30
+        color: '#1F1F1F',
+        fontSize: 20,
     },
     text_footer: {
         color: '#05375a',
@@ -198,11 +227,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#FF0000',
-        paddingBottom: 5
+        paddingBottom: 5,
+        alignItems: 'center',
     },
     textInput: {
         flex: 1,
-        marginTop: Platform.OS === 'ios' ? 0 : -12,
+        fontSize: 30,
+        fontWeight: 'bold',
         paddingLeft: 10,
         color: '#05375a',
     },

@@ -61,7 +61,7 @@ export default function ParentControl() {
     username: '',
     password: '',
     usernameError: '',
-    forSubmitError: '',
+    formSubmitError: '',
     hidePassword: false,
     isLoading: false,
     restricted: {
@@ -91,7 +91,7 @@ export default function ParentControl() {
       ...child,
       username,
       usernameError: '',
-      forSubmitError: ''
+      formSubmitError: ''
     }));
     if (username.trim().length >= 4) {
       isUsernameExist(username);
@@ -122,7 +122,7 @@ export default function ParentControl() {
         username: '',
         password: '',
         usernameError: '',
-        forSubmitError: '',
+        formSubmitError: '',
         hidePassword: false,
         isLoading: false,
         restricted: {
@@ -137,7 +137,7 @@ export default function ParentControl() {
     } catch (error) {
       setAddChild((addChild) => ({
         ...addChild,
-        forSubmitError: error.response?.data?.message || error.message
+        formSubmitError: error.response?.data?.message || error.message
       }))
     }
 
@@ -180,7 +180,7 @@ export default function ParentControl() {
                   setAddChild((addChild) => ({
                     ...addChild,
                     name: val,
-                    forSubmitError: ''
+                    formSubmitError: ''
                   }))
                 }}
               />
@@ -214,7 +214,7 @@ export default function ParentControl() {
                   setAddChild((child) => ({
                     ...child,
                     password: text,
-                    forSubmitError: ''
+                    formSubmitError: ''
                   }))
                 }
               />
@@ -233,7 +233,7 @@ export default function ParentControl() {
                       restricted: {
                         ...child.restricted,
                         updateAcc: !child.restricted.updateAcc,
-                        forSubmitError: ''
+                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.updateAcc}
@@ -250,7 +250,7 @@ export default function ParentControl() {
                       restricted: {
                         ...child.restricted,
                         connectCounsel: !child.restricted.connectCounsel,
-                        forSubmitError: ''
+                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.connectCounsel}
@@ -267,7 +267,7 @@ export default function ParentControl() {
                       restricted: {
                         ...child.restricted,
                         updateTask: !child.restricted.updateTask,
-                        forSubmitError: ''
+                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.updateTask}
@@ -284,7 +284,7 @@ export default function ParentControl() {
                       restricted: {
                         ...child.restricted,
                         usePomodoro: !child.restricted.usePomodoro,
-                        forSubmitError: ''
+                        formSubmitError: ''
                       }
                     }))}
                     value={addChild.restricted.usePomodoro}
@@ -292,9 +292,9 @@ export default function ParentControl() {
                 </View>
               </View>
             </View>
-            {addChild.forSubmitError ?
+            {addChild.formSubmitError ?
               <Animatable.View animation="fadeInLeft" duration={500}>
-                <Text style={styles.errorMsg}>{addChild.forSubmitError}</Text>
+                <Text style={styles.errorMsg}>{addChild.formSubmitError}</Text>
               </Animatable.View> : null
             }
             <Button mode="contained" onPress={handleAddChild} disabled={addChild.usernameError || !addChild.password || !addChild.username}>
@@ -304,8 +304,8 @@ export default function ParentControl() {
         </Portal>
 
         <ScrollView style={{ flex: 1, flexDirection: 'column' }}>
-          {childData.map((child) => (
-            <Card style={styles.resCard}>
+          {childData.length ? childData.map((child) => (
+              <Card style={styles.resCard}>
               <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
                 <View
                   style={{
@@ -338,7 +338,8 @@ export default function ParentControl() {
                 </View>
               </View>
             </Card>
-          ))}
+            )
+): <Text>You don't have any child account.Click on ADD to create child account</Text>}
 
 
         </ScrollView>

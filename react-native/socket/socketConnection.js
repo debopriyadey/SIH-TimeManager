@@ -1,5 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { API_URL } from "../api";
+import { setMessages } from "../redux/slice/roomSlice";
+import store from "../redux/store";
 
 let socket;
 
@@ -17,9 +19,10 @@ const connectWithSocketServer = (userToken) => {
     );
   });
 
-  // socket.on("friend-invitations", (data) => {
-  //     store.dispatch(setPendingInvitations(data) as any);
-  // })
+  socket.on("messages:all", (data) => {
+    const msgs = data.map(mapMessage);
+    store.dispatch(setMessages(msgs));
+  });
 };
 
 const joinRoom = (roomCode, user) => {
@@ -28,4 +31,33 @@ const joinRoom = (roomCode, user) => {
   });
 };
 
-export { connectWithSocketServer, joinRoom };
+const fetchMessage = (roomId) => {
+  socket.emit("messages:fetch", roomId, (err) => {
+    console.log(err);
+  });
+};
+
+const sendMessage = (message, roomId) => {
+  socket.emit("message:send", message, roomId, (err) => {
+    console.log(err);
+  });
+};
+
+function mapMessage(message) {
+  return {
+    _id: message._id,
+    text: message.content,
+    createdAt: new Date(message.createdAt),
+    user: mapUser(message.sender),
+  };
+}
+
+function mapUser(user) {
+  return {
+    _id: user._id,
+    name: user.name,
+    avatar: `https://i.pravatar.cc/140?u=${user._id}`,
+  };
+}
+
+export { connectWithSocketServer, joinRoom, fetchMessage, sendMessage };

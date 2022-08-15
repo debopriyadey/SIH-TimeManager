@@ -3,7 +3,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#009387",
+    backgroundColor: "#3D5CFF",
     height: 40,
     display: "flex",
     alignItems: "center",

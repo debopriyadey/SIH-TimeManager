@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -15,6 +15,7 @@ import ParentControl from './screens/ParentControl';
 import SessionScreen from './screens/SessionScreen';
 import SearchScreen from './screens/SearchScreen';
 import AudioScreen from './screens/AudioScreen';
+import Profile from './screens/AccountScreen';
 import FocusScreen from './screens/Focus';
 import Pomodoro from './screens/Pomodoro';
 import RootStackScreen from './screens/RootStackScreen';
@@ -39,11 +40,11 @@ import { ApplicationProvider, Layout } from "react-native-ui-kitten";
 import DetailsScreen from "./screens/DetailsScreen";
 import { saveUserInfo } from "./redux/slice/userSlice";
 import { connectWithSocketServer } from "./socket/socketConnection";
+import { Text } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 const App = () => {
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
-
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,
     ...PaperDefaultTheme,
@@ -81,6 +82,7 @@ const App = () => {
 
 const Application = () => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
   const token = useSelector((state) => state.user.token);
 
@@ -95,7 +97,7 @@ const Application = () => {
           console.log("got loggedIn userInfo!", response.data)
           dispatch(saveUserInfo(response.data));
           connectWithSocketServer(userToken);
-        }
+        } else setIsLoading(false);
       } catch (e) {
         console.log(e.message);
       }
@@ -103,15 +105,23 @@ const Application = () => {
 
     setData();
   }, []);
+
+
+  useEffect(() => {
+    if(token) {
+      setIsLoading(false);
+    }
+  }, [token])
   return (
     <>
-      {token ? (
+      { isLoading? <Text>Loading</Text>: token ? (
         <Drawer.Navigator
           screenOptions={{ headerShown: false, drawerPosition: "right" }}
           drawerContent={(props) => <DrawerContent {...props} />}
         >
           <Drawer.Screen name="Home" component={MainTabScreen} />
           <Drawer.Screen name="ParentControl" component={ParentControl} />
+          <Drawer.Screen name="Profile" component={Profile} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="AudioScreen" component={AudioScreen} />
