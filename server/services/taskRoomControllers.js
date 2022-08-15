@@ -3,50 +3,109 @@ const Message = require("../models/message");
 const Task = require("../models/task");
 const User = require("../models/users");
 
-const joinRoom = async (socket, roomCode, user, cb) => {
-  const room = await Room.findOne({ roomCode });
-  const userExists = room.users.find((userId) => userId === user._id);
+const { v4: uuidv4 } = require("uuid");
 
-  if (!room) {
+const joinRoom = async (rooms, socket, roomCode, user, cb) => {
+  try {
+    const room = await Room.findOne({ roomCode });
+    const userDoc = await User.findById(user._id);
+    const userExists = room.users.find(
+      (userId) => userId.toString() === user._id.toString()
+    );
+    const roomExists = userDoc.rooms.find((roomId) => roomId == room._id);
+
+    const roomId = room._id.toString();
+
+    if (!roomExists) {
+      userDoc.rooms.push(room._id);
+      await userDoc.save();
+    }
+
+    if (!rooms[roomId]) {
+      rooms[roomId] = {
+        users: {},
+      };
+    }
+
+    socket.join(roomId);
+
+    rooms[roomId].users[socket.id] = userDoc._id;
+
+    if (!room) {
+      throw new Error("Room doesn't exist");
+    }
+
+    if (!userExists) {
+      room.users.push(user._id);
+      await room.save();
+    }
+
+    socket.emit("room:set", {
+      roomCode: room.roomCode,
+      roomName: room.roomName,
+      roomId: room._id,
+    });
+    socket.to(room._id).emit("join-room:notify", { user_name: user.name });
+  } catch (error) {
+    console.log(error);
     cb({
-      msg: "Room doesn't exist",
+      msg: error.message,
     });
   }
-
-  if (userExists) {
-    cb({
-      msg: "You are already in this room",
-    });
-  }
-
-  room.users.push(user._id);
-  await room.save();
-
-  socket.to(room._id).emit("join-room:notify", { user_name: user.name });
 };
 
-const sendMessage = async (socket, roomId, message, cb) => {
-  await Message.create({
-    sender: socket.user,
-    content: message,
-    room: roomId,
-  });
+const sendMessage = async (io, rooms, socket, roomId, message, cb) => {
+  (async () => {
+    await Message.create({
+      sender: socket.user._id,
+      content: message,
+      room: roomId,
+    });
+  })();
 
-  socket.to(roomId).emit("message:receive", {
-    message,
-    name: socket.user.name,
+  console.log(rooms);
+
+  console.log(message, socket.user._id, socket.user.name);
+
+  Object.keys(rooms[roomId].users).forEach((socketId) => {
+    //if (rooms[roomId].users[socketId] == socket.user._id.toString()) return;
+    console.log(socket.user._id, rooms[roomId].users[socketId]);
+
+    io.to(socketId).emit("message:receive", {
+      _id: uuidv4(),
+      text: message,
+      user: {
+        _id: socket.user._id,
+        name: socket.user.name,
+        avatar: `https://i.pravatar.cc/140?u=${socket.user._id}`,
+      },
+      createdAt: new Date(),
+    });
   });
+  // io.in(roomId).emit("message:receive", {
+  //   _id: uuidv4(),
+  //   text: message,
+  //   user: {
+  //     _id: socket.user._id,
+  //     name: socket.user.name,
+  //     avatar: `https://i.pravatar.cc/140?u=${socket.user._id}`,
+  //   },
+  // });
 };
 
 const fetchMessages = async (socket, roomId, cb) => {
   try {
-    let messages = await Message.find({ room: roomId }).sort({ createdAt: 1 });
+    let messages = await Message.find({ room: roomId })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    console.log(messages);
 
     for (let i = 0; i < messages.length; i++) {
       messages[i].sender = await User.findById(messages[i].sender);
     }
 
-    console.log(messages);
+    // console.log(messages);
     if (!messages) {
       throw new Error("Messages not found");
     }

@@ -1,4 +1,3 @@
-
 import "react-native-gesture-handler";
 import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -93,11 +92,11 @@ const Application = () => {
       let userToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log("Got userToken", userToken);
+        //console.log("Got userToken", userToken);
         if (userToken) {
           const data = { token: userToken };
           const response = await api.getUserInfo(data);
-          console.log("got loggedIn userInfo!", response.data);
+          //console.log("got loggedIn userInfo!", response.data);
           dispatch(saveUserInfo(response.data));
           connectWithSocketServer(userToken);
         }
