@@ -16,10 +16,10 @@ export default function Chat() {
   }, []);
 
   const onSend = useCallback((newMessages = []) => {
-    sendMessage(newMessages[0].text, room.roomId); 
+    sendMessage(newMessages[0].text, room.roomId);
     GiftedChat.append(messages, newMessages);
+    fetchMessage(room.roomId);
   }, []);
-
 
   function mapUser(user) {
     console.log(user);

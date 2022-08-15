@@ -1,18 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const roomState = {
-  messages: [
-    {
-      _id: 0,
-      text: `Share your room code: jflaIE`,
-      createdAt: new Date(),
-      user: {
-        _id: 0,
-        name: "Bot",
-        avatar: `https://i.pravatar.cc/140?u=bot`,
-      },
-    },
-  ],
+  messages: [],
 };
 
 export const roomSlice = createSlice({
@@ -23,11 +12,14 @@ export const roomSlice = createSlice({
       return { ..._state, ...action.payload };
     },
     setMessages: (_state, action) => {
-      _state.messages = [..._state.messages, ...action.payload];
+      _state.messages = action.payload;
+    },
+    addMessage: (_state, action) => {
+      _state.messages.push(action.payload);
     },
   },
 });
 
-export const { setRoom, setMessages } = roomSlice.actions;
+export const { setRoom, setMessages, addMessage } = roomSlice.actions;
 
 export default roomSlice.reducer;

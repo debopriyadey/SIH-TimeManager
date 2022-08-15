@@ -23,6 +23,9 @@ const connectWithSocketServer = (userToken) => {
     const msgs = data.map(mapMessage);
     store.dispatch(setMessages(msgs));
   });
+
+  // socket.to(roomId).emit("message:receive", {
+  socket.on("message:receive", (data) => {});
 };
 
 const joinRoom = (roomCode, user) => {
@@ -47,7 +50,6 @@ function mapMessage(message) {
   return {
     _id: message._id,
     text: message.content,
-    createdAt: new Date(message.createdAt),
     user: mapUser(message.sender),
   };
 }
