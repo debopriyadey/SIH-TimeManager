@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, Image, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import * as Animatable from 'react-native-animatable';
 import {
   Avatar,
@@ -18,10 +20,14 @@ import {
 } from 'react-native-paper';
 import * as api from '../api';
 import { debounce } from '../extras';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveSuperUserInfo } from '../redux/slice/superUser';
+import { saveUserInfo } from '../redux/slice/userSlice';
 
-export default function ParentControl() {
-  const token = useSelector((state) => state.user?.token)
+export default function ParentControl({navigation}) {
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.user)
   const [visible, setVisible] = React.useState(false);
 
   const showModal = () => setVisible(true);
@@ -113,7 +119,7 @@ export default function ParentControl() {
         password: addChild.password,
         restricted: addChild.restricted
       }
-      const response  = await api.addChild(data, token);
+      const response  = await api.addChild(data, user.token);
       console.log("created child ", response.data)
       setChildData((childData) => [...childData, response.data]);
       setAddChild({...addChild, isLoading: false})
@@ -129,8 +135,24 @@ export default function ParentControl() {
 
   }
 
+  const handleSwitch = async(child) => {
+    console.log(child)
+    const data = {
+      email: child.username,
+      password: ''
+    }
+    const {data: response} = await api.signin(data, user.token)
+    console.log("Hey request fullfilled! ", response)
+    dispatch(saveSuperUserInfo(user));
+    await AsyncStorage.setItem("superUserToken", user.token);
+    await AsyncStorage.setItem("userToken", response.token);
+    dispatch(saveUserInfo(response));
+    navigation.navigate("Home")
+  }
+
+
   const handleDetails = (child) => {
-    setAddChild({...child, isNewChild: false});
+    setAddChild({...child, isNewChild: false, password: ''});
     showModal()
   }
   React.useEffect(() => {
@@ -151,7 +173,7 @@ export default function ParentControl() {
         password: addChild.password,
         restricted: addChild.restricted
       }
-      const response  = await api.updateChild(data, token);
+      const response  = await api.updateChild(data, user.token);
       console.log("created child ", response.data)
       let temp = [...childData]
       let prevIndex = temp.findIndex(x => x._id === response.data._id);
@@ -185,8 +207,8 @@ export default function ParentControl() {
   }
 
   React.useEffect(() => {
-    console.log("Render ", token)
-    const fetchData = async(token) => {``
+    console.log("Render ", user.token)
+    const fetchData = async(token) => {
       try {
         console.log(("Here is it."));
         const {data} =  await api.getChilds(token);
@@ -196,8 +218,8 @@ export default function ParentControl() {
         console.log(error)
       }
   } 
-  fetchData(token)
-  }, [token]);
+  fetchData(user.token)
+  }, [user.token]);
 
  
 
@@ -378,7 +400,7 @@ export default function ParentControl() {
                     <Button mode="contained" style={styles.btn} onPress={() => handleDetails(child)} >
                     <Text style={styles.btnText}>Detail</Text>
                     </Button>
-                    <Button mode="contained" style={styles.btn}>
+                    <Button mode="contained" style={styles.btn} onPress={() => handleSwitch(child)}>
                      <Text  style={styles.btnText}>Switch</Text>
                     </Button>
                   </View>

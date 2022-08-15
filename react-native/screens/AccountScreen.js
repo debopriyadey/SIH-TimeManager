@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 
 export default function AccountScreen() {
   const [text, setText] = React.useState('');
-  const updateAccPermission = useSelector((state) => state.user?.restricted?.updateAcc) 
+  const updateAccPermission = useSelector((state) => state.user?.restricted?.updateTask) 
   const userType = useSelector((state) => state.user?.type)
   const onChangeSearch = (query) => setSearchQuery(query);
 

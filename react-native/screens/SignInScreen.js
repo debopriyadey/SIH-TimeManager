@@ -70,10 +70,10 @@ const SignInScreen = ({ navigation }) => {
         try {
             const { data } = await api.signin(payload);
             console.log("got response for signin!", data)
-            await AsyncStorage.setItem('userToken', data.user.token);
-            dispatch(signin(data.user));
+            await AsyncStorage.setItem('userToken', data.token);
+            dispatch(signin(data));
         } catch (error) {
-            console.log("got error in signin!", error.response.data)
+            console.log("got error in signin!", error.response?.data)
             Alert.alert('Wrong Input!', error.response?.data?.message || "something went wrong.", [
                 { text: 'Okay' }
             ]);

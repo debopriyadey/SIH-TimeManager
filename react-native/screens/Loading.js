@@ -22,7 +22,7 @@ export default function SplashScreen() {
         source={require('../assets/clocktime.json')}
       />
       <View style={styles.buttonContainer}>
-        <Text style={{fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Parampara Prathistha Anushashan</Text>
+        <Text style={{fontSize: 30, textAlign: 'center', fontWeight: 'bold'}} >Parampara Prathistha Anushashan</Text>
       </View>
       {/* <View style={styles.buttonContainer}>
         <Button

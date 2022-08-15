@@ -51,33 +51,42 @@ const signup = (req, res, next) => {
 const signin = (req, res, next) => {
 
     const { email, password } = req.body;
+    const parentId = req.user?._id;
 
-    if (!email || !password) {
-        return res.status(422).json({ message: "Please enter all fields" });
+    if (!parentId) {
+        if (!email || !password) {
+            return res.status(422).json({ message: "Please enter all fields" });
+        }
     }
+
     Users.findOne({ $or: [{ email: email }, { username: email }] })
-        .then((savedUser) => {
+        .then(async(savedUser) => {
             if (!savedUser) {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
-            bcrypt.compare(password, savedUser.password)
-                .then((doMatch) => {
-                    if (doMatch) {
-                        const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.JWT_SECRET);
-                        savedUser.token = token;
-                        savedUser.save().then((user) => {
-                            return res.json({ user });
-                        }).catch((err) => {
-                            next(err);
-                        })
-                    }
-                    else {
-                        return res.status(401).json({ message: "Invalid credentials" });
-                    }
-                })
-                .catch((err) => {
+            let doMatch = true;
+            if (!parentId){
+                 doMatch = await bcrypt.compare(password, savedUser.password)
+            }
+            console.log("Got here!", doMatch && ((parentId&& savedUser.parentId.toString() == parentId) || (!parentId)))
+            if (doMatch && ((parentId&& savedUser.parentId.toString() == parentId) || (!parentId))) {
+                const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.JWT_SECRET);
+                if (!savedUser.token)
+                savedUser.token = token
+                console.log(savedUser.token)
+                if(!parentId)
+                savedUser.isLoggedIn = true;
+                savedUser.save().then((user) => {
+                    
+                    return res.json(user);
+                }).catch((err) => {
                     next(err);
                 })
+            }
+            else {
+                return res.status(401).json({ message: "Invalid credentials" });
+            }
+               
         })
         .catch((err) => {
             next(err);
@@ -197,6 +206,50 @@ const updateChild = async (req, res, next) => {
         })
     })
 }
+
+/*
+clicks on switch -> backend request with (child._id, parent._id) 
+    find document with this fields 
+    setSuperUser = userInfo
+    send this in response -> basicChildData same as login (User Table)
+    setUserInfo = basicChildData
+        In drawer 
+            if superUser.Exist 
+                then show logout from child
+    setUserInfo = superUser;
+    superUser = null;
+
+    superUserToken -> 
+    if user is child -> check if parentTokenPresent 
+            ----> userAccount
+            -----> parentAccount
+    else userAccount 
+    
+
+    AddTask 
+    -----
+        {
+            task: coding
+
+        }
+        1. Normal user
+        checkIfUserIsActualUser -> jwt (create in login time)
+        add task in user taskList 
+
+        2. Child user 
+        
+
+        Switch -> backend -> create token 
+        {
+                type: child
+                from: parent
+                parentId: parentId,
+                childId: childId,
+        }
+        -> send it to frontend 
+        
+
+*/
 
 module.exports = {
     signup,

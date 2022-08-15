@@ -5,6 +5,9 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    isLoggedIn: {
+        type: Boolean
+    },
     username: {
         type: String,
         require: true,

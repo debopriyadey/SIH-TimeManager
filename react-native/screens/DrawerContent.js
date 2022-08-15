@@ -10,15 +10,19 @@ import {
   Text,
   TouchableRipple,
   Switch,
+  Button,
 } from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useDispatch, useSelector } from "react-redux";
-import { signout } from "../redux/slice/userSlice";
+import { saveUserInfo, signout } from "../redux/slice/userSlice";
 import * as api from "../api";
+import { saveSuperUserInfo } from "../redux/slice/superUser";
 export function DrawerContent(props) {
   const dispatch = useDispatch();
+  const superUser = useSelector((state) => state.superUser)
+  console.log(superUser)
   const user = useSelector((state) => state.user);
   const paperTheme = useTheme();
   const handleSignout = async () => {
@@ -36,6 +40,12 @@ export function DrawerContent(props) {
       );
     }
   };
+
+  const handleRevert = () => {
+    // super to user 
+    dispatch(saveUserInfo(superUser))
+    dispatch(saveSuperUserInfo({}))
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -72,7 +82,12 @@ export function DrawerContent(props) {
               </View>
             </View>
           </View>
+          {
+            superUser.username? (
 
+              <Button onPress={handleRevert}>Switch to root</Button>
+            ): null
+          }
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({ color, size }) => (
@@ -204,6 +219,24 @@ export function DrawerContent(props) {
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
+      {/* {  
+      <Drawer.Section style={styles.bottomDrawerSection}>
+        <DrawerItem
+          icon={({ color, size }) => (
+            <Image
+              source={require('../icons/signout_blue.png')}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+              }}
+            />
+          )}
+          label="Sign Out From"
+          onPress={handleSignout}
+        />
+      </Drawer.Section>
+      } */}
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({ color, size }) => (
