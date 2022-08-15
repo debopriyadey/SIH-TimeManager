@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, Image } from "react-native";
 import {
   useTheme,
   Avatar,
@@ -14,8 +14,6 @@ import {
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { signout } from "../redux/slice/userSlice";
 import * as api from "../api";
@@ -46,12 +44,14 @@ export function DrawerContent(props) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
-              {/* <Avatar.Image 
-                                source={{
-                                    uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
-                                }}
-                                size={50}
-                            /> */}
+              <Image
+                source={require('../assets/Avatar.png')}
+                resizeMode="contain"
+                style={{
+                  width: 50,
+                  height: 50,
+                }}
+              />
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
                 <Title style={styles.title}>John Doe</Title>
                 <Caption style={styles.caption}>@j_doe</Caption>
@@ -77,7 +77,14 @@ export function DrawerContent(props) {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({ color, size }) => (
-                <Entypo name="home" size={24} color="black" />
+                <Image
+                  source={require('../icons/home_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
               )}
               label="Home"
               onPress={() => {
@@ -86,10 +93,13 @@ export function DrawerContent(props) {
             />
             <DrawerItem
               icon={({ color, size }) => (
-                <Ionicons
-                  name="person-circle-outline"
-                  size={24}
-                  color="black"
+                <Image
+                  source={require('../icons/profile_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
                 />
               )}
               label="Profile"
@@ -99,47 +109,14 @@ export function DrawerContent(props) {
             />
             <DrawerItem
               icon={({ color, size }) => (
-                <Ionicons
-                  name="person-circle-outline"
-                  size={24}
-                  color="black"
+                <Image
+                  source={require('../icons/child_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
                 />
-              )}
-              label="Details"
-              onPress={() => {
-                props.navigation.navigate("Details");
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Entypo name="bookmark" size={24} color="black" />
-              )}
-              label="Bookmarks"
-              onPress={() => {
-                props.navigation.navigate("BookmarkScreen");
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Ionicons name="settings" size={24} color="black" />
-              )}
-              label="Settings"
-              onPress={() => {
-                props.navigation.navigate("SettingsScreen");
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Ionicons name="checkmark-circle" size={24} color="black" />
-              )}
-              label="Support"
-              onPress={() => {
-                props.navigation.navigate("SupportScreen");
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Ionicons name="checkmark-circle" size={24} color="black" />
               )}
               label="Child"
               onPress={() => {
@@ -148,7 +125,47 @@ export function DrawerContent(props) {
             />
             <DrawerItem
               icon={({ color, size }) => (
-                <Ionicons name="checkmark-circle" size={24} color="black" />
+                <Image
+                  source={require('../icons/setting_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
+              )}
+              label="Settings"
+              onPress={() => {
+                props.navigation.navigate("SettingsScreen");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Image
+                  source={require('../icons/support_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
+              )}
+              label="Support"
+              onPress={() => {
+                props.navigation.navigate("SupportScreen");
+              }}
+            />
+            
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Image
+                  source={require('../icons/createroom_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
               )}
               label="Create Room"
               onPress={() => {
@@ -157,7 +174,14 @@ export function DrawerContent(props) {
             />
             <DrawerItem
               icon={({ color, size }) => (
-                <Ionicons name="checkmark-circle" size={24} color="black" />
+                <Image
+                  source={require('../icons/room_blue.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
               )}
               label="Room Screen"
               onPress={() => {
@@ -184,7 +208,14 @@ export function DrawerContent(props) {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({ color, size }) => (
-            <MaterialIcons name="logout" size={24} color="black" />
+            <Image
+              source={require('../icons/signout_blue.png')}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+              }}
+            />
           )}
           label="Sign Out"
           onPress={handleSignout}
