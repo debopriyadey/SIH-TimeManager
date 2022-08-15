@@ -149,7 +149,8 @@ export default function ParentControl() {
       try {
         console.log(("Here is it."));
         const {data} =  await api.getChilds(token);
-      console.log(data);
+      console.log(typeof(data), data);
+      setChildData(data)
       } catch (error) {
         console.log(error)
       }
@@ -302,7 +303,7 @@ export default function ParentControl() {
           </Modal>
         </Portal>
 
-        <View style={{ flex: 1, flexDirection: 'column' }}>
+        <ScrollView style={{ flex: 1, flexDirection: 'column' }}>
           {childData.map((child) => (
             <Card style={styles.resCard}>
               <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
@@ -328,10 +329,10 @@ export default function ParentControl() {
                   <View
                     style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
                     <Button mode="contained" style={styles.btn}>
-                      Details
+                    <Text style={styles.btnText}>Detail</Text>
                     </Button>
                     <Button mode="contained" style={styles.btn}>
-                      Switch
+                     <Text  style={styles.btnText}>Switch</Text>
                     </Button>
                   </View>
                 </View>
@@ -340,7 +341,7 @@ export default function ParentControl() {
           ))}
 
 
-        </View>
+        </ScrollView>
 
         <View
           style={[
@@ -355,8 +356,10 @@ export default function ParentControl() {
               height: 40,
             }}
           /> */}
-          <Button onPress={showModal} >
+          <Button onPress={showModal}  style={styles.addBtn} color='#ffffff'>
+            <Text>
             add
+            </Text>
           </Button>
         </View>
       </Provider>
@@ -394,6 +397,9 @@ const styles = StyleSheet.create({
   subHeading: {
     fontSize: 20,
   },
+  addBtn: {
+    backgroundColor: '#3d5cff',
+  },
   helperText: {
     fontSize: 12,
   },
@@ -418,8 +424,12 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: 100,
-    margin: 8,
+    margin: 4,
+    backgroundColor:  '#3d5cff'
   },
+ btnText: {
+  fontSize: 12
+ },
   resCard: {
     marginVertical: 5,
   },

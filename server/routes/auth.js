@@ -12,5 +12,6 @@ route.post('/signout', controller.logout);
 route.get('/usernameExist/:username', controller.isUsernameExist)
 route.post('/addChild', requiredLogin, controller.addChild);
 route.get('/childs', requiredLogin,controller.getChilds);
+route.put('/child', requiredLogin,controller.updateChild);
 
 module.exports=route;

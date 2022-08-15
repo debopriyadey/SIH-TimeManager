@@ -1,37 +1,49 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
     name: {
         type: String,
-        require: true
+        require: true,
     },
     username: {
         type: String,
-        require: true
+        require: true,
     },
     email: {
         type: String,
+        require: true,
     },
     password: {
         type: String,
-        require: true
+        require: true,
     },
     type: {
         type: String,
-        require: true
+        require: true,
     },
     token: {
-        type: String, 
-        default: ""
+        type: String,
+        default: "",
     },
+    tasks: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Task",
+        },
+    ],
+    restricted: {},
     childs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-    restricted: {}
+    rooms: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Room",
+        }
+    ]
 });
 
-const Users = mongoose.model('Users', userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = Users;
-
+module.exports = User;

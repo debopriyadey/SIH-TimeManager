@@ -13,7 +13,7 @@ const signup = (req, res, next) => {
     }
     Users.findOne({ $or: [{ username: username }, { email: email }] })
         .then((savedUser) => {
-            if(savedUser) {
+            if (savedUser) {
                 if (savedUser.email === email) {
                     return res.status(409).json({ message: "Email already registered" });
                 } else if (savedUser.username === username) {
@@ -149,8 +149,8 @@ const addChild = async (req, res, next) => {
                 .then(user => {
                     Users.findOne({ _id: parentId }).then((parent) => {
                         console.log(parentId, parent)
-                        if(!parent) 
-                        return res.status(404).json({ message: "User not found." });
+                        if (!parent)
+                            return res.status(404).json({ message: "User not found." });
                         parent.childs.push(user._id);
                         parent.save().then((parent) => {
                             return res.status(201).json(user);
@@ -158,8 +158,8 @@ const addChild = async (req, res, next) => {
                             next(err);
                         })
                     }).catch((err) => {
-                            next(err);
-                        })
+                        next(err);
+                    })
                 })
 
         })
@@ -168,18 +168,35 @@ const addChild = async (req, res, next) => {
 }
 
 
-const getChilds = async(req, res, next) => {
-    const {_id} = req.user
-    Users.findOne({_id}).populate('childs').then((value) =>  {
-        if(!value)                        
-         return res.status(404).json({ message: "User not found." });
-
-        return res.status(201).json(value);
+const getChilds = async (req, res, next) => {
+    const { _id } = req.user
+    Users.findOne({ _id }).populate('childs').then((value) => {
+        if (!value)
+            return res.status(404).json({ message: "User not found." });
+        console.log(value)
+        return res.status(201).json(value.childs);
 
     }).catch((err) => {
         next(err)
     })
 
+}
+
+const updateChild = async (req, res, next) => {
+    const { username, name, password, restricted, _id } = req.body;
+    const parentId = req.user._id;
+    if (!username || !name || !password || !parentId || !_id) {
+        return res.status(422).json({ message: "Please enter all fields" });
+    }
+
+    bcrypt.hash(password, 12).then((hashedpassword) => {
+        Users.findOneAndUpdate({ _id }, { name: name, username: username, password: hashedpassword, restricted }, { new: true }).then((user) => {
+            if (!user) {
+                return res.status(422).json({ message: "Account not found." });
+            }
+            return res.status(200).json(user);
+        })
+    })
 }
 
 module.exports = {
@@ -190,5 +207,6 @@ module.exports = {
     isUsernameExist,
     addChild,
     getChilds,
-    logout
+    logout,
+    updateChild
 }

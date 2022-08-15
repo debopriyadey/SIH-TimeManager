@@ -1,15 +1,42 @@
 const { Server } = require("socket.io");
-const { joinRoom } = require("./taskRoomControllers");
+const {
+  joinRoom,
+  sendMessage,
+  fetchMessages,
+  fetchTasks,
+  createTask,
+  markTaskAsComplete,
+} = require("./taskRoomControllers");
+const socketAuth = require("../middleware/socketAuth");
+const User = require("../models/users");
 
 const createSockerServer = (server) => {
-  const io = new Server(server, {
-    cors: {
-      origin: ["http://localhost:3000"],
-    },
+  const io = new Server(server);
+
+  io.use((socket, next) => {
+    socketAuth(socket, next);
   });
 
-  io.on("connection", (socket) => {
-    socket.on("join-room", joinRoom);
+  const rooms = {};
+
+  io.on("connection", async (socket) => {
+    const user = await User.findById(socket.user);
+    socket.user = user;
+    console.log(rooms);
+
+    user.rooms.forEach((roomId) => {
+      socket.join(roomId);
+      rooms[roomId].users[socket.id] = user._id;
+    });
+
+    socket.on("join-room", (roomCode, user, cb) => {
+      joinRoom(socket, roomCode, user, cb);
+    });
+    socket.on("message:send", sendMessage);
+    socket.on("message:fetch", fetchMessages);
+    socket.on("task:fetch", fetchTasks);
+    socket.on("task:create", createTask);
+    socket.on("task:mark-complete", markTaskAsComplete);
   });
 };
 

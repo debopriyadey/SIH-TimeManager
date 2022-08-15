@@ -25,19 +25,24 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "package": "com.sih"
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "build": { "babel": { "include": [ "@ui-kitten/components" ] }}
+      "build": {
+        "babel": {
+          "include": [
+            "@ui-kitten/components"
+          ]
+        }
+      }
     },
-    "notification":
-    {
+    "notification": {
       "icon": "./assets/favicon.png",
       "color": "#3D5CFF"
-      
     },
-       "plugins": [
+    "plugins": [
       [
         "expo-notifications",
         {
@@ -49,6 +54,5 @@
         }
       ]
     ]
-
   }
 }

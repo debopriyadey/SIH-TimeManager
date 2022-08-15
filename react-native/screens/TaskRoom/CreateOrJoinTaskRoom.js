@@ -1,23 +1,29 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { View, Text, TextInput, StyleSheet, StatusBar } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useTheme, Button, Modal, Portal } from "react-native-paper";
+import * as api from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { setRoom } from "../../redux/slice/roomSlice";
 
-import CreateRoomModal from "../components/TaskRoom/CreateRoomModal";
-import JoinTaskRoomModal from "../components/TaskRoom/JoinTaskRoomModal";
+import CreateRoomModal from "../../components/TaskRoom/CreateRoomModal";
+import JoinTaskRoomModal from "../../components/TaskRoom/JoinTaskRoomModal";
 
 const dummyCode = "https://meet.google.com/ruy-exui-wkz";
 
-export default function CreateOrJoinTaskRoom() {
+export default function CreateOrJoinTaskRoom({ navigation }) {
   const [roomData, setRoomData] = React.useState({
-    roonName: "",
+    roomName: "",
     isValidRoomName: true,
   });
   const [showCreateRoomModal, setCreateRoomModal] = React.useState(false);
   const [showJoinRoomModal, setJoinRoomModal] = React.useState(false);
   const [roomCode, setRoomCode] = React.useState("");
-
+  const dispatch = useDispatch();
   const { colors } = useTheme();
+
+  const room = useSelector((state) => state.room);
 
   const roomNameChangeHandler = (value) => {
     if (value.trim().length >= 4) {
@@ -27,16 +33,26 @@ export default function CreateOrJoinTaskRoom() {
       });
     } else {
       setRoomData({
-        roonName: value,
+        roomName: value,
         isValidRoomName: false,
       });
     }
   };
 
-  const createRoomHandler = () => {
+  const createRoomHandler = async () => {
     // Generate the link or code in the backend
-    setRoomCode(dummyCode);
-    setCreateRoomModal(true);
+    try {
+      const userToken = await AsyncStorage.getItem("userToken");
+      console.log(userToken);
+      const { data: room } = await api.createRoom({
+        token: userToken,
+        roomName: roomData.roomName,
+      });
+      dispatch(setRoom(room));
+      setCreateRoomModal(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const joinRoomHandler = () => {
@@ -76,7 +92,7 @@ export default function CreateOrJoinTaskRoom() {
             onDismiss={hideModal}
             contentContainerStyle={containerStyle}
           >
-            <CreateRoomModal roomCode={roomCode} />
+            <CreateRoomModal roomCode={room.roomCode} />
           </Modal>
         </Portal>
         <Portal>
@@ -85,7 +101,10 @@ export default function CreateOrJoinTaskRoom() {
             onDismiss={hideModal}
             contentContainerStyle={containerStyle}
           >
-            <JoinTaskRoomModal />
+            <JoinTaskRoomModal
+              navigation={navigation}
+              setJoinRoomModal={setJoinRoomModal}
+            />
           </Modal>
         </Portal>
         <Text
@@ -119,6 +138,7 @@ export default function CreateOrJoinTaskRoom() {
           onPress={createRoomHandler}
           color="#009387"
           mode="contained"
+          disabled={roomData.isValidRoomName ? false : true}
         >
           Create Room
         </Button>
