@@ -3,14 +3,17 @@ import { Text, View, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import { USER_TYPE } from '../constants';
 
 
 // or any pure javascript modules available in npm
 import { Avatar, Button, TextInput } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 
 export default function AccountScreen() {
   const [text, setText] = React.useState('');
-
+  const updateAccPermission = useSelector((state) => state.user?.restricted?.updateTask) 
+  const userType = useSelector((state) => state.user?.type)
   const onChangeSearch = (query) => setSearchQuery(query);
 
   return (
@@ -43,7 +46,7 @@ export default function AccountScreen() {
           value={text}
           onChangeText={(text) => setText(text)}
         />
-        <Button mode="contained" style={styles.textInput}>Save</Button>
+        <Button mode="contained" style={styles.textInput} disabled={ userType === USER_TYPE.CHILD && !updateAccPermission}>Save</Button>
       </ScrollView>
     </SafeAreaView>
   );
