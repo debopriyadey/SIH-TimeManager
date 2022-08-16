@@ -43,7 +43,7 @@ export default function CreateOrJoinTaskRoom({ navigation }) {
     // Generate the link or code in the backend
     try {
       const userToken = await AsyncStorage.getItem("userToken");
-      console.log(userToken);
+      console.log("line 45", userToken);
       const { data: room } = await api.createRoom({
         token: userToken,
         roomName: roomData.roomName,

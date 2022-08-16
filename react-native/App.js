@@ -18,9 +18,9 @@ import BookmarkScreen from "./screens/BookmarkScreen";
 import ParentControl from "./screens/ParentControl";
 import SessionScreen from "./screens/SessionScreen";
 import SearchScreen from "./screens/SearchScreen";
-import AccountScreen  from "./screens/AccountScreen";
+import AccountScreen from "./screens/AccountScreen";
 import Pomodoro from "./screens/Pomodoro";
-import Loading from "./screens/Loading"
+import Loading from "./screens/Loading";
 import Focus from "./screens/Focus";
 import RootStackScreen from "./screens/RootStackScreen";
 import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
@@ -59,6 +59,9 @@ const App = () => {
       ...PaperDefaultTheme.colors,
       background: "#ffffff",
       text: "#333333",
+      primary: "#3498db",
+      secondary: "#f1c40f",
+      tertiary: "#a1b2c3",
     },
   };
 
@@ -91,20 +94,20 @@ const Application = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const token = useSelector((state) => state.user.token);
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user);
   const superUser = useSelector((state) => state.superUser);
 
   useEffect(() => {
-    console.log("Here is an update........")
-    console.log("user ", user, "super User", superUser)
-  }, [user, superUser])
+    console.log("Here is an update........");
+    console.log("user ", user, "super User", superUser);
+  }, [user, superUser]);
   useEffect(() => {
     async function setData() {
       let userToken = null;
       let superUserToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log(userToken)
+        console.log(userToken);
         superUserToken = await AsyncStorage.getItem("superUserToken");
         console.log("Got userToken", userToken);
         if (superUserToken) {
@@ -120,8 +123,8 @@ const Application = () => {
           connectWithSocketServer(userToken);
         } else setIsLoading(false);
       } catch (e) {
-        console.log(e.response?.data?.message||e.message);
-        setIsLoading(false)
+        console.log(e.response?.data?.message || e.message);
+        setIsLoading(false);
       }
     }
 
