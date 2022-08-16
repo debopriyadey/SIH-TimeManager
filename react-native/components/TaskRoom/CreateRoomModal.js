@@ -27,7 +27,7 @@ const ModalContent = (props) => {
       <View style={styles.inputContainer}>
         <TextInput label="Room Code" value={code} disabled={true} />
         <Button
-          color="#3D5CFF"
+          color="#3c40bd"
           disabled={copy ? true : false}
           onPress={copyToClipboard}
         >
@@ -35,7 +35,7 @@ const ModalContent = (props) => {
         </Button>
       </View>
       <Button
-        color="#3D5CFF"
+        color="#3c40bd"
         mode="contained"
         style={styles.shareBtn}
         onPress={shareCode}

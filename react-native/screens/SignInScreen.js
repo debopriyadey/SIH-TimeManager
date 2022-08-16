@@ -16,7 +16,6 @@ import { useTheme } from "react-native-paper";
 import { signin } from "../redux/slice/userSlice";
 import * as api from "../api";
 import { useDispatch, useSelector } from "react-redux";
-import { connectWithSocketServer } from "../socket/socketConnection";
 
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = React.useState({
@@ -71,7 +70,6 @@ const SignInScreen = ({ navigation }) => {
       const { data } = await api.signin(payload);
       console.log("got response for signin!", data);
       await AsyncStorage.setItem("userToken", data.token);
-      connectWithSocketServer(data.token);
       dispatch(signin(data));
     } catch (error) {
       console.log("got error in signin!", error.response?.data);

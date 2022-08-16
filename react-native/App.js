@@ -47,6 +47,7 @@ import { connectWithSocketServer } from "./socket/socketConnection";
 import { Text } from "react-native";
 import { saveSuperUserInfo } from "./redux/slice/superUser";
 import ProfileScreen from "./screens/ProfileScreen";
+import Schedule from "./components/Schedule/Schedule";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
@@ -151,6 +152,9 @@ const Application = () => {
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
+          <Drawer.Screen name="TodoForm" component={TodoForm} />
+          <Drawer.Screen name="GoalForm" component={GoalForm} />
+          <Drawer.Screen name="Schedule" component={Schedule} />
           <Drawer.Screen name="Focus" component={Focus} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
