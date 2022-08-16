@@ -104,12 +104,11 @@ const Application = () => {
       let superUserToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log(userToken)
         superUserToken = await AsyncStorage.getItem("superUserToken");
-        console.log("Got userToken", userToken);
+        console.log("Got superUser and user ", superUserToken, userToken);
         if (superUserToken) {
-          const data = { token: superUserToken };
-          const response = await api.getUserInfo(data);
+          console.log("requesting super user info", superUserToken);
+          const response = await api.getUserInfo(superUserToken);
           console.log("got loggedIn superUserInfo!", response.data);
           dispatch(saveSuperUserInfo(response.data));
         }
