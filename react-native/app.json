@@ -40,14 +40,14 @@
     },
     "notification": {
       "icon": "./assets/favicon.png",
-      "color": "#3D5CFF"
+      "color": "#3c40bd"
     },
     "plugins": [
       [
         "expo-notifications",
         {
           "icon": "./assets/pomodoroImg.png",
-          "color": "#3D5CFF",
+          "color": "#3c40bd",
           "sounds": [
             "./assets/notification.wav"
           ]
