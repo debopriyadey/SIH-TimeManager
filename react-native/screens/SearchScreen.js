@@ -9,7 +9,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
-export default function SearchScreen({ navigation }) {
+export default function TaskBucket({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = (query) => setSearchQuery(query);

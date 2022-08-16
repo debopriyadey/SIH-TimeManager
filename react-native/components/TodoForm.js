@@ -23,7 +23,7 @@ function TodoForm() {
   const [mode, setMode] = useState("time");
   const [show, setShow] = useState(false);
   const [todoData, setTodoData] = useState({
-    name: "",
+    title: "",
     desc: "",
     tags: "",
     smart_desc: "",
@@ -92,7 +92,7 @@ function TodoForm() {
   const clearForm = () => {
     setModal(false);
     setTodoData({
-      name: "",
+      title: "",
       desc: "",
       tags: "",
       smart_desc: "",
@@ -116,15 +116,15 @@ function TodoForm() {
           <View style={[styles.start_end, { justifyContent: "space-between" }]}>
             <Text style={styles.heading}>Date: {todoData.date} </Text>
             <TouchableOpacity onPress={() => showMode("date")}>
-              <AntDesign name="calendar" size={24} color="black" />
+              <AntDesign title="calendar" size={24} color="black" />
             </TouchableOpacity>
           </View>
           <TextInput
-            placeholder="Task name"
-            value={todoData.name}
+            placeholder="Task title"
+            value={todoData.title}
             style={styles.input}
             onChangeText={(val) =>
-              setTodoData((prev) => ({ ...prev, name: val }))
+              setTodoData((prev) => ({ ...prev, title: val }))
             }
           />
           <TextInput
@@ -160,7 +160,7 @@ function TodoForm() {
             </View>
             <View style={styles.icon}>
               <TouchableOpacity onPress={() => showMode("time")}>
-                <AntDesign name="clockcircle" size={24} color="gray" />
+                <AntDesign title="clockcircle" size={24} color="gray" />
               </TouchableOpacity>
             </View>
           </View>
