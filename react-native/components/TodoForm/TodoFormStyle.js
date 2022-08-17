@@ -1,13 +1,18 @@
 import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   button: {
+    marginTop: 20,
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#3D5CFF",
+    backgroundColor: "#3c40bd",
     height: 40,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  btn_text: {
+    color: "white",
+    fontSize: 15,
   },
   container: {
     width: "100%",
@@ -20,6 +25,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   formWrapper: {
+    paddingVertical: 20,
     width: "100%",
     backgroundColor: "#edebeb",
   },
@@ -38,6 +44,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
   },
+  placeholder: {
+    color: "#666666",
+  },
   pickerView: {
     display: "flex",
     flexDirection: "row",
@@ -49,7 +58,7 @@ const styles = StyleSheet.create({
     height: 45,
     backgroundColor: "white",
   },
-  start_end: {
+  flex_view: {
     width: "100%",
     marginVertical: 10,
     display: "flex",

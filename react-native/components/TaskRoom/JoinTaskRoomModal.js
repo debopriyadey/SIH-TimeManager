@@ -22,7 +22,7 @@ export default function JoinTaskRoomModal({ navigation, setJoinRoomModal }) {
         onChangeText={(text) => setCode(text)}
       />
       <Button
-        color="#3D5CFF"
+        color="#3c40bd"
         mode="contained"
         style={styles.joinBtn}
         onPress={joinRoomHandler}

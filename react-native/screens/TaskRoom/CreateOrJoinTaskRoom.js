@@ -73,7 +73,7 @@ export default function CreateOrJoinTaskRoom({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#3D5CFF" barStyle="light-content" />
+      <StatusBar backgroundColor="#3c40bd" barStyle="light-content" />
       <View style={styles.header}>
         <Text style={styles.text_header}>Create Or Join A TaskRoom!</Text>
       </View>
@@ -136,7 +136,7 @@ export default function CreateOrJoinTaskRoom({ navigation }) {
         <Button
           style={styles.createBtn}
           onPress={createRoomHandler}
-          color="#3D5CFF"
+          color="#3c40bd"
           mode="contained"
           disabled={roomData.isValidRoomName ? false : true}
         >
@@ -144,7 +144,7 @@ export default function CreateOrJoinTaskRoom({ navigation }) {
         </Button>
         <Button
           style={styles.joinBtn}
-          color="#3D5CFF"
+          color="#3c40bd"
           onPress={joinRoomHandler}
         >
           Join Room With Code
@@ -157,7 +157,7 @@ export default function CreateOrJoinTaskRoom({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3D5CFF",
+    backgroundColor: "#3c40bd",
   },
   header: {
     flex: 1,

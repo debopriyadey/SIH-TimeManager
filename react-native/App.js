@@ -18,10 +18,14 @@ import BookmarkScreen from "./screens/BookmarkScreen";
 import ParentControl from "./screens/ParentControl";
 import SessionScreen from "./screens/SessionScreen";
 import SearchScreen from "./screens/SearchScreen";
-import AccountScreen  from "./screens/AccountScreen";
+import Notifications from "./screens/Notifications";
+import AccountScreen from "./screens/AccountScreen";
 import Pomodoro from "./screens/Pomodoro";
-import Loading from "./screens/Loading"
+import GoalForm from "./components/GoalForm/GoalForm";
+import TodoForm from "./components/TodoForm/TodoForm";
+import Loading from "./screens/Loading";
 import Focus from "./screens/Focus";
+import TaskBucket from "./screens/TaskBucket";
 import RootStackScreen from "./screens/RootStackScreen";
 import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
 import RoomScreen from "./screens/TaskRoom/RoomScreen";
@@ -47,6 +51,8 @@ import { connectWithSocketServer } from "./socket/socketConnection";
 import { Text } from "react-native";
 import { saveSuperUserInfo } from "./redux/slice/superUser";
 import ProfileScreen from "./screens/ProfileScreen";
+import Schedule from "./components/Schedule/Schedule";
+import RoutineScreen from "./screens/RoutineSceen";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
@@ -91,20 +97,20 @@ const Application = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const token = useSelector((state) => state.user.token);
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user);
   const superUser = useSelector((state) => state.superUser);
 
   useEffect(() => {
-    console.log("Here is an update........")
-    console.log("user ", user, "super User", superUser)
-  }, [user, superUser])
+    console.log("Here is an update........");
+    console.log("user ", user, "super User", superUser);
+  }, [user, superUser]);
   useEffect(() => {
     async function setData() {
       let userToken = null;
       let superUserToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log(userToken)
+        console.log(userToken);
         superUserToken = await AsyncStorage.getItem("superUserToken");
         console.log("Got userToken", userToken);
         if (superUserToken) {
@@ -120,8 +126,8 @@ const Application = () => {
           connectWithSocketServer(userToken);
         } else setIsLoading(false);
       } catch (e) {
-        console.log(e.response?.data?.message||e.message);
-        setIsLoading(false)
+        console.log(e.response?.data?.message || e.message);
+        setIsLoading(false);
       }
     }
 
@@ -147,7 +153,13 @@ const Application = () => {
           <Drawer.Screen name="Profile" component={AccountScreen} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
+          <Drawer.Screen name="Notifications" component={Notifications} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
+          <Drawer.Screen name="TaskBucket" component={TaskBucket} />
+          <Drawer.Screen name="RoutineScreen" component={RoutineScreen} />
+          <Drawer.Screen name="TodoForm" component={TodoForm} />
+          <Drawer.Screen name="GoalForm" component={GoalForm} />
+          <Drawer.Screen name="Schedule" component={Schedule} />
           <Drawer.Screen name="Focus" component={Focus} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />

@@ -9,8 +9,11 @@ import TaskForm from '../components/TaskBucket/BucketTaskForm'
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal } from 'react-native-paper';
 import BucketList from '../components/TaskBucket/BucketList';
+import {debounce} from '../extras'
+import RoutineList from '../components/Routine/RoutineList'
+import RoutineForm from '../components/Routine/RoutineForm'
 
-export default function TaskBucket({ navigation }) {
+export default function RoutineScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [filter, setFilter] = React.useState()
     const [curr, setCurr] = React.useState();
@@ -33,7 +36,7 @@ export default function TaskBucket({ navigation }) {
     const userId = '12345688'
 
     const data = [{
-        title: "Coding",
+        title: "Morning Routine",
         desc: "Something about the task",
         duration: "30",
         username: "debo",
@@ -42,7 +45,7 @@ export default function TaskBucket({ navigation }) {
         creator: '12345688',
         sharedWith: ['1234', '2345']
     }, {
-        title: "Meeting",
+        title: "Evening Routine",
         desc: "Something about the meeting",
         duration: "30",
         username: "debo",
@@ -51,7 +54,7 @@ export default function TaskBucket({ navigation }) {
         creator: '12345688',
         sharedWith: ['1534', '2345']
     }, {
-        title: "Yoga",
+        title: "Sunday Routine",
         desc: "Something about the yoga",
         duration: "20",
         username: "bishal",
@@ -60,7 +63,7 @@ export default function TaskBucket({ navigation }) {
         creator: '12345689',
         sharedWith: ['1234', '2345']
     }, {
-        title: "Golf",
+        title: "Coding Routine",
         desc: "Something about the playing",
         duration: "30",
         username: "gourav",
@@ -69,8 +72,8 @@ export default function TaskBucket({ navigation }) {
         creator: '12345681',
         sharedWith: ['1234', '2345']
     }, {
-        title: "Study",
-        desc: "Something about the Study",
+        title: "MCKV Time Table",
+        desc: " CLASS 12 time table of MCKV school",
         duration: "30",
         username: "debo",
         canEdit: 'withOnly',
@@ -115,7 +118,7 @@ export default function TaskBucket({ navigation }) {
             >
                 <ScrollView style={styles.scrollView}>
                     <View style={[styles.inlineView, { marginBottom: 10 }]}>
-                        <Text style={styles.paragraph}>Task Bucket</Text>
+                        <Text style={styles.paragraph}>Routine</Text>
                         <View style={[styles.inlineView, { justifyContent: 'flex-end' }]}>
                             <TouchableOpacity activeOpacity={.5} onPress={() => navigation.openDrawer()} style={{ marginRight: 5 }}>
                                 <Image
@@ -157,7 +160,7 @@ export default function TaskBucket({ navigation }) {
                     <Chip icon="close" onPress={() => console.log('Pressed')}>Example Chip</Chip>
 
                     {data.map((task) => (
-                        <BucketList task={task} />
+                        <RoutineList task={task} />
                     ))}
                 </ScrollView>
 
@@ -166,7 +169,7 @@ export default function TaskBucket({ navigation }) {
                     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
                 >
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                        <TaskForm task={curr} />
+                        <RoutineForm task={curr} />
                     </Modal>
                 </Portal>
             </Provider>
