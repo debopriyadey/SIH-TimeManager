@@ -20,6 +20,7 @@ export default function JoinTaskRoomModal({ navigation, setJoinRoomModal }) {
         label="Code"
         placeholder="Enter the Joining Code"
         onChangeText={(text) => setCode(text)}
+        style={{ width: "80%" }}
       />
       <Button
         color="#3c40bd"
@@ -34,8 +35,14 @@ export default function JoinTaskRoomModal({ navigation, setJoinRoomModal }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   joinBtn: {
     borderRadius: 30,
     marginTop: 20,
+    width: "60%",
   },
 });

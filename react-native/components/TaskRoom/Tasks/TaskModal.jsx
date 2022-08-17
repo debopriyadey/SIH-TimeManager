@@ -2,8 +2,11 @@ import { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TextInput, Button, Chip } from "react-native-paper";
 import { useSelector } from "react-redux";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import AppButton from "../../Common/AppButton";
 
 const TaskModal = () => {
+  const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState([]);
@@ -15,22 +18,32 @@ const TaskModal = () => {
     { name: "Harsh" },
     { name: "Ishika" },
   ]);
+  let dateNow = new Date();
   const room = useSelector((state) => state.room);
+  const [endTime, setEndTime] = useState(null);
+  const [date, setDate] = useState(dateNow);
+  const [mode, setMode] = useState("date");
   // const { users } = room;
 
   const titleChangeHandler = (value) => setTitle(value);
-
+  const showMode = (mode) => {
+    setShow(true);
+    setMode(mode);
+  };
+  const handleChange = (mode, selectedDate) => {
+    const currentDate = selectedDate || dateNow;
+    setShow(false);
+    let tempDate = new Date(currentDate);
+    if (mode === "time") {
+      setEndTime(tempDate.toLocaleTimeString());
+    }
+    if (mode === "date") {
+      setDate(tempDate);
+    }
+  };
   const createRoomHandler = () => {
     // send request to backend
   };
-
-  const assignHandler = (value) => {
-    setSearch(value);
-  };
-
-  // const searchHandler = () => {
-
-  // };
 
   const handleSelect = (user) => {
     if (select.includes(user)) {
@@ -45,6 +58,15 @@ const TaskModal = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.flex_view}>
+        <Text style={styles.heading}>Date : {date.toDateString()}</Text>
+        <AppButton
+          color="black"
+          name="calendar"
+          txtStyle={styles.icon}
+          onPress={() => showMode("date")}
+        />
+      </View>
       <View style={styles.title}>
         <TextInput
           label="Title"
@@ -59,24 +81,9 @@ const TaskModal = () => {
             flex: 1,
           }}
           onChangeText={(value) => {
-            console.log(value);
             setSearch(value);
           }}
         />
-        {/* <Button
-          icon={() => (
-            <Image
-              source={require("../../../icons/search_blue.png")}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-                marginTop: 20,
-              }}
-            />
-          )}
-          onPress={searchHandler}
-        /> */}
       </View>
       <View style={styles.chipView}>
         {users
@@ -95,6 +102,27 @@ const TaskModal = () => {
             </Chip>
           ))}
       </View>
+      <View style={styles.flex_view}>
+        <Text style={styles.heading}>
+          End Time : {endTime === null ? "--:--:--" : endTime}
+        </Text>
+        <AppButton
+          color="black"
+          name="calendar"
+          txtStyle={styles.icon}
+          onPress={() => showMode("time")}
+        />
+      </View>
+      {show && (
+        <RNDateTimePicker
+          value={date}
+          mode={mode}
+          onChange={(event, selectedDate) => handleChange(mode, selectedDate)}
+          minimumDate={date}
+          is24Hour={true}
+        />
+      )}
+
       <Button
         color="#3D5CFF"
         mode="contained"
@@ -109,6 +137,14 @@ const TaskModal = () => {
 
 const styles = StyleSheet.create({
   container: {},
+  flex_view: {
+    width: "100%",
+    marginVertical: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   title: {
     marginBottom: 10,
   },
@@ -133,6 +169,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#bad6ff",
     marginVertical: 2,
     marginHorizontal: 2,
+  },
+  button: {
+    marginTop: 20,
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#3D5CFF",
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textColor: "white",
   },
 });
 

@@ -9,6 +9,10 @@ import { setRoom } from "../../redux/slice/roomSlice";
 
 import CreateRoomModal from "../../components/TaskRoom/CreateRoomModal";
 import JoinTaskRoomModal from "../../components/TaskRoom/JoinTaskRoomModal";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 const dummyCode = "https://meet.google.com/ruy-exui-wkz";
 
@@ -66,9 +70,9 @@ export default function CreateOrJoinTaskRoom({ navigation }) {
 
   const containerStyle = {
     backgroundColor: "#fff",
-    padding: 10,
-    height: 200,
+    margin: 10,
     borderRadius: 30,
+    height: hp("30%"),
   };
 
   return (

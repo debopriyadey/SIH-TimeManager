@@ -25,7 +25,12 @@ const ModalContent = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <TextInput label="Room Code" value={code} disabled={true} />
+        <TextInput
+          label="Room Code"
+          value={code}
+          disabled={true}
+          style={{ flex: 1 }}
+        />
         <Button
           color="#3c40bd"
           disabled={copy ? true : false}

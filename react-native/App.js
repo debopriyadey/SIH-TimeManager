@@ -48,6 +48,8 @@ import { Text } from "react-native";
 import { saveSuperUserInfo } from "./redux/slice/superUser";
 import ProfileScreen from "./screens/ProfileScreen";
 import Schedule from "./components/Schedule/Schedule";
+import TodoForm from "./components/TodoForm/TodoForm";
+import GoalForm from "./components/GoalForm/GoalForm";
 
 const Drawer = createDrawerNavigator();
 const App = () => {

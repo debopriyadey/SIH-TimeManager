@@ -36,12 +36,7 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
-    },
-  ],
+  tasks: [taskSchema],
   restricted: {},
   childs: [
     {

@@ -53,7 +53,7 @@ const Tasks = () => {
     display: "flex",
     justifyContent: "flex-start",
     borderRadius: 20,
-    height: hp("50%"),
+    height: hp("60%"),
   };
 
   return (
