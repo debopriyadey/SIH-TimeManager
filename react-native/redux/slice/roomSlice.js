@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const roomState = {
-  messages: [],
   roomId: "",
   roomName: "",
   roomCode: "",
+  users: [],
 };
 
 export const roomSlice = createSlice({
@@ -16,6 +16,7 @@ export const roomSlice = createSlice({
       _state.roomId = action.payload.roomId;
       _state.roomCode = action.payload.roomCode;
       _state.roomName = action.payload.roomName;
+      _state.users = action.payload.users;
     },
     setMessages: (_state, action) => {
       console.log("line 27", _state);

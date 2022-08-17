@@ -21,8 +21,6 @@ import SearchScreen from "./screens/SearchScreen";
 import Notifications from "./screens/Notifications";
 import AccountScreen from "./screens/AccountScreen";
 import Pomodoro from "./screens/Pomodoro";
-import GoalForm from "./components/GoalForm/GoalForm";
-import TodoForm from "./components/TodoForm/TodoForm";
 import Loading from "./screens/Loading";
 import Focus from "./screens/Focus";
 import TaskBucket from "./screens/TaskBucket";
@@ -65,6 +63,9 @@ const App = () => {
       ...PaperDefaultTheme.colors,
       background: "#ffffff",
       text: "#333333",
+      primary: "#3498db",
+      secondary: "#f1c40f",
+      tertiary: "#a1b2c3",
     },
   };
 

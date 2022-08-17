@@ -43,7 +43,9 @@ const createSockerServer = (server) => {
       fetchMessages(socket, roomId, cb);
     });
     socket.on("task:fetch", fetchTasks);
-    socket.on("task:create", createTask);
+    socket.on("task:create", (roomId, taskId) => {
+      sendMessage(io, rooms, roomId, taskId);
+    });
     socket.on("task:mark-complete", markTaskAsComplete);
   });
 };
