@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import { Button, StyleSheet, View, Text } from 'react-native';
-import LottieView from 'lottie-react-native';
+import React, { useRef, useEffect } from "react";
+import { Button, StyleSheet, View, Text } from "react-native";
+import LottieView from "lottie-react-native";
 
 export default function SplashScreen() {
   const animation = useRef(null);
@@ -19,10 +19,12 @@ export default function SplashScreen() {
           height: 200,
         }}
         // Find more Lottie files at https://lottiefiles.com/featured
-        source={require('../assets/clocktime.json')}
+        source={require("../assets/clocktime.json")}
       />
       <View style={styles.buttonContainer}>
-        <Text style={{fontSize: 30, textAlign: 'center', fontWeight: 'bold'}} >Parampara Prathistha Anushashan</Text>
+        <Text style={{ fontSize: 30, textAlign: "center", fontWeight: "bold" }}>
+          Parampara Prathistha Anushashan
+        </Text>
       </View>
       {/* <View style={styles.buttonContainer}>
         <Button
@@ -39,9 +41,9 @@ export default function SplashScreen() {
 
 const styles = StyleSheet.create({
   animationContainer: {
-    backgroundColor: '#3D5CFF',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#3c40bd",
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
   },
   buttonContainer: {

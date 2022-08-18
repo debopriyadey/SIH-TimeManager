@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, Image, Switch } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
-import Constants from 'expo-constants';
+import * as React from "react";
+import { Text, View, StyleSheet, Image, Switch } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native-gesture-handler";
+import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import * as Animatable from 'react-native-animatable';
+import * as Animatable from "react-native-animatable";
 import {
   Avatar,
   Button,
@@ -17,44 +17,41 @@ import {
   TextInput,
   IconButton,
   MD3Colors,
-} from 'react-native-paper';
-import * as api from '../api';
-import { debounce } from '../extras';
-import { useDispatch, useSelector } from 'react-redux';
-import { saveSuperUserInfo } from '../redux/slice/superUser';
-import { saveUserInfo } from '../redux/slice/userSlice';
+} from "react-native-paper";
+import * as api from "../api";
+import { debounce } from "../utils";
+import { useDispatch, useSelector } from "react-redux";
+import { saveSuperUserInfo } from "../redux/slice/superUser";
+import { saveUserInfo } from "../redux/slice/userSlice";
 
-export default function ParentControl({navigation}) {
-  const dispatch = useDispatch()
+export default function ParentControl({ navigation }) {
+  const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user);
   const [visible, setVisible] = React.useState(false);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-
-  const [childData, setChildData] = React.useState([
-   
-  ])
+  const [childData, setChildData] = React.useState([]);
 
   const [addChild, setAddChild] = React.useState({
-    _id: '',
+    _id: "",
     isNewChild: true,
-    name: '',
-    username: '',
-    password: '',
-    usernameError: '',
-    formSubmitError: '',
+    name: "",
+    username: "",
+    password: "",
+    usernameError: "",
+    formSubmitError: "",
     hidePassword: false,
     isLoading: false,
     restricted: {
       updateAcc: false,
       updateTask: false,
       usePomodoro: false,
-      connectCounsel: false
-    }
-  })
+      connectCounsel: false,
+    },
+  });
 
   const isUsernameExist = debounce(async (username) => {
     try {
@@ -62,20 +59,18 @@ export default function ParentControl({navigation}) {
     } catch (error) {
       setAddChild((child) => ({
         ...child,
-        usernameError: error.response?.data?.message || error.message
-      }))
+        usernameError: error.response?.data?.message || error.message,
+      }));
     }
-
-  }, 200)
-
+  }, 200);
 
   const handleUsernameChange = (val) => {
     let username = val.trim();
     setAddChild((child) => ({
       ...child,
       username,
-      usernameError: '',
-      formSubmitError: ''
+      usernameError: "",
+      formSubmitError: "",
     }));
     if (username.trim().length >= 4) {
       isUsernameExist(username);
@@ -85,15 +80,15 @@ export default function ParentControl({navigation}) {
         usernameError: "Username must be at least 4 characters",
       }));
     }
-  }
+  };
 
   const handleNewChild = () => {
     setAddChild({
-      _id: '',
-      username: '',
-      password: '',
-      usernameError: '',
-      formSubmitError: '',
+      _id: "",
+      username: "",
+      password: "",
+      usernameError: "",
+      formSubmitError: "",
       hidePassword: false,
       isLoading: false,
       isNewChild: true,
@@ -101,86 +96,83 @@ export default function ParentControl({navigation}) {
         updateAcc: false,
         updateTask: false,
         usePomodoro: false,
-        connectCounsel: false
-      }
-    })
-    showModal()
-  }
+        connectCounsel: false,
+      },
+    });
+    showModal();
+  };
 
   const handleAddChild = async () => {
     try {
       setAddChild((addChild) => ({
         ...addChild,
-        isLoading: true
-      }))
+        isLoading: true,
+      }));
       const data = {
         username: addChild.username,
         name: addChild.name,
         password: addChild.password,
-        restricted: addChild.restricted
-      }
-      const response  = await api.addChild(data, user.token);
-      console.log("created child ", response.data)
+        restricted: addChild.restricted,
+      };
+      const response = await api.addChild(data, user.token);
+      console.log("created child ", response.data);
       setChildData((childData) => [...childData, response.data]);
-      setAddChild({...addChild, isLoading: false})
-    
-      hideModal()
+      setAddChild({ ...addChild, isLoading: false });
+
+      hideModal();
     } catch (error) {
       setAddChild((addChild) => ({
         ...addChild,
         isLoading: false,
-        formSubmitError: error.response?.data?.message || error.message
-      }))
+        formSubmitError: error.response?.data?.message || error.message,
+      }));
     }
+  };
 
-  }
-
-  const handleSwitch = async(child) => {
-    console.log(child)
+  const handleSwitch = async (child) => {
+    console.log(child);
     const data = {
       email: child.username,
-      password: ''
-    }
-    const {data: response} = await api.signin(data, user.token)
-    console.log("Hey request fullfilled! ", response)
+      password: "",
+    };
+    const { data: response } = await api.signin(data, user.token);
+    console.log("Hey request fullfilled! ", response);
     dispatch(saveSuperUserInfo(user));
     await AsyncStorage.setItem("superUserToken", user.token);
     await AsyncStorage.setItem("userToken", response.token);
     dispatch(saveUserInfo(response));
-    navigation.navigate("Home")
-  }
-
+    navigation.navigate("Home");
+  };
 
   const handleDetails = (child) => {
-    setAddChild({...child, isNewChild: false, password: ''});
-    showModal()
-  }
+    setAddChild({ ...child, isNewChild: false, password: "" });
+    showModal();
+  };
   React.useEffect(() => {
-    console.log(addChild)
+    console.log(addChild);
+  }, [addChild]);
 
-  }, [addChild])
-
-  const handleUpdateChild = async() => {
+  const handleUpdateChild = async () => {
     try {
       setAddChild((addChild) => ({
         ...addChild,
-        isLoading: true
-      }))
+        isLoading: true,
+      }));
       const data = {
         _id: addChild._id,
         username: addChild.username,
         name: addChild.name,
         password: addChild.password,
-        restricted: addChild.restricted
-      }
-      const response  = await api.updateChild(data, user.token);
-      console.log("created child ", response.data)
-      let temp = [...childData]
-      let prevIndex = temp.findIndex(x => x._id === response.data._id);
-      if(prevIndex>=0) {
-        temp[prevIndex] = response.data
-        console.log(temp)
-        setChildData(temp)
+        restricted: addChild.restricted,
+      };
+      const response = await api.updateChild(data, user.token);
+      console.log("created child ", response.data);
+      let temp = [...childData];
+      let prevIndex = temp.findIndex((x) => x._id === response.data._id);
+      if (prevIndex >= 0) {
+        temp[prevIndex] = response.data;
+        console.log(temp);
+        setChildData(temp);
       }
       // setChildData((childData) => {
       //   const newChilds = childData.map((child) => {
@@ -188,56 +180,57 @@ export default function ParentControl({navigation}) {
       //     if(child._id === response.data._id) {
       //       console.log("Got update.. ")
       //       return  response.data;
-      //     } 
+      //     }
       //     return child
       //   })
       //   return newChilds
       // });
-     setAddChild({...addChild, isLoading: false})
-    
-      hideModal()
+      setAddChild({ ...addChild, isLoading: false });
+
+      hideModal();
     } catch (error) {
       setAddChild((addChild) => ({
         ...addChild,
         isLoading: false,
-        formSubmitError: error.response?.data?.message || error.message
-      }))
+        formSubmitError: error.response?.data?.message || error.message,
+      }));
     }
-
-  }
+  };
 
   React.useEffect(() => {
-    console.log("Render ", user.token)
-    const fetchData = async(token) => {
+    console.log("Render ", user.token);
+    const fetchData = async (token) => {
       try {
-        console.log(("Here is it."));
-        const {data} =  await api.getChilds(token);
-      console.log(typeof(data), data);
-      setChildData(data)
+        console.log("Here is it.");
+        const { data } = await api.getChilds(token);
+        console.log(typeof data, data);
+        setChildData(data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-  } 
-  fetchData(user.token)
+    };
+    fetchData(user.token);
   }, [user.token]);
-
- 
 
   return (
     <SafeAreaView style={styles.container}>
-      <Provider style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Portal style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Provider
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <Portal
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <Modal
             visible={visible}
             onDismiss={hideModal}
-            contentContainerStyle={styles.containerStyle}>
-            <Text style={styles.heading}>{addChild.isNewChild? "New Child": addChild.username}</Text>
-            {
-              addChild.isNewChild ? (
-                <Text style={styles.helperText}>logged in</Text>
-
-              ): null
-            }
+            contentContainerStyle={styles.containerStyle}
+          >
+            <Text style={styles.heading}>
+              {addChild.isNewChild ? "New Child" : addChild.username}
+            </Text>
+            {addChild.isNewChild ? (
+              <Text style={styles.helperText}>logged in</Text>
+            ) : null}
             <View>
               <TextInput
                 mode="outlined"
@@ -248,8 +241,8 @@ export default function ParentControl({navigation}) {
                   setAddChild((addChild) => ({
                     ...addChild,
                     name: val,
-                    formSubmitError: ''
-                  }))
+                    formSubmitError: "",
+                  }));
                 }}
               />
               <TextInput
@@ -260,30 +253,32 @@ export default function ParentControl({navigation}) {
                 onChangeText={handleUsernameChange}
                 disabled={!addChild.isNewChild}
               />
-              {addChild.usernameError ?
+              {addChild.usernameError ? (
                 <Animatable.View animation="fadeInLeft" duration={500}>
                   <Text style={styles.errorMsg}>{addChild.usernameError}</Text>
-                </Animatable.View> : null
-              }
+                </Animatable.View>
+              ) : null}
               <TextInput
                 mode="outlined"
                 label="Password"
                 style={styles.inputStyle}
                 secureTextEntry={addChild.hidePassword}
                 value={addChild.password}
-                right={<Image
-                  source={require('../icons/search_blue.png')}
-                  resizeMode="contain"
-                  style={{
-                    width: 25,
-                    height: 25,
-                  }}
-                />}
+                right={
+                  <Image
+                    source={require("../icons/search_blue.png")}
+                    resizeMode="contain"
+                    style={{
+                      width: 25,
+                      height: 25,
+                    }}
+                  />
+                }
                 onChangeText={(text) =>
                   setAddChild((child) => ({
                     ...child,
                     password: text,
-                    formSubmitError: ''
+                    formSubmitError: "",
                   }))
                 }
               />
@@ -295,16 +290,20 @@ export default function ParentControl({navigation}) {
                   <Text>Update Account</Text>
                   <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={addChild.restricted.updateAcc ? "#3D5CFF" : "#f4f3f4"}
+                    thumbColor={
+                      addChild.restricted.updateAcc ? "#3c40bd" : "#f4f3f4"
+                    }
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={() => setAddChild((child) => ({
-                      ...child,
-                      formSubmitError: '',
-                      restricted: {
-                        ...child.restricted,
-                        updateAcc: !child.restricted.updateAcc,
-                      }
-                    }))}
+                    onValueChange={() =>
+                      setAddChild((child) => ({
+                        ...child,
+                        formSubmitError: "",
+                        restricted: {
+                          ...child.restricted,
+                          updateAcc: !child.restricted.updateAcc,
+                        },
+                      }))
+                    }
                     value={addChild.restricted.updateAcc}
                   />
                 </View>
@@ -312,16 +311,20 @@ export default function ParentControl({navigation}) {
                   <Text>Connect Counsel</Text>
                   <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={addChild.restricted.connectCounsel ? "#3D5CFF" : "#f4f3f4"}
+                    thumbColor={
+                      addChild.restricted.connectCounsel ? "#3c40bd" : "#f4f3f4"
+                    }
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={() => setAddChild((child) => ({
-                      ...child,
-                      formSubmitError: '',
-                      restricted: {
-                        ...child.restricted,
-                        connectCounsel: !child.restricted.connectCounsel,
-                      }
-                    }))}
+                    onValueChange={() =>
+                      setAddChild((child) => ({
+                        ...child,
+                        formSubmitError: "",
+                        restricted: {
+                          ...child.restricted,
+                          connectCounsel: !child.restricted.connectCounsel,
+                        },
+                      }))
+                    }
                     value={addChild.restricted.connectCounsel}
                   />
                 </View>
@@ -329,16 +332,20 @@ export default function ParentControl({navigation}) {
                   <Text>Update Task Time </Text>
                   <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={addChild.restricted.updateTask ? "#3D5CFF" : "#f4f3f4"}
+                    thumbColor={
+                      addChild.restricted.updateTask ? "#3c40bd" : "#f4f3f4"
+                    }
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={() => setAddChild((child) => ({
-                      ...child,
-                      formSubmitError: '',
-                      restricted: {
-                        ...child.restricted,
-                        updateTask: !child.restricted.updateTask,
-                      }
-                    }))}
+                    onValueChange={() =>
+                      setAddChild((child) => ({
+                        ...child,
+                        formSubmitError: "",
+                        restricted: {
+                          ...child.restricted,
+                          updateTask: !child.restricted.updateTask,
+                        },
+                      }))
+                    }
                     value={addChild.restricted.updateTask}
                   />
                 </View>
@@ -346,78 +353,117 @@ export default function ParentControl({navigation}) {
                   <Text>Use Pomodoro </Text>
                   <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={addChild.restricted.usePomodoro ? "#3D5CFF" : "#f4f3f4"}
+                    thumbColor={
+                      addChild.restricted.usePomodoro ? "#3c40bd" : "#f4f3f4"
+                    }
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={() => setAddChild((child) => ({
-                      ...child,
-                      formSubmitError: '',
-                      restricted: {
-                        ...child.restricted,
-                        usePomodoro: !child.restricted.usePomodoro,
-                      }
-                    }))}
+                    onValueChange={() =>
+                      setAddChild((child) => ({
+                        ...child,
+                        formSubmitError: "",
+                        restricted: {
+                          ...child.restricted,
+                          usePomodoro: !child.restricted.usePomodoro,
+                        },
+                      }))
+                    }
                     value={addChild.restricted.usePomodoro}
                   />
                 </View>
               </View>
             </View>
-            {addChild.formSubmitError ?
+            {addChild.formSubmitError ? (
               <Animatable.View animation="fadeInLeft" duration={500}>
                 <Text style={styles.errorMsg}>{addChild.formSubmitError}</Text>
-              </Animatable.View> : null
-            }
-            <Button mode="contained" onPress={addChild.isNewChild? handleAddChild: handleUpdateChild} disabled={addChild.usernameError || !addChild.password || !addChild.username}>
-              {addChild.isNewChild? "Add" : "Update Account"}
+              </Animatable.View>
+            ) : null}
+            <Button
+              mode="contained"
+              onPress={addChild.isNewChild ? handleAddChild : handleUpdateChild}
+              disabled={
+                addChild.usernameError ||
+                !addChild.password ||
+                !addChild.username
+              }
+            >
+              {addChild.isNewChild ? "Add" : "Update Account"}
             </Button>
           </Modal>
         </Portal>
 
-        <ScrollView style={{ flex: 1, flexDirection: 'column' }}>
-          {childData.length ? childData.map((child) => (
+        <ScrollView style={{ flex: 1, flexDirection: "column" }}>
+          {childData.length ? (
+            childData.map((child) => (
               <Card style={styles.resCard}>
-              <View style={[styles.inlineView, { justifyContent: 'space-around' }]}>
                 <View
-                  style={{
-                    backgroundColor: 'skyblue',
-                    margin: 3,
-                    padding: 7,
-                    borderRadius: 10,
-                    flex: 0.3,
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Avatar.Icon size={80} icon="search" />
-                </View>
-                <View style={{ flex: 0.8, padding: 5 }}>
-                  <View style={styles.inlineView}>
-                    <Text style={styles.heading}>{child.username}</Text>
-                    {child.logedin ? <Badge style={{ backgroundColor: '#228B22' }}></Badge> : <Badge style={{ backgroundColor: '#800000' }}></Badge>}
-                  </View>
-                  <View style={{ marginVertical: 10 }}></View>
+                  style={[
+                    styles.inlineView,
+                    { justifyContent: "space-around" },
+                  ]}
+                >
                   <View
-                    style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
-                    <Button mode="contained" style={styles.btn} onPress={() => handleDetails(child)} >
-                    <Text style={styles.btnText}>Detail</Text>
-                    </Button>
-                    <Button mode="contained" style={styles.btn} onPress={() => handleSwitch(child)}>
-                     <Text  style={styles.btnText}>Switch</Text>
-                    </Button>
+                    style={{
+                      backgroundColor: "skyblue",
+                      margin: 3,
+                      padding: 7,
+                      borderRadius: 10,
+                      flex: 0.3,
+                      textAlign: "center",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Avatar.Icon size={80} icon="search" />
+                  </View>
+                  <View style={{ flex: 0.8, padding: 5 }}>
+                    <View style={styles.inlineView}>
+                      <Text style={styles.heading}>{child.username}</Text>
+                      {child.logedin ? (
+                        <Badge style={{ backgroundColor: "#228B22" }}></Badge>
+                      ) : (
+                        <Badge style={{ backgroundColor: "#800000" }}></Badge>
+                      )}
+                    </View>
+                    <View style={{ marginVertical: 10 }}></View>
+                    <View
+                      style={[
+                        styles.inlineView,
+                        { justifyContent: "flex-start" },
+                      ]}
+                    >
+                      <Button
+                        mode="contained"
+                        style={styles.btn}
+                        onPress={() => handleDetails(child)}
+                      >
+                        <Text style={styles.btnText}>Detail</Text>
+                      </Button>
+                      <Button
+                        mode="contained"
+                        style={styles.btn}
+                        onPress={() => handleSwitch(child)}
+                      >
+                        <Text style={styles.btnText}>Switch</Text>
+                      </Button>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Card>
-            )
-): <Text>You don't have any child account.Click on ADD to create child account</Text>}
-
-
+              </Card>
+            ))
+          ) : (
+            <Text>
+              You don't have any child account.Click on ADD to create child
+              account
+            </Text>
+          )}
         </ScrollView>
 
         <View
           style={[
             styles.inlineView,
-            { justifyContent: 'flex-end', marginTop: 20 },
-          ]}>
+            { justifyContent: "flex-end", marginTop: 20 },
+          ]}
+        >
           {/* <Image
             source={require('../assets/addBtn.png')}
             resizeMode="contain"
@@ -426,10 +472,12 @@ export default function ParentControl({navigation}) {
               height: 40,
             }}
           /> */}
-          <Button onPress={handleNewChild}  style={styles.addBtn} color='#ffffff'>
-            <Text>
-            add
-            </Text>
+          <Button
+            onPress={handleNewChild}
+            style={styles.addBtn}
+            color="#ffffff"
+          >
+            <Text>add</Text>
           </Button>
         </View>
       </Provider>
@@ -440,66 +488,66 @@ export default function ParentControl({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: "#ecf0f1",
     padding: 8,
   },
   containerStyle: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 20,
     margin: 10,
   },
   scrollView: {
     marginHorizontal: 5,
-    backgroundColor: '#1fe3c1'
+    backgroundColor: "#1fe3c1",
   },
   paragraph: {
     margin: 24,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   heading: {
     fontSize: 25,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subHeading: {
     fontSize: 20,
   },
   addBtn: {
-    backgroundColor: '#3d5cff',
+    backgroundColor: "#3d5cff",
   },
   helperText: {
     fontSize: 12,
   },
   errorMsg: {
-    color: '#FF0000',
+    color: "#FF0000",
     fontSize: 14,
   },
   inputStyle: {
-    marginTop: 15
+    marginTop: 15,
   },
   errorMsgHide: {
     opacity: 0,
-    color: '#FF0000',
+    color: "#FF0000",
     fontSize: 14,
   },
   inlineView: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingInline: 10,
   },
   btn: {
     width: 100,
     margin: 4,
-    backgroundColor:  '#3d5cff'
+    backgroundColor: "#3d5cff",
   },
- btnText: {
-  fontSize: 12
- },
+  btnText: {
+    fontSize: 12,
+  },
   resCard: {
     marginVertical: 5,
   },
