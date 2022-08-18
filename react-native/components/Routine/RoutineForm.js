@@ -69,7 +69,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
         canEdit: task.canEdit
     });
 
-    const data = [{
+    const [data, setData] = useState([{
         title: "Coding",
         desc: "Something about the task",
         duration: "30",
@@ -114,7 +114,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
         canView: 'withOnly',
         creator: '12345688',
         sharedWith: ['1234', '2345']
-    }]
+    }])
 
     const showMode = (mode) => {
         setShow(true);
@@ -164,9 +164,12 @@ function RoutineForm({ task, isRoutineUpdate }) {
     };
 
     const childToParent = (childdata) => {
-        console.log("coming from child", childdata);
         setPic(childdata);
     };
+
+    const updatedTaskList = (taskList) => {
+        console.log(taskList)
+    }
 
 
     return (
@@ -293,16 +296,19 @@ function RoutineForm({ task, isRoutineUpdate }) {
             <Portal
                 style={{ flex: 1, justifyContent: "flex-start", alignItems: 'flex-start' }}
             >
-                <Modal visible={visibleShared} onDismiss={hideSharedModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: 600}]}>
+                <Modal visible={visibleShared} onDismiss={hideSharedModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: 600 }]}>
                     <CloseModal hide={hideSharedModal} />
                     <SearchUser
                         users={pic}
                         childToParent={childToParent}
                     />
                 </Modal>
-                <Modal visible={visibleSearch} onDismiss={hideSearchModal} contentContainerStyle={containerStyle}>
+                <Modal visible={visibleSearch} onDismiss={hideSearchModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: 600 }]}>
                     <CloseModal hide={hideSearchModal} />
-                    <SearchTask />
+                    <SearchTask
+                        tasks={data}
+                        updatedTaskList={updatedTaskList}
+                    />
                 </Modal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                     <CloseModal hide={hideModal} />
