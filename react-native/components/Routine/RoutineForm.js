@@ -300,6 +300,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
                     <CloseModal hide={hideSharedModal} />
                     <SearchUser
                         users={pic}
+                        hide={hideSharedModal}
                         childToParent={childToParent}
                     />
                 </Modal>
@@ -307,6 +308,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
                     <CloseModal hide={hideSearchModal} />
                     <SearchTask
                         tasks={data}
+                        hide={hideSearchModal}
                         updatedTaskList={updatedTaskList}
                     />
                 </Modal>

@@ -9,7 +9,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 // or any pure javascript modules available in npm
 import { Searchbar, Button, Title, Divider } from 'react-native-paper';
 
-export default function SearchUser({ users, childToParent }) {
+export default function SearchUser({ users, updatedUserList, hide }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [filter, setFilter] = React.useState()
     const [searchResult, setSearchResult] = React.useState([{
@@ -53,7 +53,8 @@ export default function SearchUser({ users, childToParent }) {
     }
 
     const saveUsers = () => {
-        childToParent(usersList);
+        updatedUserList(usersList);
+        hide()
     }
     return (
         <View>

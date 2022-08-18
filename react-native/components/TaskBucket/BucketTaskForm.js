@@ -18,6 +18,27 @@ function BucketTaskForm({ task, isUpdate }) {
     let date = new Date();
     const [show, setShow] = useState(false);
     const [visibleShared, setVisibleShared] = useState()
+    const [pic, setPic] = useState([
+        {
+            avtar: require("../../icons/face1.png"),
+            username: 'debo'
+        }, {
+            avtar: require("../../icons/face2.png"),
+            username: 'bishal'
+        }, {
+            avtar: require("../../icons/face3.png"),
+            username: 'ishika'
+        }, {
+            avtar: require("../../icons/face4.png"),
+            username: 'gourav'
+        }, {
+            avtar: require("../../icons/face1.png"),
+            username: 'shrayansh'
+        }, {
+            avtar: require("../../icons/face1.png"),
+            username: 'harsh'
+        }
+    ])
 
     const showSharedModal = () => setVisibleShared(true);
     const hideSharedModal = () => setVisibleShared(false);
@@ -36,16 +57,6 @@ function BucketTaskForm({ task, isUpdate }) {
         setShow(true);
     };
 
-    const handleSubTasks = () => {
-        setTodoData({
-            title: "",
-            desc: "",
-            tags: "",
-            duration: "",
-            canView: "",
-            canEdit: "",
-        });
-    };
 
     const handlePress = () => {
         if (
@@ -70,21 +81,9 @@ function BucketTaskForm({ task, isUpdate }) {
         }
     };
 
-    const pic = [
-        {
-            avtar: require("../../icons/face1.png"),
-        }, {
-            avtar: require("../../icons/face2.png"),
-        }, {
-            avtar: require("../../icons/face3.png"),
-        }, {
-            avtar: require("../../icons/face4.png"),
-        }, {
-            avtar: require("../../icons/face1.png"),
-        }, {
-            avtar: require("../../icons/face1.png"),
-        }
-    ]
+    const updatedUserList = (userList) => {
+        setPic(userList);
+    };
 
     return (
         <View>
@@ -157,7 +156,7 @@ function BucketTaskForm({ task, isUpdate }) {
                         </View>
                     </View>
                     <View style={styles.inlineView}>
-                        <Text style={{fontSize: 18}}> Shared With </Text>
+                        <Text style={{ fontSize: 18 }}> Shared With </Text>
                         <TouchableOpacity onPress={showSharedModal}>
                             {
                                 pic.length ?
@@ -196,7 +195,11 @@ function BucketTaskForm({ task, isUpdate }) {
             >
                 <Modal visible={visibleShared} onDismiss={hideSharedModal} contentContainerStyle={containerStyle}>
                     <CloseModal hide={hideSharedModal} />
-                    <SearchUser />
+                    <SearchUser
+                        users={pic}
+                        hide={hideSharedModal}
+                        updatedUserList={updatedUserList}
+                    />
                 </Modal>
             </Portal>
         </View>

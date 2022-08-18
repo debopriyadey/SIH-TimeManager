@@ -9,7 +9,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 // or any pure javascript modules available in npm
 import { Searchbar, Button, Title, Divider } from 'react-native-paper';
 
-export default function SearchTask({ tasks, updatedTaskList }) {
+export default function SearchTask({ tasks, updatedTaskList, hide }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [filter, setFilter] = React.useState()
     const [searchResult, setSearchResult] = React.useState([{
@@ -54,8 +54,9 @@ export default function SearchTask({ tasks, updatedTaskList }) {
         setTasksList(filtered)
     }
 
-    const saveUsers = () => {
+    const saveTasks = () => {
         updatedTaskList(tasksList);
+        hide()
     }
 
     return (
@@ -128,7 +129,7 @@ export default function SearchTask({ tasks, updatedTaskList }) {
                 </View>)}
             </ScrollView>
 
-            <Button onPress={() => saveUsers()}>Save</Button>
+            <Button onPress={() => saveTasks()}>Save</Button>
         </View>
     );
 }
