@@ -18,7 +18,8 @@ export default function SearchUser({ users, childToParent }) {
     }, {
         avtar: require("../../icons/face2.png"),
         username: 'new User 2'
-    }]);
+    }
+    ]);
 
     const [usersList, setUsersList] = React.useState(users)
 
@@ -53,7 +54,7 @@ export default function SearchUser({ users, childToParent }) {
 
     const saveUsers = () => {
         childToParent(usersList);
-    } 
+    }
     return (
         <View>
             <ScrollView style={styles.scrollView}>
@@ -76,7 +77,7 @@ export default function SearchUser({ users, childToParent }) {
                     }
                 />
 
-                <View style={{margin: 10}}></View>
+                <View style={{ margin: 10 }}></View>
                 {!searchQuery.length ? <></> : (<View>
                     <Text>All Users </Text>
                     <Divider />
@@ -99,11 +100,13 @@ export default function SearchUser({ users, childToParent }) {
                             </View>
                             <View>
                                 {
-                                    usersList
+                                    usersList.findIndex((x) => x.username === res.username) < 0 ?
+                                        (<Button style={styles.btn} onPress={() => addUser(res)}>
+                                            <Text style={styles.btnText}>Add</Text>
+                                        </Button>) : (<Button style={styles.btn} onPress={() => removeUser(res)}>
+                                            <Text style={styles.btnText}>Remove</Text>
+                                        </Button>)
                                 }
-                                <Button style={styles.btn} onPress={() => addUser(res)}>
-                                    <Text style={styles.btnText}>Add</Text>
-                                </Button>
                             </View>
                         </View>
                     ))}</View>)}

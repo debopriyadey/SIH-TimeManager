@@ -25,7 +25,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
     const [visible, setVisible] = useState()
     const [visibleSearch, setVisibleSearch] = useState()
     const [visibleShared, setVisibleShared] = useState()
-    const [pic, setPic] = react.useState([
+    const [pic, setPic] = useState([
         {
             avtar: require("../../icons/face1.png"),
             username: 'debo'
@@ -46,7 +46,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
             username: 'harsh'
         }
     ])
-    
+
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
@@ -293,7 +293,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
             <Portal
                 style={{ flex: 1, justifyContent: "flex-start", alignItems: 'flex-start' }}
             >
-                <Modal visible={visibleShared} onDismiss={hideSharedModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: hp("100%") }]}>
+                <Modal visible={visibleShared} onDismiss={hideSharedModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: 600}]}>
                     <CloseModal hide={hideSharedModal} />
                     <SearchUser
                         users={pic}
