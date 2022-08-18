@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const { find } = require('../models/users.js');
+const User = require('../models/users.js');
 
 const signup = (req, res, next) => {
     const { username, name, email, password } = req.body;
@@ -60,24 +61,24 @@ const signin = (req, res, next) => {
     }
 
     Users.findOne({ $or: [{ email: email }, { username: email }] })
-        .then(async(savedUser) => {
+        .then(async (savedUser) => {
             if (!savedUser) {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
             let doMatch = true;
-            if (!parentId){
-                 doMatch = await bcrypt.compare(password, savedUser.password)
+            if (!parentId) {
+                doMatch = await bcrypt.compare(password, savedUser.password)
             }
-            console.log("Got here!", doMatch && ((parentId&& savedUser.parentId.toString() == parentId) || (!parentId)))
-            if (doMatch && ((parentId&& savedUser.parentId.toString() == parentId) || (!parentId))) {
+            console.log("Got here!", doMatch && ((parentId && savedUser.parentId.toString() == parentId) || (!parentId)))
+            if (doMatch && ((parentId && savedUser.parentId.toString() == parentId) || (!parentId))) {
                 const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.JWT_SECRET);
                 if (!savedUser.token)
-                savedUser.token = token
+                    savedUser.token = token
                 console.log(savedUser.token)
-                if(!parentId)
-                savedUser.isLoggedIn = true;
+                if (!parentId)
+                    savedUser.isLoggedIn = true;
                 savedUser.save().then((user) => {
-                    
+
                     return res.json(user);
                 }).catch((err) => {
                     next(err);
@@ -86,7 +87,7 @@ const signin = (req, res, next) => {
             else {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
-               
+
         })
         .catch((err) => {
             next(err);
@@ -207,6 +208,36 @@ const updateChild = async (req, res, next) => {
     })
 }
 
+const getRooms = async (req, res, next) => {
+    try {
+        const user_id = req.params.id;
+
+        if (!user_id) {
+            res.status(400);
+            throw new Error("User id is required");
+        }
+
+        const user = await User.findById(user_id)
+            .populate({
+                path: 'rooms',
+                populate: {
+                    path: 'users',
+                    model: 'User',
+                    select: { name: 1, email: 1, _id: 1}
+                }
+            });
+        
+        if(!user) {
+            res.status(400);
+            throw new Error("User doesn't exist");
+        }
+
+        res.json(user.rooms);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 /*
 clicks on switch -> backend request with (child._id, parent._id) 
     find document with this fields 
@@ -260,5 +291,6 @@ module.exports = {
     addChild,
     getChilds,
     logout,
-    updateChild
+    updateChild,
+    getRooms
 }

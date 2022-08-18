@@ -2,28 +2,27 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { setRoom } from "../../redux/slice/roomSlice";
+import { ScrollView } from "react-native-gesture-handler";
 
-const ChatIndex = () => {
+const ChatIndex = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  //   const rooms = user.rooms;
-  // Populate user.rooms in the backend after authentication
-  const rooms = [
-    { id: 1, roomName: "Study", roomCode: "ab" },
-    { id: 2, roomName: "Code", roomCode: "cd" },
-    { id: 3, roomName: "Play", roomCode: "ef" },
-    { id: 4, roomName: "Sleep", roomCode: "gh" },
-  ];
+  const rooms = user.rooms;
 
-  const handleClick = (roomCode) => {
-    // Get the room from backend
-    const room = {
-      roomId: "dsshdh",
-      roomCode: roomCode,
-      roomName: "Hello",
-      users: ["a1", "a2"],
-    };
-    dispatch(setRoom(room));
+  // Populate user.rooms in the backend after authentication
+  // const rooms = [
+  //   { id: 1, roomName: "Study", roomCode: "ab" },
+  //   { id: 2, roomName: "Code", roomCode: "cd" },
+  //   { id: 3, roomName: "Play", roomCode: "ef" },
+  //   { id: 4, roomName: "Sleep", roomCode: "gh" },
+  // ];
+
+  const openRoom = (room) => {
+    console.log("line 20 ChatIndex", room);
+    dispatch(setRoom({
+      ...room,
+      roomId: room._id
+    }));
     navigation.navigate("RoomScreen");
   };
 
@@ -61,22 +60,24 @@ const ChatIndex = () => {
     "#171717"
   );
   return (
-    <View>
-      {rooms.map((room) => (
-        <Pressable
-          style={({ pressed }) => [
-            {
-              backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
-            },
-          ]}
-          onPress={() => handleClick(room.roomCode)}
-        >
-          <View style={[styles.card, shadow]}>
-            <Text>{room.roomName}</Text>
-          </View>
-        </Pressable>
-      ))}
-    </View>
+    <ScrollView>
+      <View>
+        {rooms.map((room) => (
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
+              },
+            ]}
+            onPress={() => openRoom(room)}
+          >
+            <View style={[styles.card, shadow]}>
+              <Text>{room.roomName}</Text>
+            </View>
+          </Pressable>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 

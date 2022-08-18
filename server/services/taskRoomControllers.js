@@ -93,15 +93,13 @@ const fetchMessages = async (socket, roomId, cb) => {
   try {
     let messages = await Message.find({ room: roomId })
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(20);
 
-    console.log(messages);
 
     for (let i = 0; i < messages.length; i++) {
       messages[i].sender = await User.findById(messages[i].sender);
     }
 
-    // console.log(messages);
     if (!messages) {
       throw new Error("Messages not found");
     }
