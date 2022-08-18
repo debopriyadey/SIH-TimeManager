@@ -16,6 +16,7 @@ import { Button, Modal, Portal } from "react-native-paper";
 import BucketTaskForm from "../TaskBucket/BucketTaskForm";
 import CloseModal from "../Common/CloseModal";
 import SearchTask from "../Search/SearchTask";
+import SearchUser from "../Search/SearchUser";
 
 function RoutineForm({ task, isRoutineUpdate }) {
     let date = new Date();
@@ -23,12 +24,37 @@ function RoutineForm({ task, isRoutineUpdate }) {
     const [isUpdate, setIsUpdate] = useState(false)
     const [visible, setVisible] = useState()
     const [visibleSearch, setVisibleSearch] = useState()
-
+    const [visibleShared, setVisibleShared] = useState()
+    const [pic, setPic] = react.useState([
+        {
+            avtar: require("../../icons/face1.png"),
+            username: 'debo'
+        }, {
+            avtar: require("../../icons/face2.png"),
+            username: 'bishal'
+        }, {
+            avtar: require("../../icons/face3.png"),
+            username: 'ishika'
+        }, {
+            avtar: require("../../icons/face4.png"),
+            username: 'gourav'
+        }, {
+            avtar: require("../../icons/face1.png"),
+            username: 'shrayansh'
+        }, {
+            avtar: require("../../icons/face1.png"),
+            username: 'harsh'
+        }
+    ])
+    
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
     const showSearchModal = () => setVisibleSearch(true);
     const hideSearchModal = () => setVisibleSearch(false);
+
+    const showSharedModal = () => setVisibleShared(true);
+    const hideSharedModal = () => setVisibleShared(false);
 
     // const showDetailModal = () => setDetailVisible(true);
     // const hideDetailModal = () => setDetailVisible(false);
@@ -137,6 +163,12 @@ function RoutineForm({ task, isRoutineUpdate }) {
         }
     };
 
+    const childToParent = (childdata) => {
+        console.log("coming from child", childdata);
+        setPic(childdata);
+    };
+
+
     return (
         <View>
             <ScrollView style={styles.formWrapper}>
@@ -191,18 +223,28 @@ function RoutineForm({ task, isRoutineUpdate }) {
                     </View>
                     <View style={styles.inlineView}>
                         <Button> Shared With </Button>
-                        <View>
-                            {/* <Image
-                                source={require("../../assets/avatar.png")}
-                                resizeMode="contain"
-                                style={{
-                                    width: 20,
-                                    height: 20,
-                                    marginBottom: -50,
-                                    // flex: 1
-                                }}
-                            /> */}
-                        </View>
+                        <TouchableOpacity onPress={showSharedModal}>
+                            {
+                                pic.length ?
+                                    (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 5 }}>{
+                                        pic.slice(0, 4).map((res) => (
+                                            <Image
+                                                source={res.avtar}
+                                                resizeMode="contain"
+                                                style={{
+                                                    width: 40,
+                                                    height: 40,
+                                                    marginRight: -20,
+                                                }}
+                                            />
+                                        ))
+                                    }
+                                        < View style={{ backgroundColor: '#BAD6FF', width: 40, height: 40, borderRadius: 20, padding: 6 }}>
+                                            <Text style={{ fontSize: 14, fontWeight: 'bold', margin: 2 }}>99+</Text>
+                                        </View>
+                                    </View>) :
+                                    <Text>Add Users</Text>}
+                        </TouchableOpacity>
                     </View>
                     <View style={[styles.inlineView, { marginVertical: 20 }]}>
                         <View>
@@ -247,20 +289,27 @@ function RoutineForm({ task, isRoutineUpdate }) {
                     />
 
                 </View>
-            </ScrollView>
+            </ScrollView >
             <Portal
                 style={{ flex: 1, justifyContent: "flex-start", alignItems: 'flex-start' }}
             >
-                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                    <CloseModal hide={hideModal} />
-                    <BucketTaskForm task={curr} isUpdate={isUpdate} />
+                <Modal visible={visibleShared} onDismiss={hideSharedModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: hp("100%") }]}>
+                    <CloseModal hide={hideSharedModal} />
+                    <SearchUser
+                        users={pic}
+                        childToParent={childToParent}
+                    />
                 </Modal>
                 <Modal visible={visibleSearch} onDismiss={hideSearchModal} contentContainerStyle={containerStyle}>
                     <CloseModal hide={hideSearchModal} />
                     <SearchTask />
                 </Modal>
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                    <CloseModal hide={hideModal} />
+                    <BucketTaskForm task={curr} isUpdate={isUpdate} />
+                </Modal>
             </Portal>
-        </View>
+        </View >
 
     );
 }
