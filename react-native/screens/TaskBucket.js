@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, StatusBar } from 'reac
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import { debounce } from '../utils'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TaskForm from '../components/TaskBucket/BucketTaskForm'
 // You can import from local files
@@ -16,13 +17,13 @@ export default function TaskBucket({ navigation }) {
     const [curr, setCurr] = React.useState();
     const [searchResult, setSearchResult] = React.useState([]);
 
-    const getSearchResult= debounce(async (username) => {
+    const getSearchResult = debounce(async (username) => {
         try {
-          const { data } = await api.bucketSearch(username);
-          setSearchResult(data);
-          console.log(data)
+            const { data } = await api.bucketSearch(username);
+            setSearchResult(data);
+            console.log(data)
         } catch (error) {
-         console.log(error)
+            console.log(error)
         }
     }, 200);
 

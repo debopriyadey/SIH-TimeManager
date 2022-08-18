@@ -21,6 +21,8 @@ import SearchScreen from "./screens/SearchScreen";
 import Notifications from "./screens/Notifications";
 import AccountScreen from "./screens/AccountScreen";
 import Pomodoro from "./screens/Pomodoro";
+import  TodoForm  from "./components/TodoForm/TodoForm";
+import GoalForm from "./components/GoalForm/GoalForm"
 import Loading from "./screens/Loading";
 import Focus from "./screens/Focus";
 import TaskBucket from "./screens/TaskBucket";
@@ -111,12 +113,11 @@ const Application = () => {
       let superUserToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log(userToken);
         superUserToken = await AsyncStorage.getItem("superUserToken");
-        console.log("Got userToken", userToken);
+        console.log("Got superUser and user ", superUserToken, userToken);
         if (superUserToken) {
-          const data = { token: superUserToken };
-          const response = await api.getUserInfo(data);
+          console.log("requesting super user info", superUserToken);
+          const response = await api.getUserInfo(superUserToken);
           console.log("got loggedIn superUserInfo!", response.data);
           dispatch(saveSuperUserInfo(response.data));
         }

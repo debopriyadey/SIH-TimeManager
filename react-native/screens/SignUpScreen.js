@@ -15,7 +15,7 @@ import {
 import * as api from "../api";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
-import { debounce, isValidEmail } from "../extras";
+import { debounce, isValidEmail } from "../utils";
 //  import FontAwesome from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf';
 // import Feather from '../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Feather.ttf';
 

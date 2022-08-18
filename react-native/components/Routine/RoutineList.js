@@ -8,12 +8,13 @@ import RoutineForm from './RoutineForm'
 // You can import from local files
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal } from 'react-native-paper';
+import CloseModal from '../Common/CloseModal';
 
-export default function BucketList({ task }) {
+export default function RoutineList({ task }) {
     const [visible, setVisible] = React.useState(false);
     const [deatilVisible, setDetailVisible] = React.useState(false);
     const [curr, setCurr] = React.useState();
-    const [isUpdate, setIsUpdate] = React.useState(false);
+    const [isRoutineUpdate, setIsRoutineUpdate] = React.useState(false);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -24,13 +25,13 @@ export default function BucketList({ task }) {
 
     const createCopy = (task) => {
         setCurr(task)
-        setIsUpdate(false)
+        setIsRoutineUpdate(false)
         showDetailModal()
     }
 
     const createUpdate = (task) => {
         setCurr(task)
-        setIsUpdate(true)
+        setIsRoutineUpdate(true)
         showDetailModal()
     }
 
@@ -66,7 +67,8 @@ export default function BucketList({ task }) {
                 style={{ flex: 1, justifyContent: "flex-start", alignItems: 'flex-start' }}
             >
                 <Modal visible={deatilVisible} onDismiss={hideDetailModal} contentContainerStyle={containerStyle}>
-                    <RoutineForm task={curr} isUpdate={isUpdate} />
+                    <CloseModal hide={hideDetailModal} />
+                    <RoutineForm task={curr} isRoutineUpdate={isRoutineUpdate} />
                 </Modal>
             </Portal>
         </View>

@@ -18,4 +18,3 @@ export const updateChild = (data, token) => axios.put(`${API_URL}/child`, data, 
 export const getChilds = (token) => axios.get(`${API_URL}/childs`, getConfig(token));
 export const bucketSearch = (data) => axios.get(`${API_URL}/bucketSearch/${data}`);
 export const createRoom = (data) => axios.post(`${API_URL}/room/create`, data, getConfig(data.token));
-

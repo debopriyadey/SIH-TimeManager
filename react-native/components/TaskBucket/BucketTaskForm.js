@@ -105,19 +105,19 @@ function BucketTaskForm({ task, isUpdate }) {
                 />
 
                 <View style={styles.inlineView}>
-                    <View>
+                    <View  style={{ width: widthPercentageToDP("40%") }}>
                         <Text> Can View</Text>
                         <Picker
                             selectedValue={todoData.canView}
                             onValueChange={(val) => setTodoData((prev) => ({ ...prev, canView: val }))}
-                            style={{ width: widthPercentageToDP("40%") }}
+                           
                         >
                             <Picker.Item label="Everyone" value="everyone" />
                             <Picker.Item label="Only With" value="onlyWith" />
                             <Picker.Item label="None" value="none" />
                         </Picker>
                     </View>
-                    <View>
+                    <View  style={{ width: widthPercentageToDP("40%") }}>
                         <Text> Can Edit</Text>
                         <Picker
                             selectedValue={todoData.canEdit}
@@ -131,7 +131,10 @@ function BucketTaskForm({ task, isUpdate }) {
                         </Picker>
                     </View>
                 </View>
+                <View style={styles.inlineView}>
                 <Text> Shared With </Text>
+
+                </View>
 
                 <AppButton
                     onPress={handlePress}

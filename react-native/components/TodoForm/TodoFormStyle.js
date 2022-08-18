@@ -1,5 +1,16 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 const styles = StyleSheet.create({
+  inlineView: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '100%',
+    alignSelf: 'baseline',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingInline: 10,
+},
   button: {
     marginTop: 20,
     alignItems: "center",
@@ -13,6 +24,13 @@ const styles = StyleSheet.create({
   btn_text: {
     color: "white",
     fontSize: 15,
+  },
+  btn: {
+    padding: 0,
+    margin: 2
+  },
+  btnText: {
+    fontSize: wp("2%"),
   },
   container: {
     width: "100%",
@@ -28,9 +46,13 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     width: "100%",
     backgroundColor: "#edebeb",
+    marginVertical: 20,
+    paddingVertical: 10,
+    borderRadius: 10
   },
   heading: {
-    fontSize: 20,
+    fontSize: 25,
+    fontWeight: 'bold',
   },
   icon: {
     paddingHorizontal: 10,

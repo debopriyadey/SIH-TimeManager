@@ -5,6 +5,6 @@ const controller = require('../controllers/taskBucket')
 const requiredLogin = require('../middleware/requireAuth');
 
 route.post('/task_bucket',requiredLogin, controller.createTask);
-route.get('/task_bucket:id', controller.getTask);
+route.get('/search', requiredLogin, controller.getTask);
 
 module.exports=route;

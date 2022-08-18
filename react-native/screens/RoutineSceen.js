@@ -7,8 +7,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 // You can import from local files
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal } from 'react-native-paper';
-import BucketList from '../components/TaskBucket/BucketList';
-import {debounce} from '../extras'
+import { debounce } from '../utils'
 import RoutineList from '../components/Routine/RoutineList'
 import RoutineForm from '../components/Routine/RoutineForm'
 
@@ -18,13 +17,13 @@ export default function RoutineScreen({ navigation }) {
     const [curr, setCurr] = React.useState();
     const [searchResult, setSearchResult] = React.useState([]);
 
-    const getSearchResult= debounce(async (username) => {
+    const getSearchResult = debounce(async (username) => {
         try {
-          const { data } = await api.bucketSearch(username);
-          setSearchResult(data);
-          console.log(data)
+            const { data } = await api.bucketSearch(username);
+            setSearchResult(data);
+            console.log(data)
         } catch (error) {
-         console.log(error)
+            console.log(error)
         }
     }, 200);
 
@@ -168,6 +167,23 @@ export default function RoutineScreen({ navigation }) {
                     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
                 >
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={hideModal}
+                        // style={{flex: 1, justifyContent: 'flex-end'}}
+                        >
+                            <Image
+                                source={require("../icons/close.png")}
+                                resizeMode="contain"
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    marginBottom: 10,
+                                    marginRight: 0,
+                                    // flex: 1
+                                }}
+                            />
+                        </TouchableOpacity>
                         <RoutineForm task={curr} />
                     </Modal>
                 </Portal>
