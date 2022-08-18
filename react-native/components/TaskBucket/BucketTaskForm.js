@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, Switch, ScrollView, TouchableOpacity, Image } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
+import * as api from '../../api'
 
 import styles from "../TodoForm/TodoFormStyle";
 import AppButton from "../Common/AppButton";
@@ -59,6 +60,7 @@ function BucketTaskForm({ task, isUpdate }) {
 
 
     const handlePress = () => {
+        console.log(todoData, "before handle click ")
         if (
             todoData.title &&
             todoData.desc &&
@@ -76,14 +78,20 @@ function BucketTaskForm({ task, isUpdate }) {
                 canEdit: "",
             });
             alert("Task added");
+            try {
+                await api.
+            } catch (error) {
+                
+            }
         } else {
-            alert("Fill the required fields");
+            alert("Fill the required is the update fields");
         }
     };
 
     const updatedUserList = (userList) => {
         setPic(userList);
     };
+
 
     return (
         <View>

@@ -6,7 +6,7 @@ const USER_TYPE = {
 const SHARING_TYPE = {
     EVERYONE: 'everyone',
     ONLY_WITH: 'only_with',
-    NO_ONE: 'no_one'
+    NO_ONE: 'none'
 
 }
 
