@@ -13,6 +13,6 @@ route.get('/usernameExist/:username', controller.isUsernameExist)
 route.post('/addChild', requiredLogin, controller.addChild);
 route.get('/childs', requiredLogin,controller.getChilds);
 route.put('/child', requiredLogin,controller.updateChild);
-route.get('/user/rooms/:id', controller.getRooms);
+route.get('/user/rooms/:id', requiredLogin, controller.getRooms);
 
 module.exports=route;

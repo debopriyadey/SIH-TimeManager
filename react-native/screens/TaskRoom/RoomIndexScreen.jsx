@@ -33,8 +33,9 @@ const RoomIndexScreen = ({ navigation }) => {
     }
   }
 
-  if (loading)
-    return <ActivityIndicator animating={true} />
+  if (loading) {
+    return <ActivityIndicator style={{ marginTop: 10 }} animating={true} />
+  }
 
   return (
     <Tabs style={styles.theme} theme={{ colors: { text: "#3D5CFF" } }}>

@@ -22,5 +22,5 @@ export const getChilds = (token) =>
   axios.get(`${API_URL}/childs`, getConfig(token));
 export const createRoom = (data) =>
   axios.post(`${API_URL}/room/create`, data, getConfig(data.token));
-export const getRooms = (userId) =>
-  axios.get(`${API_URL}/user/rooms/${userId}`);
+export const getRooms = (userId, token) =>
+  axios.get(`${API_URL}/user/rooms/${userId}`, getConfig(token));

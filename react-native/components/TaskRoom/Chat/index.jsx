@@ -16,8 +16,6 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log("line 14", room);
-
   useLayoutEffect(() => {
     if (room.roomId) {
       setLoading(true);

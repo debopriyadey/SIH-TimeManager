@@ -1,29 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TextInput, Button, Chip } from "react-native-paper";
 import { useSelector } from "react-redux";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import AppButton from "../../Common/AppButton";
+import { createTask, fetchTasks } from "../../../socket/socketConnection";
 
-const TaskModal = () => {
+const TaskModal = ({ setShowModal }) => {
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState([]);
-  const [users, setUsers] = useState([
-    { name: "Shrayansh" },
-    { name: "Bishal" },
-    { name: "Debopriya" },
-    { name: "Gourav" },
-    { name: "Harsh" },
-    { name: "Ishika" },
-  ]);
+  // const [users, setUsers] = useState([
+  //   { name: "Shrayansh" },
+  //   { name: "Bishal" },
+  //   { name: "Debopriya" },
+  //   { name: "Gourav" },
+  //   { name: "Harsh" },
+  //   { name: "Ishika" },
+  // ]);
   let dateNow = new Date();
   const room = useSelector((state) => state.room);
   const [endTime, setEndTime] = useState(null);
   const [date, setDate] = useState(dateNow);
   const [mode, setMode] = useState("date");
-  // const { users } = room;
+  const [valid, setValid] = useState(false);
+  const { users } = room;
+
+  useEffect(() => {
+    if(!title || !endTime || !select.length) {
+      setValid(false);
+    } else {
+      setValid(true);
+    }
+  },[endTime, title, select]);
 
   const titleChangeHandler = (value) => setTitle(value);
   const showMode = (mode) => {
@@ -41,15 +51,30 @@ const TaskModal = () => {
       setDate(tempDate);
     }
   };
-  const createRoomHandler = () => {
-    // send request to backend
+  const createTaskHandler = () => {
+    const endDate = new Date(
+      date.getFullYear(), 
+      date.getMonth(), 
+      date.getDate(), 
+      endTime.slice(0, 2),
+      endTime.slice(3, 5),
+      endTime.slice(6)
+    );
+    console.log(endDate.toString());
+    const task = {
+      title,
+      assignees: select,
+      endTime: endDate
+    }
+    createTask(room.roomId, task);
+    fetchTasks(room.roomId);
+    setShowModal(false);
   };
 
   const handleSelect = (user) => {
     if (select.includes(user)) {
       let tempSelect = select;
       const filtered = tempSelect.filter((_user) => _user != user);
-      //tempSelect.splice(index, 1);
       setSelect(filtered);
     } else {
       setSelect((prev) => [...prev, user]);
@@ -95,7 +120,7 @@ const TaskModal = () => {
               mode="flat"
               selected={select.includes(user)}
               style={styles.chip}
-              key={user.id}
+              key={user._id}
               onPress={() => handleSelect(user)}
             >
               {user.name}
@@ -127,7 +152,8 @@ const TaskModal = () => {
         color="#3D5CFF"
         mode="contained"
         style={styles.createTaskBtn}
-        onPress={createRoomHandler}
+        onPress={createTaskHandler}
+        disabled={!valid}
       >
         Create Task
       </Button>

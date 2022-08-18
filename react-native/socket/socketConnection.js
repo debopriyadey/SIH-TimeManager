@@ -46,6 +46,20 @@ const sendMessage = (message, roomId) => {
   });
 };
 
+const createTask = (roomId, task) => {
+  socket.emit("task:create", roomId, task);
+};
+
+const fetchTasks = (roomId) => {
+  socket.emit("task:fetch", roomId);
+};
+
+const toggleTaskStatus = (taskId) => {
+  console.log("taskId", taskId);
+  socket.emit("task:toggle", taskId);
+}
+
+
 function mapUser(user) {
   return {
     _id: user._id,
@@ -54,4 +68,13 @@ function mapUser(user) {
   };
 }
 
-export { connectWithSocketServer, joinRoom, fetchMessage, sendMessage, socket };
+export {
+  connectWithSocketServer,
+  joinRoom,
+  fetchMessage,
+  sendMessage,
+  createTask,
+  fetchTasks,
+  toggleTaskStatus,
+  socket
+};

@@ -113,17 +113,21 @@ const fetchMessages = async (socket, roomId, cb) => {
   }
 };
 
-const fetchTasks = async (socket, roomId, userId) => {
-  const user = await User.findById(userId);
+const fetchTasks = async (socket, roomId) => {
+  const user = await User.findById(socket.user._id);
+
+  let tasks = [];
 
   for (let i = 0; i < user.tasks.length; i++) {
     const task = await Task.findById(user.tasks[i].task);
-    user.tasks[i] = {
-      status: user.tasks[i].status,
-      title: task.title,
-    };
+    if(task.roomId == roomId) {
+      tasks.push({
+        status: user.tasks[i].status,
+        title: task.title,
+        _id: user.tasks[i]._id,
+      });
+    }
   }
-  const tasks = user.tasks;
   socket.emit("tasks:all", tasks);
 };
 
@@ -133,11 +137,11 @@ const createTask = async (io, socket, rooms, roomId, task) => {
     endTime: task.endTime,
     completeCount: 0,
     roomId: roomId,
-    creatorId: socket.user._id,
+    creator: socket.user._id,
   });
 
-  for (let i = 0; i < task.userIDs.length; i++) {
-    const user = await User.findById(userIDs[i]);
+  for (let i = 0; i < task.assignees.length; i++) {
+    const user = await User.findById(task.assignees[i]._id);
     user.tasks.push({
       status: false,
       task: _task._id,
@@ -146,7 +150,7 @@ const createTask = async (io, socket, rooms, roomId, task) => {
   }
 
   const assignedUsers = new Set();
-  userIDs.forEach((id) => assignedUsers.add(id));
+  task.assignees.forEach((user) => assignedUsers.add(user._id));
 
   Object.keys(rooms[roomId].users).forEach((socketId) => {
     if (!assignedUsers.has(rooms[roomId].users[socketId])) return;
@@ -154,17 +158,17 @@ const createTask = async (io, socket, rooms, roomId, task) => {
   });
 };
 
-const markTaskAsComplete = async (io, socket, rooms, taskId, roomId) => {
+const toggleTaskStatus = async (socket, taskId) => {
   const user = await User.findById(socket.user._id);
 
   for (let i = 0; i < user.tasks.length; i++) {
-    if (user.tasks[i].task == taskId) {
-      user.tasks[i].status = true;
+    if (user.tasks[i]._id == taskId) {
+      user.tasks[i].status = !user.tasks[i].status;
       await user.save();
     }
   }
 
-  socket.emit("task:completed", {
+  socket.emit("task:toggled", {
     taskId,
   });
 };
@@ -175,5 +179,5 @@ module.exports = {
   fetchMessages,
   fetchTasks,
   createTask,
-  markTaskAsComplete,
+  toggleTaskStatus,
 };

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const taskSchema = mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       trim: true,
       required: true,
@@ -30,6 +30,10 @@ const taskSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Room",
     },
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
   },
   {
     timestamps: true,
