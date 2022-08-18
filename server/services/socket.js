@@ -7,6 +7,7 @@ const {
   createTask,
   markTaskAsComplete,
   toggleTaskStatus,
+  removeUser,
 } = require("./taskRoomControllers");
 const socketAuth = require("../middleware/socketAuth");
 const User = require("../models/users");
@@ -49,8 +50,11 @@ const createSockerServer = (server) => {
     socket.on("task:create", (roomId, task) => {
       createTask(io, socket, rooms, roomId, task);
     });
-    socket.on("task:toggle", (taskId) => {
-      toggleTaskStatus(socket, taskId);
+    socket.on("task:toggle", (task) => {
+      toggleTaskStatus(socket, task);
+    });
+    socket.on("room:remove-user", (userId, roomId) => {
+      removeUser(socket, userId, roomId);
     });
   });
 };

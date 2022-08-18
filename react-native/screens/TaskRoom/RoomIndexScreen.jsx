@@ -4,7 +4,7 @@ import { Tabs, TabScreen } from "react-native-paper-tabs";
 import CreateOrJoinTaskRoom from "./CreateOrJoinTaskRoom";
 import ChatIndex from "./ChatIndex";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { getRooms } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { setRooms } from "../../redux/slice/userSlice";
@@ -16,7 +16,7 @@ const RoomIndexScreen = ({ navigation }) => {
   const goBack = () => {
     navigation.goBack();
   };
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchRooms();
@@ -31,10 +31,10 @@ const RoomIndexScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   if (loading) {
-    return <ActivityIndicator style={{ marginTop: 10 }} animating={true} />
+    return <ActivityIndicator style={{ marginTop: 10 }} animating={true} />;
   }
 
   return (
@@ -46,7 +46,7 @@ const RoomIndexScreen = ({ navigation }) => {
         label="Create Or Join Task Room"
         icon="checkbox-marked-circle-plus-outline"
       >
-        <CreateOrJoinTaskRoom />
+        <CreateOrJoinTaskRoom navigation={navigation} />
       </TabScreen>
     </Tabs>
   );

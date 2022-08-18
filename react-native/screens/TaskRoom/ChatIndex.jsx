@@ -19,10 +19,12 @@ const ChatIndex = ({ navigation }) => {
 
   const openRoom = (room) => {
     console.log("line 20 ChatIndex", room);
-    dispatch(setRoom({
-      ...room,
-      roomId: room._id
-    }));
+    dispatch(
+      setRoom({
+        ...room,
+        roomId: room._id,
+      })
+    );
     navigation.navigate("RoomScreen");
   };
 

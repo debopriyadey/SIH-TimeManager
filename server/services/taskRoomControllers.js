@@ -59,6 +59,25 @@ const joinRoom = async (rooms, socket, roomCode, userId, cb) => {
   }
 };
 
+const removeUser = async (socket, userId, roomId) => {
+  try {
+    let user = await User.findById(userId);
+    let room = await Room.findById(roomId);
+    console.log(userId, roomId);
+    console.log(room);
+
+    room.users = room.users.filter(
+      (_userId) => _userId.toString() != userId.toString()
+    );
+    await room.save();
+
+    user.rooms = user.rooms.filter(
+      (_roomId) => _roomId.toString() != roomId.toString()
+    );
+    await user.save();
+  } catch (error) {}
+};
+
 const sendMessage = async (io, rooms, socket, roomId, message, cb) => {
   (async () => {
     await Message.create({
@@ -95,7 +114,6 @@ const fetchMessages = async (socket, roomId, cb) => {
       .sort({ createdAt: -1 })
       .limit(20);
 
-
     for (let i = 0; i < messages.length; i++) {
       messages[i].sender = await User.findById(messages[i].sender);
     }
@@ -120,7 +138,7 @@ const fetchTasks = async (socket, roomId) => {
 
   for (let i = 0; i < user.tasks.length; i++) {
     const task = await Task.findById(user.tasks[i].task);
-    if(task.roomId == roomId) {
+    if (task.roomId == roomId) {
       tasks.push({
         status: user.tasks[i].status,
         title: task.title,
@@ -158,18 +176,24 @@ const createTask = async (io, socket, rooms, roomId, task) => {
   });
 };
 
-const toggleTaskStatus = async (socket, taskId) => {
-  const user = await User.findById(socket.user._id);
+const toggleTaskStatus = async (socket, task) => {
+  (async () => {
+    const user = await User.findById(socket.user._id);
 
-  for (let i = 0; i < user.tasks.length; i++) {
-    if (user.tasks[i]._id == taskId) {
-      user.tasks[i].status = !user.tasks[i].status;
-      await user.save();
+    for (let i = 0; i < user.tasks.length; i++) {
+      if (user.tasks[i]._id == task._id) {
+        user.tasks[i].status = !user.tasks[i].status;
+        await user.save();
+        break;
+      }
     }
-  }
+  })();
+
+  console.log(task);
 
   socket.emit("task:toggled", {
-    taskId,
+    ...task,
+    status: !task.status,
   });
 };
 
@@ -180,4 +204,5 @@ module.exports = {
   fetchTasks,
   createTask,
   toggleTaskStatus,
+  removeUser,
 };

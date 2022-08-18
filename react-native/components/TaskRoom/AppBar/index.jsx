@@ -4,15 +4,16 @@ import { Appbar } from "react-native-paper";
 import TopMenu from "./TopMenu";
 import { useSelector } from "react-redux";
 
-const AppBar = ({ navigation, setShowCode }) => {
-  const [menuVisible, setMenuVisible] = React.useState(false);
-  const room = useSelector(state => state.room);
+const AppBar = ({ navigation, setShowCode, setShowPeople }) => {
+  const room = useSelector((state) => state.room);
 
   const _goBack = () => navigation.navigate("Space");
 
-  const _handleShowCode = () => setShowCode(prev => !prev);
+  const _handleShowCode = () => setShowCode((prev) => !prev);
 
-  const _handleMore = () => setVisible(true);
+  // const _handleMore = () => setVisible(true);
+
+  const _handleShowPeople = () => setShowPeople((prev) => !prev);
 
   return (
     <View>
@@ -20,7 +21,7 @@ const AppBar = ({ navigation, setShowCode }) => {
         <Appbar.BackAction onPress={_goBack} />
         <Appbar.Content title={room.roomName} />
         <Appbar.Action icon="qrcode" onPress={_handleShowCode} />
-        <TopMenu menuVisibility={[menuVisible, setMenuVisible]} />
+        <Appbar.Action icon="account-group" onPress={_handleShowPeople} />
       </Appbar.Header>
     </View>
   );

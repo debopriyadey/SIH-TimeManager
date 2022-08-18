@@ -9,43 +9,65 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
+import ShowMembersModal from "../../components/TaskRoom/ShowMembersModal";
 
 const RoomScreen = ({ navigation }) => {
   const [showCode, setShowCode] = React.useState(false);
-  const room = useSelector(state => state.room);
+  const [showPeople, setShowPeople] = React.useState(false);
+  const room = useSelector((state) => state.room);
   const { colors } = useTheme();
-  
-  const containerStyle = {
+
+  const container1Style = {
     backgroundColor: "#fff",
     margin: 10,
     borderRadius: 30,
     height: hp("30%"),
   };
 
+  const container2Style = {
+    backgroundColor: "#fff",
+    margin: 10,
+    borderRadius: 30,
+    height: hp("80%"),
+  };
+
   return (
     <Animatable.View
-    animation="fadeInUpBig"
-    style={[
-      styles.footer,
-      {
-        backgroundColor: colors.background,
-      },
-    ]}
-  >
-      <AppBar navigation={navigation} setShowCode={setShowCode} />
+      animation="fadeInUpBig"
+      style={[
+        styles.footer,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
+    >
+      <AppBar
+        navigation={navigation}
+        setShowCode={setShowCode}
+        setShowPeople={setShowPeople}
+      />
       <TabBar />
 
-        <Portal>
-          <Modal
-            visible={showCode}
-            onDismiss={() => setShowCode(false)}
-            contentContainerStyle={containerStyle}
-          >
-            <CreateRoomModal roomCode={room.roomCode} />
-          </Modal>
-        </Portal>
-      </Animatable.View>
+      <Portal>
+        <Modal
+          visible={showCode}
+          onDismiss={() => setShowCode(false)}
+          contentContainerStyle={container1Style}
+        >
+          <CreateRoomModal roomCode={room.roomCode} />
+        </Modal>
+      </Portal>
+      <Portal>
+        <Modal
+          visible={showPeople}
+          onDismiss={() => setShowPeople(false)}
+          contentContainerStyle={container2Style}
+        >
+          <ShowMembersModal users={room.users} roomId={room.roomId} />
+        </Modal>
+      </Portal>
+    </Animatable.View>
   );
 };
 
@@ -100,6 +122,5 @@ const styles = StyleSheet.create({
     borderRadius: 90,
   },
 });
-
 
 export default RoomScreen;

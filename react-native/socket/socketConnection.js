@@ -54,11 +54,13 @@ const fetchTasks = (roomId) => {
   socket.emit("task:fetch", roomId);
 };
 
-const toggleTaskStatus = (taskId) => {
-  console.log("taskId", taskId);
-  socket.emit("task:toggle", taskId);
-}
+const toggleTaskStatus = (task) => {
+  socket.emit("task:toggle", task);
+};
 
+const deleteUser = (userId, roomId) => {
+  socket.emit("room:remove-user", userId, roomId);
+};
 
 function mapUser(user) {
   return {
@@ -76,5 +78,6 @@ export {
   createTask,
   fetchTasks,
   toggleTaskStatus,
-  socket
+  deleteUser,
+  socket,
 };

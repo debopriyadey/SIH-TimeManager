@@ -19,11 +19,15 @@ export const roomSlice = createSlice({
       _state.users = action.payload.users;
     },
     emptyRoom: (_state, action) => {
-      return {}
+      return {};
+    },
+    removeUser: (_state, action) => {
+      const userId = action.payload.userId;
+      _state.users = _state.users.filter((user) => user._id !== userId);
     },
   },
 });
 
-export const { setRoom, emptyRoom } = roomSlice.actions;
+export const { setRoom, emptyRoom, removeUser } = roomSlice.actions;
 
 export default roomSlice.reducer;
