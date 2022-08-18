@@ -137,7 +137,7 @@ function BucketTaskForm({ task, isUpdate }) {
 
                             >
                                 <Picker.Item label="Everyone" value="everyone" />
-                                <Picker.Item label="Only With" value="onlyWith" />
+                                <Picker.Item label="Only With" value="only_with" />
                                 <Picker.Item label="None" value="none" />
                             </Picker>
                         </View>
@@ -147,10 +147,10 @@ function BucketTaskForm({ task, isUpdate }) {
                                 selectedValue={todoData.canEdit}
                                 onValueChange={(val) => setTodoData((prev) => ({ ...prev, canEdit: val }))}
                                 style={{ width: widthPercentageToDP("40%") }}
-                                enabled={todoData.canView === "everyone" || todoData.canView === "onlyWith"}
+                                enabled={todoData.canView === "everyone" || todoData.canView === "only_with"}
                             >
                                 {todoData.canView === "everyone" && <Picker.Item label="Everyone" value="everyone" />}
-                                <Picker.Item label="Only With" value="onlyWith" />
+                                <Picker.Item label="Only With" value="only_with" />
                                 <Picker.Item label="None" value="none" />
                             </Picker>
                         </View>

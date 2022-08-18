@@ -74,8 +74,8 @@ function RoutineForm({ task, isRoutineUpdate }) {
         desc: "Something about the task",
         duration: "30",
         username: "debo",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345688',
         sharedWith: ['1234', '2345']
     }, {
@@ -83,8 +83,8 @@ function RoutineForm({ task, isRoutineUpdate }) {
         desc: "Something about the meeting",
         duration: "30",
         username: "debo",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345688',
         sharedWith: ['1534', '2345']
     }, {
@@ -101,8 +101,8 @@ function RoutineForm({ task, isRoutineUpdate }) {
         desc: "Something about the playing",
         duration: "30",
         username: "gourav",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345681',
         sharedWith: ['1234', '2345']
     }, {
@@ -110,8 +110,8 @@ function RoutineForm({ task, isRoutineUpdate }) {
         desc: "Something about the Study",
         duration: "30",
         username: "debo",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345688',
         sharedWith: ['1234', '2345']
     }])
@@ -143,16 +143,12 @@ function RoutineForm({ task, isRoutineUpdate }) {
     const handlePress = () => {
         if (
             todoData.title &&
-            todoData.desc &&
-            todoData.tags &&
             todoData.duration &&
             todoData.canView
         ) {
             console.log(todoData);
             setTodoData({
                 title: "",
-                desc: "",
-                tags: "",
                 duration: "",
                 canView: "",
                 canEdit: "",
@@ -163,8 +159,8 @@ function RoutineForm({ task, isRoutineUpdate }) {
         }
     };
 
-    const childToParent = (childdata) => {
-        setPic(childdata);
+    const updatedUserList = (userList) => {
+        setPic(userList);
     };
 
     const updatedTaskList = (taskList) => {
@@ -206,7 +202,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
                                 style={{ width: widthPercentageToDP("40%") }}
                             >
                                 <Picker.Item label="Everyone" value="everyone" />
-                                <Picker.Item label="Only With" value="onlyWith" />
+                                <Picker.Item label="Only With" value="only_with" />
                                 <Picker.Item label="None" value="none" />
                             </Picker>
                         </View>
@@ -216,10 +212,10 @@ function RoutineForm({ task, isRoutineUpdate }) {
                                 selectedValue={todoData.canEdit}
                                 onValueChange={(val) => setTodoData((prev) => ({ ...prev, canEdit: val }))}
                                 style={{ width: widthPercentageToDP("40%") }}
-                                enabled={todoData.canView === "everyone" || todoData.canView === "onlyWith"}
+                                enabled={todoData.canView === "everyone" || todoData.canView === "only_with"}
                             >
                                 {todoData.canView === "everyone" && <Picker.Item label="Everyone" value="everyone" />}
-                                <Picker.Item label="Only With" value="onlyWith" />
+                                <Picker.Item label="Only With" value="only_with" />
                                 <Picker.Item label="None" value="none" />
                             </Picker>
                         </View>
@@ -301,7 +297,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
                     <SearchUser
                         users={pic}
                         hide={hideSharedModal}
-                        childToParent={childToParent}
+                        updatedUserList={updatedUserList}
                     />
                 </Modal>
                 <Modal visible={visibleSearch} onDismiss={hideSearchModal} contentContainerStyle={[containerStyle, { justifyContent: 'flex-start', height: 600 }]}>

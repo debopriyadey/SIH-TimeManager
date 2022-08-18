@@ -38,8 +38,8 @@ export default function TaskBucket({ navigation }) {
         desc: "Something about the task",
         duration: "30",
         username: "debo",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345688',
         sharedWith: ['1234', '2345']
     }, {
@@ -47,8 +47,8 @@ export default function TaskBucket({ navigation }) {
         desc: "Something about the meeting",
         duration: "30",
         username: "debo",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345688',
         sharedWith: ['1534', '2345']
     }, {
@@ -65,8 +65,8 @@ export default function TaskBucket({ navigation }) {
         desc: "Something about the playing",
         duration: "30",
         username: "gourav",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345681',
         sharedWith: ['1234', '2345']
     }, {
@@ -74,8 +74,8 @@ export default function TaskBucket({ navigation }) {
         desc: "Something about the Study",
         duration: "30",
         username: "debo",
-        canEdit: 'withOnly',
-        canView: 'withOnly',
+        canEdit: 'only_with',
+        canView: 'only_with',
         creator: '12345688',
         sharedWith: ['1234', '2345']
     }]

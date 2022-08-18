@@ -30,7 +30,7 @@ const createTask = async (req, res) => {
     //   if (req.body.canView) {
     //       resBody['canView'] = req.body.canView;
 
-    //       if (req.body.canView === 'everyone' || req.body.canView === 'onlywith') {
+    //       if (req.body.canView === 'everyone' || req.body.canView === 'only_with') {
     //         if ('canEdit' in req.body) {
     //             if (req.canEdit) {
     //                 resBody['canEdit'] = req.body.canEdit;
