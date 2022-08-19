@@ -19,7 +19,7 @@ import {
   MD3Colors,
 } from "react-native-paper";
 import * as api from "../api";
-import { debounce } from "../extras";
+import { debounce } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSuperUserInfo } from "../redux/slice/superUser";
 import { saveUserInfo } from "../redux/slice/userSlice";

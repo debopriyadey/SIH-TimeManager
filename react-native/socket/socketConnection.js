@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { API_URL } from "../api";
+import { API_URL } from "../config";
 import { setMessages, setRoom, addMessage } from "../redux/slice/roomSlice";
 import store from "../redux/store";
 
@@ -29,7 +29,7 @@ const connectWithSocketServer = (userToken) => {
 
 const joinRoom = (roomCode, user) => {
   console.log(user);
-  socket.emit("join-room", roomCode, user, (err) => {
+  socket.emit("join-room", roomCode, user._id, (err) => {
     console.log(err);
   });
 };

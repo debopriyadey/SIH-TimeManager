@@ -61,19 +61,35 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate("SearchScreen")}
-          >
-            <Image
-              source={require("../icons/search.png")}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
-          </TouchableOpacity>
+          <View style={[styles.inlineView, {justifyContent: 'flex-end', marginRight: 10}]}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate("Notifications")}
+            >
+              <Image
+                source={require("../icons/bell.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  marginRight: 10
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate("SearchScreen")}
+            >
+              <Image
+                source={require("../icons/search.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={[styles.taskCardCont, { marginTop: -100, zIndex: 2 }]}>
           <Card style={styles.resCard}>
@@ -97,6 +113,10 @@ export default function HomeScreen({ navigation }) {
               <ProgressBar progress={0.7} />
             </Card.Content>
           </Card>
+        </View>
+        <View style={styles.inlineView}>
+          <Button onPress={() => navigation.navigate("TaskBucket")}> Bucket </Button>
+          <Button onPress={() => navigation.navigate("RoutineScreen")}> Routine </Button>
         </View>
         <View style={styles.taskCardCont}>
           <Card style={styles.resCard}>

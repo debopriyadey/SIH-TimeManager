@@ -5,20 +5,27 @@ const User = require("../models/users");
 
 const { v4: uuidv4 } = require("uuid");
 
-const joinRoom = async (rooms, socket, roomCode, user, cb) => {
+const joinRoom = async (rooms, socket, roomCode, userId, cb) => {
   try {
     const room = await Room.findOne({ roomCode });
-    const userDoc = await User.findById(user._id);
+    const user = await User.findById(userId);
     const userExists = room.users.find(
       (userId) => userId.toString() === user._id.toString()
     );
-    const roomExists = userDoc.rooms.find((roomId) => roomId == room._id);
+    const roomExists = user.rooms.find(
+      (roomId) => roomId.toString() == room._id.toString()
+    );
 
     const roomId = room._id.toString();
 
     if (!roomExists) {
-      userDoc.rooms.push(room._id);
-      await userDoc.save();
+      user.rooms.push(room._id);
+      await user.save();
+    }
+
+    if (!userExists) {
+      room.users.push(user._id);
+      await room.save();
     }
 
     if (!rooms[roomId]) {
@@ -27,25 +34,23 @@ const joinRoom = async (rooms, socket, roomCode, user, cb) => {
       };
     }
 
-    socket.join(roomId);
+    rooms[roomId].users[socket.id] = user._id;
 
-    rooms[roomId].users[socket.id] = userDoc._id;
-
-    if (!room) {
-      throw new Error("Room doesn't exist");
-    }
-
-    if (!userExists) {
-      room.users.push(user._id);
-      await room.save();
+    for (let i = 0; i < room.users.length; i++) {
+      const user = await User.findById(room.users[i]);
+      room.users[i] = {
+        id: user._id,
+        name: user.name,
+      };
     }
 
     socket.emit("room:set", {
       roomCode: room.roomCode,
       roomName: room.roomName,
       roomId: room._id,
+      users: room.users,
     });
-    socket.to(room._id).emit("join-room:notify", { user_name: user.name });
+    //socket.to(room._id).emit("join-room:notify", { user_name: user.name });
   } catch (error) {
     console.log(error);
     cb({
@@ -82,15 +87,6 @@ const sendMessage = async (io, rooms, socket, roomId, message, cb) => {
       createdAt: new Date(),
     });
   });
-  // io.in(roomId).emit("message:receive", {
-  //   _id: uuidv4(),
-  //   text: message,
-  //   user: {
-  //     _id: socket.user._id,
-  //     name: socket.user.name,
-  //     avatar: `https://i.pravatar.cc/140?u=${socket.user._id}`,
-  //   },
-  // });
 };
 
 const fetchMessages = async (socket, roomId, cb) => {
@@ -119,39 +115,59 @@ const fetchMessages = async (socket, roomId, cb) => {
   }
 };
 
-const fetchTasks = async (roomId) => {
-  const tasks = await Task.find({ roomId }).sort({ createdAt: -1 });
+const fetchTasks = async (socket, roomId, userId) => {
+  const user = await User.findById(userId);
 
+  for (let i = 0; i < user.tasks.length; i++) {
+    const task = await Task.findById(user.tasks[i].task);
+    user.tasks[i] = {
+      status: user.tasks[i].status,
+      title: task.title,
+    };
+  }
+  const tasks = user.tasks;
   socket.emit("tasks:all", tasks);
 };
 
-const createTask = async (roomId, task) => {
-  await Task.create({
-    name: task.name,
-    description: task.description,
-    startTime: task.startTime,
+const createTask = async (io, socket, rooms, roomId, task) => {
+  const _task = await Task.create({
+    title: task.title,
     endTime: task.endTime,
-    tags: task.tags,
     completeCount: 0,
     roomId: roomId,
+    creatorId: socket.user._id,
   });
 
-  socket.to(roomId).broadcast.emit("task:created", {
-    task,
-    name: socket.user.name,
+  for (let i = 0; i < task.userIDs.length; i++) {
+    const user = await User.findById(userIDs[i]);
+    user.tasks.push({
+      status: false,
+      task: _task._id,
+    });
+    await user.save();
+  }
+
+  const assignedUsers = new Set();
+  userIDs.forEach((id) => assignedUsers.add(id));
+
+  Object.keys(rooms[roomId].users).forEach((socketId) => {
+    if (!assignedUsers.has(rooms[roomId].users[socketId])) return;
+    io.to(socketId).emit("task:assigned", _task);
   });
 };
 
-const markTaskAsComplete = async (task) => {
+const markTaskAsComplete = async (io, socket, rooms, taskId, roomId) => {
   const user = await User.findById(socket.user._id);
-  // const user = socket.user;
 
-  user.tasks.push(task._id);
-  await user.save();
+  for (let i = 0; i < user.tasks.length; i++) {
+    if (user.tasks[i].task == taskId) {
+      user.tasks[i].status = true;
+      await user.save();
+    }
+  }
 
-  socket.to(roomId).broadcast.emit("task:completed", {
-    task,
-    name: socket.user.name,
+  socket.emit("task:completed", {
+    taskId,
   });
 };
 

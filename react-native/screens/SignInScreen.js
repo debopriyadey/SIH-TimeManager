@@ -72,7 +72,7 @@ const SignInScreen = ({ navigation }) => {
       await AsyncStorage.setItem("userToken", data.token);
       dispatch(signin(data));
     } catch (error) {
-      console.log("got error in signin!", error.response?.data);
+      console.log("got error in signin!", error.response?.data || error.response.message);
       Alert.alert(
         "Wrong Input!",
         error.response?.data?.message || "something went wrong.",
@@ -83,7 +83,7 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#3c40bd" barStyle="light-content" />
+      <StatusBar backgroundColor="#3D5CFF" barStyle="light-content" />
       <View style={styles.header}>
         <Text style={styles.text_header}>Welcome!</Text>
       </View>
@@ -162,7 +162,7 @@ const SignInScreen = ({ navigation }) => {
         </View>
 
         <TouchableOpacity>
-          <Text style={{ color: "#3c40bd", marginTop: 15 }}>
+          <Text style={{ color: "#3D5CFF", marginTop: 15 }}>
             Forgot password?
           </Text>
         </TouchableOpacity>
@@ -173,7 +173,7 @@ const SignInScreen = ({ navigation }) => {
             disabled={data.isLoading || !data.email || !data.password}
           >
             <LinearGradient
-              colors={["#3c40bd", "#3c40bd"]}
+              colors={["#3D5CFF", "#3D5CFF"]}
               style={styles.signIn}
             >
               <Text
@@ -194,7 +194,7 @@ const SignInScreen = ({ navigation }) => {
             style={[
               styles.signIn,
               {
-                borderColor: "#3c40bd",
+                borderColor: "#3D5CFF",
                 borderWidth: 1,
                 marginTop: 15,
               },
@@ -204,7 +204,7 @@ const SignInScreen = ({ navigation }) => {
               style={[
                 styles.textSign,
                 {
-                  color: "#3c40bd",
+                  color: "#3D5CFF",
                 },
               ]}
             >
@@ -222,7 +222,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3c40bd",
+    backgroundColor: "#3D5CFF",
   },
   header: {
     flex: 1,

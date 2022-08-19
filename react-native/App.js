@@ -18,12 +18,14 @@ import BookmarkScreen from "./screens/BookmarkScreen";
 import ParentControl from "./screens/ParentControl";
 import SessionScreen from "./screens/SessionScreen";
 import SearchScreen from "./screens/SearchScreen";
+import Notifications from "./screens/Notifications";
 import AccountScreen from "./screens/AccountScreen";
 import Pomodoro from "./screens/Pomodoro";
-import GoalForm from "./components/GoalForm/GoalForm";
-import TodoForm from "./components/TodoForm/TodoForm";
+import  TodoForm  from "./components/TodoForm/TodoForm";
+import GoalForm from "./components/GoalForm/GoalForm"
 import Loading from "./screens/Loading";
 import Focus from "./screens/Focus";
+import TaskBucket from "./screens/TaskBucket";
 import RootStackScreen from "./screens/RootStackScreen";
 import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
 import RoomScreen from "./screens/TaskRoom/RoomScreen";
@@ -50,6 +52,7 @@ import { Text } from "react-native";
 import { saveSuperUserInfo } from "./redux/slice/superUser";
 import ProfileScreen from "./screens/ProfileScreen";
 import Schedule from "./components/Schedule/Schedule";
+import RoutineScreen from "./screens/RoutineSceen";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
@@ -62,6 +65,9 @@ const App = () => {
       ...PaperDefaultTheme.colors,
       background: "#ffffff",
       text: "#333333",
+      primary: "#3498db",
+      secondary: "#f1c40f",
+      tertiary: "#a1b2c3",
     },
   };
 
@@ -107,12 +113,11 @@ const Application = () => {
       let superUserToken = null;
       try {
         userToken = await AsyncStorage.getItem("userToken");
-        console.log(userToken);
         superUserToken = await AsyncStorage.getItem("superUserToken");
-        console.log("Got userToken", userToken);
+        console.log("Got superUser and user ", superUserToken, userToken);
         if (superUserToken) {
-          const data = { token: superUserToken };
-          const response = await api.getUserInfo(data);
+          console.log("requesting super user info", superUserToken);
+          const response = await api.getUserInfo(superUserToken);
           console.log("got loggedIn superUserInfo!", response.data);
           dispatch(saveSuperUserInfo(response.data));
         }
@@ -150,7 +155,10 @@ const Application = () => {
           <Drawer.Screen name="Profile" component={AccountScreen} />
           <Drawer.Screen name="SessionScreen" component={SessionScreen} />
           <Drawer.Screen name="SearchScreen" component={SearchScreen} />
+          <Drawer.Screen name="Notifications" component={Notifications} />
           <Drawer.Screen name="Pomodoro" component={Pomodoro} />
+          <Drawer.Screen name="TaskBucket" component={TaskBucket} />
+          <Drawer.Screen name="RoutineScreen" component={RoutineScreen} />
           <Drawer.Screen name="TodoForm" component={TodoForm} />
           <Drawer.Screen name="GoalForm" component={GoalForm} />
           <Drawer.Screen name="Schedule" component={Schedule} />
