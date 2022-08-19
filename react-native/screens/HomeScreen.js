@@ -61,7 +61,12 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.paragraph}>Lets start working</Text>
             </View>
           </View>
-          <View style={[styles.inlineView, {justifyContent: 'flex-end', marginRight: 10}]}>
+          <View
+            style={[
+              styles.inlineView,
+              { justifyContent: "flex-end", marginRight: 10 },
+            ]}
+          >
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={() => navigation.navigate("Notifications")}
@@ -72,7 +77,7 @@ export default function HomeScreen({ navigation }) {
                 style={{
                   width: 25,
                   height: 25,
-                  marginRight: 10
+                  marginRight: 10,
                 }}
               />
             </TouchableOpacity>
@@ -115,8 +120,14 @@ export default function HomeScreen({ navigation }) {
           </Card>
         </View>
         <View style={styles.inlineView}>
-          <Button onPress={() => navigation.navigate("TaskBucket")}> Bucket </Button>
-          <Button onPress={() => navigation.navigate("RoutineScreen")}> Routine </Button>
+          <Button onPress={() => navigation.navigate("TaskBucket")}>
+            {" "}
+            Bucket{" "}
+          </Button>
+          <Button onPress={() => navigation.navigate("RoutineScreen")}>
+            {" "}
+            Routine{" "}
+          </Button>
         </View>
         <View style={styles.taskCardCont}>
           <Card style={styles.resCard}>

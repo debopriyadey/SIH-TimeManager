@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, Switch, ScrollView } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { addHours, addMinutes, format } from "date-fns";
 
 import styles from "./TodoFormStyle";
 import AppButton from "../Common/AppButton";
@@ -8,8 +9,18 @@ import GoalModal from "../Common/GoalModal";
 import SliderView from "../Common/SliderView";
 import PickerView from "../Common/PickerView";
 import TimeDuration from "../Common/TimeDuration";
+import RepeatView from "./RepeatView";
 function TodoForm() {
   let date = new Date();
+  const Weekdays = [
+    { id: 1, name: "Sun" },
+    { id: 2, name: "Mon" },
+    { id: 3, name: "Tue" },
+    { id: 4, name: "Wed" },
+    { id: 5, name: "Thu" },
+    { id: 6, name: "Fri" },
+    { id: 7, name: "Sat" },
+  ];
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("time");
   const [modal, setModal] = useState(false);
@@ -20,12 +31,13 @@ function TodoForm() {
     tags: "",
     startTime: null,
     endTime: null,
-    date: date,
+    date: date.toLocaleString(),
     duration: 0,
     selectedTime: "Minutes",
     repeat: false,
     importance: 0,
     urgent: 0,
+    days: [],
   });
 
   useEffect(() => {
@@ -34,13 +46,13 @@ function TodoForm() {
     } else {
       let end = new Date(todoData.startTime);
       if (todoData.duration < 24 && todoData.selectedTime === "Hours") {
-        end.setHours(end.getHours() + todoData.duration);
+        end = addHours(end, todoData.duration);
       } else {
-        end.setMinutes(end.getMinutes() + todoData.duration);
+        end = addMinutes(end, todoData.duration);
       }
       setTodoData((prev) => ({
         ...prev,
-        endTime: end,
+        endTime: end.toLocaleString(),
       }));
     }
   }, [todoData.duration, todoData.selectedTime]);
@@ -49,18 +61,22 @@ function TodoForm() {
     setMode(mode);
   };
   const handleChange = (mode, selectedDate) => {
+    // console.log(new Date(selectedDate).toLocaleString());
     const currentDate = selectedDate || date;
     setShow(false);
     let tempDate = new Date(currentDate);
     if (mode === "time") {
-      if (todoData.date.getDate() !== tempDate.getDate()) {
-        tempDate.setDate(todoData.date.getDate());
+      if (new Date(todoData.date).getDate() !== tempDate.getDate()) {
+        tempDate.setDate(new Date(todoData.date).getDate());
       }
       tempDate.setSeconds(0);
-      setTodoData((prev) => ({ ...prev, startTime: tempDate }));
+      setTodoData((prev) => ({
+        ...prev,
+        startTime: tempDate.toLocaleString(),
+      }));
     }
     if (mode === "date") {
-      setTodoData((prev) => ({ ...prev, date: tempDate }));
+      setTodoData((prev) => ({ ...prev, date: tempDate.toLocaleString() }));
     }
   };
   const handleSubTasks = () => {
@@ -71,12 +87,13 @@ function TodoForm() {
       tags: "",
       startTime: null,
       endTime: null,
-      date: date,
+      date: date.toLocaleString(),
       duration: 0,
       selectedTime: "Minutes",
       repeat: false,
       importance: 0,
       urgent: 0,
+      days: [],
     });
   };
   const handlePress = () => {
@@ -97,24 +114,27 @@ function TodoForm() {
         tags: "",
         startTime: null,
         endTime: null,
-        date: date,
+        date: date.toLocaleString(),
         duration: 0,
         selectedTime: "Minutes",
         repeat: false,
         importance: 0,
         urgent: 0,
+        days: [],
       });
       alert("Task added");
     } else {
       alert("Fill the required fields");
     }
   };
+
   return (
     <ScrollView style={styles.formWrapper}>
       <View style={styles.container}>
         <View style={styles.flex_view}>
           <Text style={styles.heading}>
-            Date : {todoData.date.toDateString()}
+            Date : {new Date(todoData.date).toDateString()}
+            {/* {todoData.date.toDateString()} */}
           </Text>
           <AppButton
             color="black"
@@ -142,10 +162,14 @@ function TodoForm() {
           }
         />
         <TimeDuration
-          value={todoData.startTime ? todoData.startTime.toTimeString() : ""}
+          value={
+            todoData.startTime
+              ? format(new Date(todoData.startTime), "hh:mm a")
+              : ""
+          }
           onFocus={() => showMode("time")}
           placeholder="Start Time"
-          onPress={() => showMode("Time")}
+          onPress={() => showMode("time")}
         />
 
         <PickerView
@@ -185,13 +209,23 @@ function TodoForm() {
           <Text>Do you want the task to repeat? </Text>
           <Switch
             value={todoData.repeat}
-            onValueChange={(newValue) =>
-              setTodoData((prev) => ({ ...prev, repeat: newValue }))
-            }
+            onValueChange={(newValue) => {
+              setTodoData((prev) => ({ ...prev, repeat: newValue }));
+              if (newValue === false) {
+                setTodoData((prev) => ({ ...prev, days: [] }));
+              }
+            }}
             trackColor={{ false: "#C0C0C0", true: "#97e8e1" }}
             thumbColor="#009387"
           />
         </View>
+        {todoData.repeat && (
+          <RepeatView
+            Weekdays={Weekdays}
+            todoData={todoData}
+            setTodoData={setTodoData}
+          />
+        )}
         <SliderView
           title="Importance"
           value={todoData.importance}
