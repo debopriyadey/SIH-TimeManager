@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width / 9,
     height: Dimensions.get("window").width / 9,
     borderRadius: 20,
-    borderColor: "blue",
+    borderColor: "#3c40bd",
     borderWidth: 1,
   },
   selectedView: {
-    backgroundColor: "blue",
+    backgroundColor: "#3c40bd",
     borderRadius: 20,
   },
   selectedLebel: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -10,11 +10,12 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { LinearGradient } from "expo-linear-gradient";
-import { format } from "date-fns";
+import { format, isAfter } from "date-fns";
 
 const HEIGHT = Dimensions.get("window").height;
 
-function ListItem({ item, status }) {
+function ListItem({ item }) {
+  const [status, setStatus] = useState("Upcoming");
   const {
     name,
     desc,
@@ -26,20 +27,23 @@ function ListItem({ item, status }) {
     urgent,
     date,
   } = item;
+  useEffect(() => {
+    if (isAfter(new Date(startTime), new Date())) {
+      setStatus("Upcoming");
+    } else if (isAfter(new Date(endTime), new Date())) {
+      setStatus("Ongoing");
+    } else {
+      setStatus("Completed");
+    }
+  }, []);
+  const backColour = status === "Upcoming" ? "#c1dcef" : "#cfd0ef";
   const LeftAction = (progress, dragX) => {
-    const scale = dragX.interpolate({
-      inputRange: [0, 100],
-      outputRange: [0, 1],
-      extrapolate: "clamp",
-    });
     return (
       <LinearGradient
         colors={["#009387", "#46a39c", "#1fc4b7"]}
         style={styles.leftAction}
       >
-        <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>
-          Delete
-        </Animated.Text>
+        <Animated.Text style={[styles.actionText]}>Delete</Animated.Text>
       </LinearGradient>
     );
   };
@@ -56,8 +60,7 @@ function ListItem({ item, status }) {
                 style={[
                   styles.textView,
                   {
-                    backgroundColor:
-                      status === "Upcoming" ? "#c1dcef" : " #cfd0ef",
+                    backgroundColor: backColour,
                   },
                 ]}
               >

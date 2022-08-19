@@ -8,6 +8,8 @@ function RepeatView({ todoData, Weekdays, setTodoData }) {
       <View style={styles.switch}>
         <Text style={{ marginLeft: 10 }}>ALL Days?</Text>
         <Switch
+          trackColor={{ false: "#C0C0C0", true: "#787cfa" }}
+          thumbColor="#3c40bd"
           value={todoData.days.length === 7 ? true : false}
           onValueChange={(newValue) => {
             if (newValue === true) {
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   dayView: {
     width: "100%",
     paddingHorizontal: 10,
-    backgroundColor: "#C0C0C0",
+    backgroundColor: "#dedcdc",
     elevation: 2,
   },
   switch: {

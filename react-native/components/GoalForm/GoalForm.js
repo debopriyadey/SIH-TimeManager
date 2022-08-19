@@ -192,7 +192,7 @@ function GoalForm() {
               Add relevent tasks for your goal{" "}
             </Text>
             <AppButton
-              color="#009387"
+              color="#3c40bd"
               name={FormVisible ? "minuscircle" : "pluscircle"}
               txtStyle={styles.addButton}
               onPress={() => {

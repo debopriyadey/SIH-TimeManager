@@ -10,7 +10,7 @@ import SliderView from "../Common/SliderView";
 import PickerView from "../Common/PickerView";
 import TimeDuration from "../Common/TimeDuration";
 import RepeatView from "./RepeatView";
-function TodoForm() {
+function TodoForm({ navigation }) {
   let date = new Date();
   const Weekdays = [
     { id: 1, name: "Sun" },
@@ -123,6 +123,7 @@ function TodoForm() {
         days: [],
       });
       alert("Task added");
+      navigation.navigate("Schedule");
     } else {
       alert("Fill the required fields");
     }
@@ -198,6 +199,8 @@ function TodoForm() {
           <GoalModal
             modal={modal}
             changeModal={() => handleSubTasks()}
+            ignoreModal={() => setModal(false)}
+            changeScreen={() => navigation.navigate("GoalForm")}
             modalText="This is not a SMART Task You may break it into sub tasks or set it
               as a goal."
             btn1Text="Divide in Subtasks"
@@ -215,8 +218,8 @@ function TodoForm() {
                 setTodoData((prev) => ({ ...prev, days: [] }));
               }
             }}
-            trackColor={{ false: "#C0C0C0", true: "#97e8e1" }}
-            thumbColor="#009387"
+            trackColor={{ false: "#C0C0C0", true: "#787cfa" }}
+            thumbColor="#3c40bd"
           />
         </View>
         {todoData.repeat && (

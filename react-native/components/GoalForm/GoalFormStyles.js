@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   mainColour: {
-    color: "#009387",
+    color: "#3c40bd",
   },
   placeholder: {
     color: "#666666",
