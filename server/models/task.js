@@ -45,6 +45,18 @@ const taskSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    timesRescheduled: {
+      type: Number,
+      default: 0,
+    },
+    isLateStarted: {
+      type: Boolean,
+      default: false,
+    },
+    isLateCompleted: {
+      type: Boolean,
+      default: false,
+    },
     creatorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
