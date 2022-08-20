@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TextInput, Switch, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  Switch,
+  ScrollView,
+  ToastAndroid,
+} from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { addHours, addMinutes, format } from "date-fns";
 
@@ -122,7 +129,7 @@ function TodoForm({ navigation }) {
         urgent: 0,
         days: [],
       });
-      alert("Task added");
+      ToastAndroid.show("Task added", ToastAndroid.SHORT);
       navigation.navigate("Schedule");
     } else {
       alert("Fill the required fields");

@@ -36,7 +36,7 @@ function Progress() {
 export default Progress;
 const styles = StyleSheet.create({
   Tab: {
-    paddingTop: StatusBar.currentHeight + 10,
+    paddingTop: 10,
     overflow: "scroll",
   },
   scene: {
