@@ -8,8 +8,21 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
+import {
+  NavigationContainer,
+  DefaultTheme as NavigationDefaultTheme,
+  DarkTheme as NavigationDarkTheme,
+} from "@react-navigation/native";
+
+import {
+  Provider as PaperProvider,
+  DefaultTheme as PaperDefaultTheme,
+  DarkTheme as PaperDarkTheme,
+} from "react-native-paper";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { DrawerContent } from "./screens/DrawerContent";
 import MainTabScreen from "./screens/MainTabScreen";
 import SupportScreen from "./screens/SupportScreen";
@@ -34,17 +47,7 @@ import CreateOrJoinTaskRoom from "./screens/TaskRoom/CreateOrJoinTaskRoom";
 import RoomScreen from "./screens/TaskRoom/RoomScreen";
 import store from "./redux/store";
 import * as api from "./api";
-import {
-  NavigationContainer,
-  DefaultTheme as NavigationDefaultTheme,
-  DarkTheme as NavigationDarkTheme,
-} from "@react-navigation/native";
 
-import {
-  Provider as PaperProvider,
-  DefaultTheme as PaperDefaultTheme,
-  DarkTheme as PaperDarkTheme,
-} from "react-native-paper";
 import { mapping, light as lightTheme } from "@eva-design/eva";
 import { ApplicationProvider, Layout } from "react-native-ui-kitten";
 
@@ -55,9 +58,6 @@ import { Text } from "react-native";
 import { saveSuperUserInfo } from "./redux/slice/superUser";
 import ProfileScreen from "./screens/ProfileScreen";
 import RoutineScreen from "./screens/RoutineSceen";
-import Schedule from "./components/Schedule/Schedule";
-import TodoForm from "./components/TodoForm/TodoForm";
-import GoalForm from "./components/GoalForm/GoalForm";
 
 const Drawer = createDrawerNavigator();
 const App = () => {
