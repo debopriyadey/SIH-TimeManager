@@ -16,6 +16,7 @@ import { useTheme } from "react-native-paper";
 import { signin } from "../redux/slice/userSlice";
 import * as api from "../api";
 import { useDispatch, useSelector } from "react-redux";
+import { connectWithSocketServer } from "../socket/socketConnection";
 
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = React.useState({
@@ -79,6 +80,7 @@ const SignInScreen = ({ navigation }) => {
         [{ text: "Okay" }]
       );
     }
+    connectWithSocketServer(data.token);
   };
 
   return (

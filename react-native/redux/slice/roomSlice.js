@@ -18,18 +18,16 @@ export const roomSlice = createSlice({
       _state.roomName = action.payload.roomName;
       _state.users = action.payload.users;
     },
-    setMessages: (_state, action) => {
-      console.log("line 27", _state);
-      return { ..._state, messages: action.payload };
-      //_state.messages = action.payload;
+    emptyRoom: (_state, action) => {
+      return {};
     },
-    addMessage: (_state, action) => {
-      console.log("line 26", _state);
-      _state.messages.push(action.payload);
+    removeUser: (_state, action) => {
+      const userId = action.payload.userId;
+      _state.users = _state.users.filter((user) => user._id !== userId);
     },
   },
 });
 
-export const { setRoom, setMessages, addMessage } = roomSlice.actions;
+export const { setRoom, emptyRoom, removeUser } = roomSlice.actions;
 
 export default roomSlice.reducer;

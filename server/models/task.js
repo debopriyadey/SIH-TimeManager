@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { SHARING_TYPE } = require("../constant");
+const { SHARING_TYPE, TASK_TYPE } = require("../constant");
 const routine = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   routineName: String,
@@ -14,8 +14,13 @@ const taskSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [SHARING_TYPE.EVERYONE, SHARING_TYPE.ONLY_WITH, SHARING_TYPE.NO_ONE],
-      default: SHARING_TYPE.NO_ONE
+      enum: [
+        TASK_TYPE.GROUP_TASK,
+        TASK_TYPE.SCHEDULE,
+        TASK_TYPE.TASK_BUCKET,
+        TASK_TYPE.NORMAL_TASK,
+      ],
+      default: TASK_TYPE.NORMAL_TASK,
     },
     description: {
       type: String,
@@ -57,10 +62,52 @@ const taskSchema = mongoose.Schema(
       default: SHARING_TYPE.NO_ONE
     },
     routines: [routine],
-    completeCount: {
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    timesRescheduled: {
       type: Number,
       default: 0,
     },
+    isLateStarted: {
+      type: Boolean,
+      default: false,
+    },
+    isLateCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    creatorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    username: {
+      type: String,
+    },
+    sharedWith: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+    },
+    canView: {
+      type: String,
+      enum: [
+        SHARING_TYPE.EVERYONE,
+        SHARING_TYPE.ONLY_WITH,
+        SHARING_TYPE.NO_ONE,
+      ],
+      default: SHARING_TYPE.NO_ONE,
+    },
+    canEdit: {
+      type: String,
+      enum: [
+        SHARING_TYPE.EVERYONE,
+        SHARING_TYPE.ONLY_WITH,
+        SHARING_TYPE.NO_ONE,
+      ],
+      default: SHARING_TYPE.NO_ONE,
+    },
+    routines: [routine],
     roomId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Room",

@@ -50,6 +50,7 @@ const userSchema = mongoose.Schema({
       ref: "Task",
     },
   ],
+
   restricted: {},
   childs: [
     {

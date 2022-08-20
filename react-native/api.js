@@ -1,11 +1,10 @@
 import axios from "axios";
 import { API_URL } from "./config.js";
+import store from "./redux/store.js";
 
 const getConfig = (token) => ({
   headers: { Authorization: `Bearer ${token}` },
 });
-
-// const API_URL = 'https://192.168.222.33:5000'
 
 export const signup = (users) => axios.post(`${API_URL}/signup`, users);
 export const signin = (users, token) =>
@@ -18,3 +17,6 @@ export const updateChild = (data, token) => axios.put(`${API_URL}/child`, data, 
 export const getChilds = (token) => axios.get(`${API_URL}/childs`, getConfig(token));
 export const bucketSearch = (data) => axios.get(`${API_URL}/bucketSearch/${data}`);
 export const createRoom = (data) => axios.post(`${API_URL}/room/create`, data, getConfig(data.token));
+export const getRooms = (userId, token) =>
+  axios.get(`${API_URL}/user/rooms/${userId}`, getConfig(token));
+

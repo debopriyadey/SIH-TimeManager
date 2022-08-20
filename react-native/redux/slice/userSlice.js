@@ -14,12 +14,14 @@ export const userSlice = createSlice({
     },
     saveUserInfo: (_state, action) => {
       return action.payload
+    },
+    setRooms: (_state, action) => {
+      _state.rooms = action.payload;
     }
-   
   },
 })
 
-export const { signin, signout, saveUserInfo } = userSlice.actions
+export const { signin, signout, saveUserInfo, setRooms } = userSlice.actions
 
 export default userSlice.reducer
 

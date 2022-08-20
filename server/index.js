@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const roomRoute = require("./routes/room");
+const progressReportRoute = require("./routes/progressReport");
 const errorHandler = require("./middleware/errorHandler");
 const createSocketServer = require("./services/socket");
 
@@ -41,14 +42,13 @@ app.use((req, res, next) => {
 // });
 app.use("/", authRoute);
 app.use("/room", roomRoute);
+app.use("/progress-report", progressReportRoute);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-const dbURI = process.env.DB_URL ||  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
-
-
-
-
+const dbURI =
+  process.env.DB_URL ||
+  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
