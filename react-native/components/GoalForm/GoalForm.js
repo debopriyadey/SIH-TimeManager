@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { ScrollView, Text, TextInput, ToastAndroid, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
@@ -86,7 +86,7 @@ function GoalForm() {
       goalData.duration
     ) {
       console.log(goalData);
-      alert("created Task");
+      ToastAndroid.show("created Task", ToastAndroid.SHORT);
       setGoalData({
         name: "",
         desc: "",
@@ -192,14 +192,17 @@ function GoalForm() {
               Add relevent tasks for your goal{" "}
             </Text>
             <AppButton
-              color="#009387"
+              color="#3c40bd"
               name={FormVisible ? "minuscircle" : "pluscircle"}
               txtStyle={styles.addButton}
               onPress={() => {
                 if (goalData.tasks.length < 11) {
                   setFormVisible(!FormVisible);
                 } else {
-                  alert("You can add only 10 tasks ");
+                  ToastAndroid.show(
+                    "You can add only 10 tasks ",
+                    ToastAndroid.SHORT
+                  );
                 }
               }}
             />

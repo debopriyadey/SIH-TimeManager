@@ -21,7 +21,7 @@ import Tasks from "../../model/Tasks";
 import ListItem, { Seperator } from "./ListItem";
 import WeekCalander from "./WeekCalander";
 
-function Schedule() {
+function Schedule({ navigation }) {
   const [list, setList] = useState(Tasks);
   const [date, setDate] = useState(new Date());
   const [weekDays, setWeekDays] = useState([]);
@@ -45,7 +45,10 @@ function Schedule() {
       <View style={{ padding: 10, flexBasis: "25%" }}>
         <View style={styles.monthView}>
           <Text style={styles.monthText}>{format(date, "MMMM yyyy ")}</Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("TodoForm")}
+          >
             <Text style={{ color: "#1532c2", fontSize: 25 }}>+</Text>
           </TouchableOpacity>
         </View>
@@ -66,12 +69,7 @@ function Schedule() {
           data={list.filter((item) => isSameDay(new Date(item.date), date))}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ListItem
-              item={item}
-              status={isFuture(new Date(item.date)) ? "Upcoming" : "passed"}
-            />
-          )}
+          renderItem={({ item }) => <ListItem item={item} />}
         />
       </View>
     </View>

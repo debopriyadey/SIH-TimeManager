@@ -6,6 +6,8 @@ import AppButton from "./AppButton";
 export default function GoalModal({
   modal,
   changeModal,
+  changeScreen,
+  ignoreModal,
   modalText,
   btn1Text,
   btn2Text,
@@ -28,7 +30,7 @@ export default function GoalModal({
               title={btn2Text}
               btnStyle={styles.button}
               txtStyle={styles.btn_text}
-              onPress={changeModal}
+              onPress={changeScreen}
             />
           ) : null}
           {btn3Text ? (
@@ -36,7 +38,7 @@ export default function GoalModal({
               title={btn3Text}
               btnStyle={styles.button}
               txtStyle={styles.btn_text}
-              onPress={changeModal}
+              onPress={ignoreModal}
             />
           ) : null}
         </View>
