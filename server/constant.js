@@ -12,6 +12,7 @@ const SHARING_TYPE = {
 
 const TASK_TYPE = {
     GROUP_TASK: 'group_task',
+    ROUTINE_TASK: 'routine_task',
     SCHEDULE: 'schedule_task',
     TASK_BUCKET: 'task_bucket'
 }

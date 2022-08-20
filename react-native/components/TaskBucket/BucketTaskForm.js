@@ -14,10 +14,12 @@ import { widthPercentageToDP } from "react-native-responsive-screen";
 import { Button, Modal, Portal } from "react-native-paper";
 import SearchUser from "../Search/SearchUser";
 import CloseModal from "../Common/CloseModal";
+import { useSelector } from "react-redux";
 
 function BucketTaskForm({ task, isUpdate }) {
     let date = new Date();
     const [show, setShow] = useState(false);
+    const userToken = useSelector((state) => state.user?.token)
     const [visibleShared, setVisibleShared] = useState()
     const [pic, setPic] = useState([
         {
@@ -59,7 +61,7 @@ function BucketTaskForm({ task, isUpdate }) {
     };
 
 
-    const handlePress = () => {
+    const handlePress = async() => {
         console.log(todoData, "before handle click ")
         if (
             todoData.title &&
@@ -68,7 +70,22 @@ function BucketTaskForm({ task, isUpdate }) {
             todoData.duration &&
             todoData.canView
         ) {
-            console.log(todoData);
+            console.log("reponse data ", todoData);
+            try {
+                if (isUpdate) {
+                    // update 
+                   const {data} = await api.updateTask(todoData, userToken);
+                   console.log(data);
+                } else {
+                    // create 
+                    const {data} = await api.createTask(todoData, userToken);
+                    console.log(data)
+                }
+
+            } catch (error) {
+                console.log(`error in handlePress in bucketTaskForm.js`, error.response?.data?.message|| error.message )
+                
+            }
             setTodoData({
                 title: "",
                 desc: "",
@@ -78,11 +95,7 @@ function BucketTaskForm({ task, isUpdate }) {
                 canEdit: "",
             });
             alert("Task added");
-            try {
-                await api.
-            } catch (error) {
-                
-            }
+            
         } else {
             alert("Fill the required is the update fields");
         }

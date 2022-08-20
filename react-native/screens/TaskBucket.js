@@ -30,7 +30,8 @@ export default function TaskBucket({ navigation }) {
 
     const handleSearchChange = (val) => {
         setSearchQuery(val);
-        getSearchResult(val);
+        console.log(val)
+        // getSearchResult(val);
     }
     const userId = '12345688'
 

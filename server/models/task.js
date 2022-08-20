@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { SHARING_TYPE } = require("../constant");
+const { SHARING_TYPE, TASK_TYPE } = require("../constant");
 const routine = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   routineName: String,
@@ -14,8 +14,7 @@ const taskSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [SHARING_TYPE.EVERYONE, SHARING_TYPE.ONLY_WITH, SHARING_TYPE.NO_ONE],
-      default: SHARING_TYPE.NO_ONE
+      enum: [TASK_TYPE.GROUP_TASK, TASK_TYPE.ROUTINE_TASK, TASK_TYPE.SCHEDULE, TASK_TYPE.TASK_BUCKET],
     },
     description: {
       type: String,
@@ -41,11 +40,20 @@ const taskSchema = mongoose.Schema(
     },
     username: {
       type: String,
+      trim: true,
     },
     sharedWith: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "User",
+      type: [{
+        _id: {
+          type: [mongoose.Schema.Types.ObjectId],
+          ref: "User"
+        },
+        username: {
+          type: String
+        },
+      }]
     },
+
     canView: {
       type: String,
       enum: [SHARING_TYPE.EVERYONE, SHARING_TYPE.ONLY_WITH, SHARING_TYPE.NO_ONE],
