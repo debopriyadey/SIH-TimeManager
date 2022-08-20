@@ -69,7 +69,7 @@ export default function HomeScreen({ navigation }) {
           >
             <TouchableOpacity
               activeOpacity={0.5}
-              onPress={() => navigation.navigate("Notifications")}
+              onPress={() => navigation.navigate("AppNotifications")}
             >
               <Image
                 source={require("../icons/bell.png")}

@@ -25,6 +25,7 @@ import TodoForm from "./components/TodoForm/TodoForm";
 import GoalForm from "./components/GoalForm/GoalForm";
 import Schedule from "./components/Schedule/Schedule";
 import Progress from "./components/Progress/Progress";
+import AppNotifications from "./components/Notifications/AppNotifications";
 import Loading from "./screens/Loading";
 import Focus from "./screens/Focus";
 import TaskBucket from "./screens/TaskBucket";
@@ -164,6 +165,7 @@ const Application = () => {
           <Drawer.Screen name="GoalForm" component={GoalForm} />
           <Drawer.Screen name="Schedule" component={Schedule} />
           <Drawer.Screen name="Progress" component={Progress} />
+          <Drawer.Screen name="AppNotifications" component={AppNotifications} />
           <Drawer.Screen name="Focus" component={Focus} />
           <Drawer.Screen name="Details" component={DetailsScreen} />
           <Drawer.Screen name="SupportScreen" component={SupportScreen} />
