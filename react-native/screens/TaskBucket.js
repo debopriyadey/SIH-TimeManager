@@ -10,6 +10,7 @@ import TaskForm from '../components/TaskBucket/BucketTaskForm'
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal } from 'react-native-paper';
 import BucketList from '../components/TaskBucket/BucketList';
+import { SHARING_TYPE } from '../constants';
 
 export default function TaskBucket({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -29,7 +30,8 @@ export default function TaskBucket({ navigation }) {
 
     const handleSearchChange = (val) => {
         setSearchQuery(val);
-        getSearchResult(val);
+        console.log(val)
+        // getSearchResult(val);
     }
     const userId = '12345688'
 
@@ -100,8 +102,8 @@ export default function TaskBucket({ navigation }) {
             title: "",
             duration: "",
             username: "",
-            canEdit: '',
-            canView: '',
+            canEdit: SHARING_TYPE.NO_ONE,
+            canView: SHARING_TYPE.NO_ONE,
             creator: '',
         }
         setCurr(task)

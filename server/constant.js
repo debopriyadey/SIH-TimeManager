@@ -4,17 +4,18 @@ const USER_TYPE = {
 };
 
 const SHARING_TYPE = {
-  EVERYONE: "everyone",
-  ONLY_WITH: "only_with",
-  NO_ONE: "no_one",
-};
+    EVERYONE: 'everyone',
+    ONLY_WITH: 'only_with',
+    NO_ONE: 'none'
+
+}
 
 const TASK_TYPE = {
-  GROUP_TASK: "group_task",
-  SCHEDULE: "schedule_task",
-  TASK_BUCKET: "task_bucket",
-  NORMAL_TASK: "normal",
-};
+    GROUP_TASK: 'group_task',
+    ROUTINE_TASK: 'routine_task',
+    SCHEDULE: 'schedule_task',
+    TASK_BUCKET: 'task_bucket'
+}
 
 const QUERY_FILTER = {
   ALL: "all",

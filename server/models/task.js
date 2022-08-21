@@ -21,6 +21,7 @@ const taskSchema = mongoose.Schema(
         TASK_TYPE.NORMAL_TASK,
       ],
       default: TASK_TYPE.NORMAL_TASK,
+
     },
     description: {
       type: String,
@@ -46,11 +47,20 @@ const taskSchema = mongoose.Schema(
     },
     username: {
       type: String,
+      trim: true,
     },
     sharedWith: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "User",
+      type: [{
+        _id: {
+          type: [mongoose.Schema.Types.ObjectId],
+          ref: "User"
+        },
+        username: {
+          type: String
+        },
+      }]
     },
+
     canView: {
       type: String,
       enum: [SHARING_TYPE.EVERYONE, SHARING_TYPE.ONLY_WITH, SHARING_TYPE.NO_ONE],

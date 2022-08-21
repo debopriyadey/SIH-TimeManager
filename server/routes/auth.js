@@ -14,5 +14,7 @@ route.post('/addChild', requiredLogin, controller.addChild);
 route.get('/childs', requiredLogin,controller.getChilds);
 route.put('/child', requiredLogin,controller.updateChild);
 route.get('/user/rooms/:id', requiredLogin, controller.getRooms);
+route.get('/userSearch',controller.getUserSuggestion);
+
 
 module.exports=route;

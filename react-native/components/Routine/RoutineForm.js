@@ -96,24 +96,6 @@ function RoutineForm({ task, isRoutineUpdate }) {
         canView: 'everyone',
         creator: '12345689',
         sharedWith: ['1234', '2345']
-    }, {
-        title: "Golf",
-        desc: "Something about the playing",
-        duration: "30",
-        username: "gourav",
-        canEdit: 'only_with',
-        canView: 'only_with',
-        creator: '12345681',
-        sharedWith: ['1234', '2345']
-    }, {
-        title: "Study",
-        desc: "Something about the Study",
-        duration: "30",
-        username: "debo",
-        canEdit: 'only_with',
-        canView: 'only_with',
-        creator: '12345688',
-        sharedWith: ['1234', '2345']
     }])
 
     const showMode = (mode) => {
@@ -164,9 +146,14 @@ function RoutineForm({ task, isRoutineUpdate }) {
     };
 
     const updatedTaskList = (taskList) => {
-        console.log(taskList)
+        setData(data => [...data, taskList]);
     }
 
+    const removeTask = (task) => {
+        let tempUsers = data
+        const filtered = tempUsers.filter((_task) => _task.title != task.title);
+        setData(filtered)
+    }
 
     return (
         <View>
@@ -262,7 +249,7 @@ function RoutineForm({ task, isRoutineUpdate }) {
                         <View>
                             <TouchableOpacity
                                 activeOpacity={0.5}
-                                // onPress={con}
+                                onPress={() => removeTask(task)}
                                 style={{ zIndex: 2 }}
                             >
                                 <Image
