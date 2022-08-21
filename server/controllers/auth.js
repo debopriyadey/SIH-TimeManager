@@ -136,6 +136,7 @@ const isUsernameExist = async (req, res, next) => {
 // create child account by admin
 const addChild = async (req, res, next) => {
     const { username, name, password, restricted } = req.body;
+    console.log("id: ", req.user._id)
     const parentId = req.user._id;
     if (!username || !name || !password || !parentId) {
         return res.status(422).json({ message: "Please enter all fields" });

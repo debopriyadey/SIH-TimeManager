@@ -6,15 +6,12 @@ import * as api from '../../api'
 
 import styles from "../TodoForm/TodoFormStyle";
 import AppButton from "../Common/AppButton";
-import GoalModal from "../Common/GoalModal";
-import SliderView from "../Common/SliderView";
-import PickerView from "../Common/PickerView";
-import TimeDuration from "../Common/TimeDuration";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { Button, Modal, Portal } from "react-native-paper";
 import SearchUser from "../Search/SearchUser";
 import CloseModal from "../Common/CloseModal";
 import { useSelector } from "react-redux";
+import { SHARING_TYPE } from '../../constants';
 
 function BucketTaskForm({ task, isUpdate, setData }) {
     let date = new Date();
@@ -61,7 +58,7 @@ function BucketTaskForm({ task, isUpdate, setData }) {
     };
 
 
-    const handlePress = async() => {
+    const handlePress = async () => {
         console.log(todoData, "before handle click ")
         if (
             todoData.title &&
@@ -73,18 +70,18 @@ function BucketTaskForm({ task, isUpdate, setData }) {
             try {
                 if (isUpdate) {
                     // update 
-                   const {data} = await api.updateTask(todoData, userToken);
-                   console.log(data);
+                    const { data } = await api.updateTask(todoData, userToken);
+                    console.log(data);
                 } else {
                     // create 
-                    const {data: response} = await api.createTask(todoData, userToken);
+                    const { data: response } = await api.createTask(todoData, userToken);
                     setData((data) => [...data, response])
                     console.log(response)
                 }
 
             } catch (error) {
-                console.log(`error in handlePress in bucketTaskForm.js`, error.response?.data?.message|| error.message )
-                
+                console.log(`error in handlePress in bucketTaskForm.js`, error.response?.data?.message || error.message)
+
             }
             setTodoData({
                 title: "",
@@ -95,7 +92,7 @@ function BucketTaskForm({ task, isUpdate, setData }) {
                 canEdit: "",
             });
             alert("Task added");
-            
+
         } else {
             alert("Fill the required is the update fields");
         }
@@ -176,31 +173,35 @@ function BucketTaskForm({ task, isUpdate, setData }) {
                             </Picker>
                         </View>
                     </View>
-                    <View style={styles.inlineView}>
-                        <Text style={{ fontSize: 18 }}> Shared With </Text>
-                        <TouchableOpacity onPress={showSharedModal}>
-                            {
-                                pic.length ?
-                                    (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 5 }}>{
-                                        pic.slice(0, 4).map((res) => (
-                                            <Image
-                                                source={res.avtar}
-                                                resizeMode="contain"
-                                                style={{
-                                                    width: 40,
-                                                    height: 40,
-                                                    marginRight: -20,
-                                                }}
-                                            />
-                                        ))
-                                    }
-                                        < View style={{ backgroundColor: '#BAD6FF', width: 40, height: 40, borderRadius: 20, padding: 6 }}>
-                                            <Text style={{ fontSize: 14, fontWeight: 'bold', margin: 2 }}>99+</Text>
-                                        </View>
-                                    </View>) :
-                                    <Text>Add Users</Text>}
-                        </TouchableOpacity>
-                    </View>
+                    {
+                        todoData.canEdit === SHARING_TYPE.ONLY_WITH &&
+                        <View style={styles.inlineView}>
+                            <Text style={{ fontSize: 18 }}> Shared With </Text>
+                            <TouchableOpacity onPress={showSharedModal}>
+                                {
+                                    pic.length ?
+                                        (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 5 }}>{
+                                            pic.slice(0, 4).map((res) => (
+                                                <Image
+                                                    source={res.avtar}
+                                                    resizeMode="contain"
+                                                    style={{
+                                                        width: 40,
+                                                        height: 40,
+                                                        marginRight: -20,
+                                                    }}
+                                                />
+                                            ))
+                                        }
+                                            < View style={{ backgroundColor: '#BAD6FF', width: 40, height: 40, borderRadius: 20, padding: 6 }}>
+                                                <Text style={{ fontSize: 14, fontWeight: 'bold', margin: 2 }}>99+</Text>
+                                            </View>
+                                        </View>) :
+                                        <Text>Add Users</Text>}
+                            </TouchableOpacity>
+                        </View>
+
+                    }
 
                     <AppButton
                         onPress={handlePress}

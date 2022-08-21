@@ -10,6 +10,7 @@ import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provid
 import { debounce } from '../utils'
 import RoutineList from '../components/Routine/RoutineList'
 import RoutineForm from '../components/Routine/RoutineForm'
+import { SHARING_TYPE } from '../constants';
 
 export default function RoutineScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -100,8 +101,8 @@ export default function RoutineScreen({ navigation }) {
             title: "",
             duration: "",
             username: "",
-            canEdit: '',
-            canView: '',
+            canEdit: SHARING_TYPE.NO_ONE,
+            canView: SHARING_TYPE.NO_ONE,
             creator: '',
         }
         setCurr(task)

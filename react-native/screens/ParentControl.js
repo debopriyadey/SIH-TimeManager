@@ -109,6 +109,7 @@ export default function ParentControl({ navigation }) {
         isLoading: true,
       }));
       const data = {
+        user: user,
         username: addChild.username,
         name: addChild.name,
         password: addChild.password,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
@@ -14,9 +14,10 @@ import { SHARING_TYPE } from '../constants';
 
 export default function TaskBucket({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
-    const [filter, setFilter] = React.useState()
+    const [filters, setFilters] = React.useState([])
     const [curr, setCurr] = React.useState();
     const [searchResult, setSearchResult] = React.useState([]);
+    const [isSelected, setSelection] = React.useState(false);
 
     const getSearchResult = debounce(async (username) => {
         try {
@@ -48,19 +49,15 @@ export default function TaskBucket({ navigation }) {
 
     const [data, setData] = React.useState([])
     const [visible, setVisible] = React.useState(false);
-    const [deatilVisible, setDetailVisible] = React.useState(false);
+    const [filterVisible, setFilterVisible] = React.useState(false);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
-    const showDetailModal = () => setDetailVisible(true);
-    const hideDetailModal = () => setDetailVisible(false);
-    const containerStyle = { backgroundColor: 'white', padding: 10, margin: 10, borderRadius: 10 };
+    const showFilterModal = () => setFilterVisible(true);
+    const hideFilterModal = () => setFilterVisible(false);
 
-    const createCopy = (task) => {
-        setCurr(task)
-        showDetailModal()
-    }
+    const containerStyle = { backgroundColor: 'white', padding: 10, margin: 10, borderRadius: 10 };
 
     const addTask = () => {
         const task = {
@@ -85,9 +82,9 @@ export default function TaskBucket({ navigation }) {
                     <View style={[styles.inlineView, { marginBottom: 10 }]}>
                         <Text style={styles.paragraph}>Task Bucket</Text>
                         <View style={[styles.inlineView, { justifyContent: 'flex-end' }]}>
-                            <TouchableOpacity activeOpacity={.5} onPress={() => navigation.openDrawer()} style={{ marginRight: 5 }}>
+                            <TouchableOpacity activeOpacity={.5} onPress={showFilterModal} style={{ marginRight: 5 }}>
                                 <Image
-                                    source={require('../icons/filter.png')}
+                                    source={require('../icons/funnel.png')}
                                     resizeMode="contain"
                                     style={{
                                         width: 25,
@@ -122,7 +119,9 @@ export default function TaskBucket({ navigation }) {
                             />
                         }
                     />
-                    <Chip icon="close" onPress={() => console.log('Pressed')}>Example Chip</Chip>
+                    {filters.map((filter) => (
+                        <Chip icon="close" onPress={() => console.log('Pressed')}>{filter}</Chip>
+                    ))}
 
                     {data.map((task) => (
                         <BucketList task={task} />
@@ -134,7 +133,19 @@ export default function TaskBucket({ navigation }) {
                     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
                 >
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                        <TaskForm task={curr} setData={setData}/>
+                        <TaskForm task={curr} setData={setData} />
+                    </Modal>
+                    <Modal visible={filterVisible} onDismiss={hideFilterModal} contentContainerStyle={containerStyle}>
+                        <View style={styles.checkboxContainer}>
+                            {/* <CheckBox
+                                value={isSelected}
+                                onValueChange={setSelection}
+                                style={styles.checkbox}
+                            />
+                            <Text style={styles.label}>Do you like React Native?</Text> */}
+
+                            <Button>Apply</Button>
+                        </View>
                     </Modal>
                 </Portal>
             </Provider>
@@ -183,5 +194,16 @@ const styles = StyleSheet.create({
     },
     btnText: {
         fontSize: wp("2%"),
-    }
+    },
+    checkboxContainer: {
+        flexDirection: "row",
+        marginBottom: 20,
+    },
+    checkbox: {
+        alignSelf: "center",
+    },
+    label: {
+        margin: 8,
+    },
+
 });

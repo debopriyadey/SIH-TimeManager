@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, Switch, ScrollView, Image, TouchableOpacity } from "react-native";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import styles from "../TodoForm/TodoFormStyle";
 import AppButton from "../Common/AppButton";
-import GoalModal from "../Common/GoalModal";
-import SliderView from "../Common/SliderView";
-import PickerView from "../Common/PickerView";
-import TimeDuration from "../Common/TimeDuration";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import BucketList from "../TaskBucket/BucketList";
 import { Button, Modal, Portal } from "react-native-paper";
@@ -17,6 +12,7 @@ import BucketTaskForm from "../TaskBucket/BucketTaskForm";
 import CloseModal from "../Common/CloseModal";
 import SearchTask from "../Search/SearchTask";
 import SearchUser from "../Search/SearchUser";
+import { SHARING_TYPE } from '../../constants';
 
 function RoutineForm({ task, isRoutineUpdate }) {
     let date = new Date();
@@ -207,31 +203,34 @@ function RoutineForm({ task, isRoutineUpdate }) {
                             </Picker>
                         </View>
                     </View>
-                    <View style={styles.inlineView}>
-                        <Button> Shared With </Button>
-                        <TouchableOpacity onPress={showSharedModal}>
-                            {
-                                pic.length ?
-                                    (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 5 }}>{
-                                        pic.slice(0, 4).map((res) => (
-                                            <Image
-                                                source={res.avtar}
-                                                resizeMode="contain"
-                                                style={{
-                                                    width: 40,
-                                                    height: 40,
-                                                    marginRight: -20,
-                                                }}
-                                            />
-                                        ))
-                                    }
-                                        < View style={{ backgroundColor: '#BAD6FF', width: 40, height: 40, borderRadius: 20, padding: 6 }}>
-                                            <Text style={{ fontSize: 14, fontWeight: 'bold', margin: 2 }}>99+</Text>
-                                        </View>
-                                    </View>) :
-                                    <Text>Add Users</Text>}
-                        </TouchableOpacity>
-                    </View>
+                    {
+                        todoData.canEdit === SHARING_TYPE.ONLY_WITH &&
+                        <View style={styles.inlineView}>
+                            <Button> Shared With </Button>
+                            <TouchableOpacity onPress={showSharedModal}>
+                                {
+                                    pic.length ?
+                                        (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 5 }}>{
+                                            pic.slice(0, 4).map((res) => (
+                                                <Image
+                                                    source={res.avtar}
+                                                    resizeMode="contain"
+                                                    style={{
+                                                        width: 40,
+                                                        height: 40,
+                                                        marginRight: -20,
+                                                    }}
+                                                />
+                                            ))
+                                        }
+                                            < View style={{ backgroundColor: '#BAD6FF', width: 40, height: 40, borderRadius: 20, padding: 6 }}>
+                                                <Text style={{ fontSize: 14, fontWeight: 'bold', margin: 2 }}>99+</Text>
+                                            </View>
+                                        </View>) :
+                                        <Text>Add Users</Text>}
+                            </TouchableOpacity>
+                        </View>
+                    }
                     <View style={[styles.inlineView, { marginVertical: 20 }]}>
                         <View>
                             <Text style={styles.heading}>Tasks</Text>
