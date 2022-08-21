@@ -35,53 +35,18 @@ export default function TaskBucket({ navigation }) {
     }
     const userId = '12345688'
 
-    const data = [{
-        title: "Coding",
-        desc: "Something about the task",
-        duration: "30",
-        username: "debo",
-        canEdit: 'only_with',
-        canView: 'only_with',
-        creator: '12345688',
-        sharedWith: ['1234', '2345']
-    }, {
-        title: "Meeting",
-        desc: "Something about the meeting",
-        duration: "30",
-        username: "debo",
-        canEdit: 'only_with',
-        canView: 'only_with',
-        creator: '12345688',
-        sharedWith: ['1534', '2345']
-    }, {
-        title: "Yoga",
-        desc: "Something about the yoga",
-        duration: "20",
-        username: "bishal",
-        canEdit: 'none',
-        canView: 'everyone',
-        creator: '12345689',
-        sharedWith: ['1234', '2345']
-    }, {
-        title: "Golf",
-        desc: "Something about the playing",
-        duration: "30",
-        username: "gourav",
-        canEdit: 'only_with',
-        canView: 'only_with',
-        creator: '12345681',
-        sharedWith: ['1234', '2345']
-    }, {
-        title: "Study",
-        desc: "Something about the Study",
-        duration: "30",
-        username: "debo",
-        canEdit: 'only_with',
-        canView: 'only_with',
-        creator: '12345688',
-        sharedWith: ['1234', '2345']
-    }]
+    // const data = [{
+    //     title: "Coding",
+    //     description: "Something about the task",
+    //     duration: "30",
+    //     username: "debo",
+    //     canEdit: 'only_with',
+    //     canView: 'only_with',
+    //     creator: '12345688',
+    //     sharedWith: ['1234', '2345']
+    // }]
 
+    const [data, setData] = React.useState([])
     const [visible, setVisible] = React.useState(false);
     const [deatilVisible, setDetailVisible] = React.useState(false);
 
@@ -169,7 +134,7 @@ export default function TaskBucket({ navigation }) {
                     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
                 >
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                        <TaskForm task={curr} />
+                        <TaskForm task={curr} setData={setData}/>
                     </Modal>
                 </Portal>
             </Provider>

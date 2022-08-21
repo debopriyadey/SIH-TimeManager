@@ -43,12 +43,11 @@ const createTask = async (req, res, next) => {
     // }
 
     console.log(sharedWith)
-    const sharedWithIds = sharedWith.map((x) => x._id);
+    const sharedWithIds = sharedWith?.map((x) => x._id) || [];
     try {
         const savedTask = await newTask.save();
         console.log("exectuing ...")
         await Users.updateMany({username: { $in: [...sharedWithIds]}}, { $push: { sharedTasks: savedTask._id } });
-        // await Users.updateMany({username: { $in: [...sharedWithIds]}}, { $push: { sharedTasks: savedTask._id } });
         await Users.findOneAndUpdate({ _id: creatorId}, { $push: { createdTasks: savedTask._id } })
         return res.status(201).json(savedTask);
     } catch (err) {
