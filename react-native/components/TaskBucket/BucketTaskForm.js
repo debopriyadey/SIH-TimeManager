@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, Switch, ScrollView, TouchableOpacity, Image } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
+import * as api from '../../api'
 
 import styles from "../TodoForm/TodoFormStyle";
 import AppButton from "../Common/AppButton";
@@ -13,10 +14,12 @@ import { widthPercentageToDP } from "react-native-responsive-screen";
 import { Button, Modal, Portal } from "react-native-paper";
 import SearchUser from "../Search/SearchUser";
 import CloseModal from "../Common/CloseModal";
+import { useSelector } from "react-redux";
 
-function BucketTaskForm({ task, isUpdate }) {
+function BucketTaskForm({ task, isUpdate, setData }) {
     let date = new Date();
     const [show, setShow] = useState(false);
+    const userToken = useSelector((state) => state.user?.token)
     const [visibleShared, setVisibleShared] = useState()
     const [pic, setPic] = useState([
         {
@@ -44,7 +47,7 @@ function BucketTaskForm({ task, isUpdate }) {
     const hideSharedModal = () => setVisibleShared(false);
     const [todoData, setTodoData] = useState({
         title: task.title,
-        desc: task.desc,
+        description: task.description,
         tags: task.tags,
         duration: task.duration,
         canView: task.canView,
@@ -58,32 +61,50 @@ function BucketTaskForm({ task, isUpdate }) {
     };
 
 
-    const handlePress = () => {
+    const handlePress = async() => {
+        console.log(todoData, "before handle click ")
         if (
             todoData.title &&
-            todoData.desc &&
+            todoData.description &&
             todoData.tags &&
             todoData.duration &&
             todoData.canView
         ) {
-            console.log(todoData);
+            try {
+                if (isUpdate) {
+                    // update 
+                   const {data} = await api.updateTask(todoData, userToken);
+                   console.log(data);
+                } else {
+                    // create 
+                    const {data: response} = await api.createTask(todoData, userToken);
+                    setData((data) => [...data, response])
+                    console.log(response)
+                }
+
+            } catch (error) {
+                console.log(`error in handlePress in bucketTaskForm.js`, error.response?.data?.message|| error.message )
+                
+            }
             setTodoData({
                 title: "",
-                desc: "",
+                description: "",
                 tags: "",
                 duration: "",
                 canView: "",
                 canEdit: "",
             });
             alert("Task added");
+            
         } else {
-            alert("Fill the required fields");
+            alert("Fill the required is the update fields");
         }
     };
 
     const updatedUserList = (userList) => {
         setPic(userList);
     };
+
 
     return (
         <View>
@@ -99,12 +120,12 @@ function BucketTaskForm({ task, isUpdate }) {
                         }
                     />
                     <TextInput
-                        value={todoData.desc}
+                        value={todoData.description}
                         style={styles.input}
                         placeholder="Task description"
                         placeholderTextColor={styles.placeholder.color}
                         onChangeText={(val) =>
-                            setTodoData((prev) => ({ ...prev, desc: val }))
+                            setTodoData((prev) => ({ ...prev, description: val }))
                         }
                     />
 
@@ -121,7 +142,7 @@ function BucketTaskForm({ task, isUpdate }) {
                     <TextInput
                         value={todoData.duration}
                         style={styles.input}
-                        placeholder="Tags"
+                        placeholder="Duration"
                         placeholderTextColor={styles.placeholder.color}
                         onChangeText={(val) =>
                             setTodoData((prev) => ({ ...prev, duration: val }))
