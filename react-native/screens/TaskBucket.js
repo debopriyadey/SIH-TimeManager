@@ -8,7 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import TaskForm from '../components/TaskBucket/BucketTaskForm'
 // You can import from local files
 // or any pure javascript modules available in npm
-import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal } from 'react-native-paper';
+import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal, Checkbox } from 'react-native-paper';
 import BucketList from '../components/TaskBucket/BucketList';
 import { SHARING_TYPE } from '../constants';
 
@@ -137,12 +137,12 @@ export default function TaskBucket({ navigation }) {
                     </Modal>
                     <Modal visible={filterVisible} onDismiss={hideFilterModal} contentContainerStyle={containerStyle}>
                         <View style={styles.checkboxContainer}>
-                            {/* <CheckBox
+                            <Checkbox
                                 value={isSelected}
                                 onValueChange={setSelection}
                                 style={styles.checkbox}
                             />
-                            <Text style={styles.label}>Do you like React Native?</Text> */}
+                            <Text style={styles.label}>Do you like React Native?</Text>
 
                             <Button>Apply</Button>
                         </View>
