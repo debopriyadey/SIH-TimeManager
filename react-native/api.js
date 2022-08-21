@@ -18,3 +18,8 @@ export const updateChild = (data, token) => axios.put(`${API_URL}/child`, data, 
 export const getChilds = (token) => axios.get(`${API_URL}/childs`, getConfig(token));
 export const bucketSearch = (data) => axios.get(`${API_URL}/bucketSearch/${data}`);
 export const createRoom = (data) => axios.post(`${API_URL}/room/create`, data, getConfig(data.token));
+
+export const createTask = (data, token) => axios.post(`${API_URL}/task`, data, getConfig(token))
+export const updateTask = (data, token) => axios.put(`${API_URL}/task/${data.id}`, data, getConfig(token))
+export const getUsernameSuggestion = (query) => axios.get(`${API_URL}/userSearch?q=${query}`);
+export const getTaskSuggestion = (query) => axios.get(`${API_URL}/task/taskSearch?q=${query}`);

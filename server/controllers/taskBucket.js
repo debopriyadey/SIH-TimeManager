@@ -1,11 +1,12 @@
 const { TASK_TYPE } = require('../constant.js');
 const Tasks = require('../models/task.js');
 const Users = require('../models/users');
+const url = require("url")
 
-const createTask = async (req, res) => {
+const createTask = async (req, res, next) => {
     const { title, type, description, startTime, duration, tags, sharedWith, canView, canEdit } = req.body;
     const {username, _id: creatorId} = req.user;
-    if (!title || !type || !description || !startTime || !duration || !tags || !creatorId || !username) {
+    if (!title ||  !description ||  !duration || !creatorId || !username) {
         return res.status(400).json({
             message: "Please provide all required fields"
         });
@@ -23,6 +24,7 @@ const createTask = async (req, res) => {
         canView,
         canEdit,
     });
+
     // if can view true then only can edit others tasks
 
     // code with error handling
@@ -40,10 +42,13 @@ const createTask = async (req, res) => {
     //   }
     // }
 
+    console.log(sharedWith)
+    const sharedWithIds = sharedWith?.map((x) => x._id) || [];
     try {
         const savedTask = await newTask.save();
-        await Users.updateMany({_id: { $in: [sharedWith]}}, { $push: { sharedTasks: savedTask._id } });
-        await findOneAndUpdate({ _id: creatorId}, { $push: { createdTasks: savedTask._id } })
+        console.log("exectuing ...")
+        await Users.updateMany({username: { $in: [...sharedWithIds]}}, { $push: { sharedTasks: savedTask._id } });
+        await Users.findOneAndUpdate({ _id: creatorId}, { $push: { createdTasks: savedTask._id } })
         return res.status(201).json(savedTask);
     } catch (err) {
         console.log(err.message)
@@ -51,7 +56,20 @@ const createTask = async (req, res) => {
     }
 }
 
-const getTasks = async() => {
+/*
+    options:
+    SHARED_WITH_ME: 'shared_with_me',
+    ONLY_VIEW: 'only_view',
+    ONLY_EDIT: 'only_edit',
+    OWNED_BY_ME: 'owned_by_me'
+
+    req: http://url?q=all 
+    res: all task which are public, shared with the user, created by user  and has access (Read/write), Read, 
+    req: http://url?q=shared_with_me&only_view
+
+*/
+
+const getTasks = async(req, res, next) => {
     const { _id: userId } = req.user;
     var queryData = url.parse(request.url, true).query;
     queryData = queryData.q.split('&');
@@ -82,12 +100,25 @@ const getTasks = async() => {
 
 }
 
+const getTaskSuggestion = async(req, res, next) => {
+    const queryData = url.parse(req.url, true).query;
+    const title = queryData.q;
+    console.log(title)
+    try {
+        const data = await Tasks.find({title: new RegExp(`^${title}`, 'i')}).select('title').lean()
+         return res.status(200).json(data);
+    } catch (error) {
+        return next(error)
+    }
+}
 
-const updateTask = async (req, res) => {
+
+
+const updateTask = async (req, res, next) => {
     const { id: taskId } = req.params;
     const { title, type, description, startTime, duration, tags, sharedWith: newUsers, canView, canEdit } = req.body;
     const {username, _id: creatorId} = req.user;
-    if (!title || !type || !description || !startTime || !duration || !tags || !creatorId || !username) {
+    if (!title ||  !description ||  !duration || !creatorId || !username) {
         return res.status(400).json({
             message: "Please provide all required fields"
         });
@@ -96,18 +127,41 @@ const updateTask = async (req, res) => {
     try {
         const task = await Tasks.findOne({_id: taskId})
         const previousUsers = task.sharedWith;
-        const removedUsers = previousUsers.filter(x => !newUsers.includes(x));
+        const removedUsers =  previousUsers.filter(x => !newUsers.includes(x));
         const addedUsers =  newUsers.filter(x => !previousUsers.includes(x));
-        await Users.updateMany({_id: addedUsers}, { $push: { sharedTasks: task._id } });
-        await Users.updateMany({_id: removedUsers}, { $pull: { sharedTasks: task._id } });
-        return res.status(200).json(task);
+        const removedUsersId = removedUsers.map((x) => x._id)
+        const addedUsersId = addedUsers.map((x) => x._id)
+        await Users.updateMany({_id: {$in: addedUsersId}}, { $push: { sharedTasks: task._id } });
+        await Users.updateMany({_id: {$in:removedUsersId}}, { $pull: { sharedTasks: task._id } });
+        const newTask = await Tasks.findOneAndUpdate(taskId, {
+            title,
+            type,
+            description,
+            startTime,
+            duration,
+            tags,
+            creatorId,
+            username,
+            newUsers,
+            canView,
+            canEdit,
+        }, {new: true});
+
+        return res.status(200).json(newTask);
     } catch (error) {
         next(error)
     }
 }
 
+/*
+task search in taskBucket, in 
+req: url?q=cod&in=task_bucket/routine
+res: list of all task with prefix match  
+*/
+
 module.exports = {
     createTask,
-    getTask,
+    getTasks,
+    getTaskSuggestion,
     updateTask
 }

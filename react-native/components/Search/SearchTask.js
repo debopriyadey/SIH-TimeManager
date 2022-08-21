@@ -5,6 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { debounce } from '../../utils'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import * as api from '../../api'
+
 // You can import from local files
 // or any pure javascript modules available in npm
 import { Searchbar, Button, Title, Divider } from 'react-native-paper';
@@ -26,9 +28,9 @@ export default function SearchTask({ tasks, updatedTaskList, hide }) {
     const [tasksList, setTasksList] = React.useState([])
 
 
-    const getSearchResult = debounce(async (username) => {
+    const getSearchResult = debounce(async (val) => {
         try {
-            const { data } = await api.bucketSearch(username);
+            const { data } = await api.getTaskSuggestion(val);
             setSearchResult(data);
             console.log(data)
         } catch (error) {
@@ -50,17 +52,21 @@ export default function SearchTask({ tasks, updatedTaskList, hide }) {
 
     const removeTask = (task) => {
         let tempUsers = tasksList
-        const filtered = tempUsers.filter((_task) => _task.title != task.title);
+        const filtered = tempUsers.filter((_task) => _task._id != task._id);
         setTasksList(filtered)
     }
 
-    const saveTasks = () => {
+    React.useEffect(() => {
         updatedTaskList(tasksList);
-        hide()
-    }
+    }, [tasksList])
+
+    // const saveTasks = () => {
+    //     updatedTaskList(tasksList);
+    //     hide()
+    // }
 
     return (
-        <View>
+        <View style={{minHeight: 300}}>
             <ScrollView style={styles.scrollView}>
                 <View style={[styles.inlineView, { marginBottom: 10 }]}>
                     <Text style={styles.paragraph}>Search Users</Text>
@@ -95,7 +101,7 @@ export default function SearchTask({ tasks, updatedTaskList, hide }) {
                             </View>
                             <View>
                                 {
-                                    tasksList.findIndex((x) => x.title === res.title) < 0 ?
+                                    tasksList.findIndex((x) => x._id === res._id) < 0 ?
                                         (<Button style={styles.btn} onPress={() => addTask(res)}>
                                             <Text style={styles.btnText}>Add</Text>
                                         </Button>) : (<Button style={styles.btn} onPress={() => removeTask(res)}>
@@ -129,7 +135,7 @@ export default function SearchTask({ tasks, updatedTaskList, hide }) {
                 </View>)}
             </ScrollView>
 
-            <Button onPress={() => saveTasks()}>Save</Button>
+            {/* <Button onPress={() => saveTasks()}>Save</Button> */}
         </View>
     );
 }

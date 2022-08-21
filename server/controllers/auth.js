@@ -2,6 +2,7 @@ const Users = require('../models/users.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+var url = require('url');
 const { find } = require('../models/users.js');
 
 const signup = (req, res, next) => {
@@ -207,6 +208,8 @@ const updateChild = async (req, res, next) => {
     })
 }
 
+
+
 /*
 clicks on switch -> backend request with (child._id, parent._id) 
     find document with this fields 
@@ -251,6 +254,23 @@ clicks on switch -> backend request with (child._id, parent._id)
 
 */
 
+/*
+getUserSuggestion
+       req: url?q=go
+       res: all user with prefix match of go 
+*/
+
+const getUserSuggestion = async(req, res, next) => {
+    const queryData = url.parse(req.url, true).query;
+    const username = queryData.q;
+    try {
+        const data = await Users.find({username: new RegExp(`^${username}`)}).select('username').lean()
+         return res.status(200).json(data);
+    } catch (error) {
+        return next(error)
+    }
+}
+
 module.exports = {
     signup,
     signin,
@@ -258,6 +278,7 @@ module.exports = {
     getLoggedInUserInfo,
     isUsernameExist,
     addChild,
+    getUserSuggestion,
     getChilds,
     logout,
     updateChild

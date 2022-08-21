@@ -8,6 +8,8 @@ import BucketTaskForm from './BucketTaskForm'
 // You can import from local files
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal } from 'react-native-paper';
+import { SHARING_TYPE } from '../../constants';
+import { useSelector } from 'react-redux';
 
 export default function BucketList({ task }) {
     const [visible, setVisible] = React.useState(false);
@@ -34,7 +36,7 @@ export default function BucketList({ task }) {
         showDetailModal()
     }
 
-    const userId = '1234'
+    const userId = useSelector((state) => state.user?._id)
 
     return (
         <View>
@@ -50,7 +52,7 @@ export default function BucketList({ task }) {
                             <Button mode="contained" style={styles.btn}>
                                 <Text style={styles.btnText}>Schedule</Text>
                             </Button>
-                            {(task.canEdit === "everyone" || (task.canEdit === "only_with" && task.sharedWith.includes(userId))) &&
+                            {(task.canEdit === SHARING_TYPE.EVERYONE || (task.canEdit === SHARING_TYPE.ONLY_WITH && task.sharedWith.findIndex((x) => x._id===userId)!=-1 ) || (task.creatorId === userId)) &&
                                 <Button mode="contained" style={styles.btn} onPress={() => createUpdate(task)}>
                                     <Text style={styles.btnText}>Update</Text>
                                 </Button>

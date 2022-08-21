@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { debounce } from '../../utils'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import * as api from '../../api'
 // You can import from local files
 // or any pure javascript modules available in npm
 import { Searchbar, Button, Title, Divider } from 'react-native-paper';
@@ -12,21 +13,15 @@ import { Searchbar, Button, Title, Divider } from 'react-native-paper';
 export default function SearchUser({ users, updatedUserList, hide }) {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [filter, setFilter] = React.useState()
-    const [searchResult, setSearchResult] = React.useState([{
-        avtar: require("../../icons/face1.png"),
-        username: 'new User 1'
-    }, {
-        avtar: require("../../icons/face2.png"),
-        username: 'new User 2'
-    }
-    ]);
+    const [searchResult, setSearchResult] = React.useState([    ]);
 
     const [usersList, setUsersList] = React.useState(users)
 
 
     const getSearchResult = debounce(async (username) => {
         try {
-            const { data } = await api.bucketSearch(username);
+            console.log(username)
+            const { data } = await api.getUsernameSuggestion(username);
             setSearchResult(data);
             console.log(data)
         } catch (error) {
@@ -36,6 +31,7 @@ export default function SearchUser({ users, updatedUserList, hide }) {
 
     const handleSearchChange = (val) => {
         setSearchQuery(val);
+        console.log(val);
         getSearchResult(val);
     }
     const userId = '12345688'
@@ -52,10 +48,16 @@ export default function SearchUser({ users, updatedUserList, hide }) {
         setUsersList(filtered)
     }
 
-    const saveUsers = () => {
+    React.useEffect(() => {
         updatedUserList(usersList);
-        hide()
-    }
+    }, [usersList])
+    
+
+    // const saveUsers = () => {
+    //     updatedUserList(usersList);
+    //     hide()
+    // }
+
     return (
         <View>
             <ScrollView style={styles.scrollView}>
@@ -142,7 +144,7 @@ export default function SearchUser({ users, updatedUserList, hide }) {
                 </View>)}
             </ScrollView>
 
-            <Button onPress={() => saveUsers()}>Save</Button>
+            {/* <Button onPress={() => saveUsers()}>Save</Button> */}
         </View>
     );
 }
