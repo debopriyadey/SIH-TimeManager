@@ -11,7 +11,6 @@ export const userSlice = createSlice({
     },
     signout: (state) => {
       return {}
-      console.log("signout done....")
     },
     saveUserInfo: (_state, action) => {
       return action.payload
