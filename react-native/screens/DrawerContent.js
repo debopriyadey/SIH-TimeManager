@@ -21,6 +21,7 @@ import * as api from "../api";
 import { saveSuperUserInfo } from "../redux/slice/superUser";
 import { USER_TYPE } from "../constants";
 export function DrawerContent(props) {
+  
   const dispatch = useDispatch();
   const superUser = useSelector((state) => state.superUser)
   console.log(superUser)
@@ -30,7 +31,9 @@ export function DrawerContent(props) {
     try {
       const data = { token: user.token };
       await AsyncStorage.removeItem("userToken");
+      await AsyncStorage.removeItem("superUserToken")
       await api.signout(data);
+      // props.navigation.navigate("signin")
       dispatch(signout());
     } catch (error) {
       console.log("got error while signout!.", error.response);

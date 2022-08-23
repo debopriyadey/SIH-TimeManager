@@ -72,6 +72,7 @@ const signin = (req, res, next) => {
             console.log("Got here!", doMatch && ((parentId&& savedUser.parentId.toString() == parentId) || (!parentId)))
             if (doMatch && ((parentId&& savedUser.parentId.toString() == parentId) || (!parentId))) {
                 const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.JWT_SECRET);
+                console.log(process.env.JWT_SECRET, token)
                 if (!savedUser.token)
                 savedUser.token = token
                 console.log(savedUser.token)
@@ -137,6 +138,7 @@ const isUsernameExist = async (req, res, next) => {
 const addChild = async (req, res, next) => {
     const { username, name, password, restricted } = req.body;
     const parentId = req.user._id;
+    console.log("got parent id. name, password, restricted ", parentId, name, password, restricted)
     if (!username || !name || !password || !parentId) {
         return res.status(422).json({ message: "Please enter all fields" });
     }
