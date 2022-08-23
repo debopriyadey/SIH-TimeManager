@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken");
 const Users = require("../models/users.js");
 
 const requiredLogin = (req, res, next) => {
-  if (req.body.password) {
+  console.log(req.headers, req.body)
+  if (req.body.password && !req.body.isNewChild) {
    return   next()
   }
   let token = "";

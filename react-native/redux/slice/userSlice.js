@@ -10,7 +10,8 @@ export const userSlice = createSlice({
       return action.payload
     },
     signout: (state) => {
-      state = {};
+      return {}
+      console.log("signout done....")
     },
     saveUserInfo: (_state, action) => {
       return action.payload

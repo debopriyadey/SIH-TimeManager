@@ -114,7 +114,10 @@ export default function ParentControl({ navigation }) {
         name: addChild.name,
         password: addChild.password,
         restricted: addChild.restricted,
+        isNewChild: true,
+        
       };
+      console.log("token of user is ", user.token)
       const response = await api.addChild(data, user.token);
       console.log("created child ", response.data);
       setChildData((childData) => [...childData, response.data]);
@@ -122,6 +125,7 @@ export default function ParentControl({ navigation }) {
 
       hideModal();
     } catch (error) {
+      console.log("got error while creating child ", error.message)
       setAddChild((addChild) => ({
         ...addChild,
         isLoading: false,
@@ -149,9 +153,7 @@ export default function ParentControl({ navigation }) {
     setAddChild({ ...child, isNewChild: false, password: "" });
     showModal();
   };
-  React.useEffect(() => {
-    console.log(addChild);
-  }, [addChild]);
+  
 
   const handleUpdateChild = async () => {
     try {
