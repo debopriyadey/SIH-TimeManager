@@ -40,13 +40,15 @@ const getGoals = async (req, res, next) => {
     }
 
     try {
-        const savedGoal = await Goals.find({creatorId: creatorId})
+        const savedGoal = await Goals.find({creatorId: creatorId}).populate("tasksRef");
         console.log("exectuing ...")
-        return res.status(201).json(savedGoal);
+        return res.status(200).json(savedGoal);
     } catch (err) {
         next(err)
     }
 }
+
+
 
 // const updateGoals = async (req, res, next) => {
 //     const { title, description, startTime, duration } = req.body;
@@ -79,7 +81,16 @@ const getGoals = async (req, res, next) => {
 
 // }
 
-const addTaskinGoal = 
+const addTaskInGoal = async (req, res, next) => {
+    const {taskId, goalId} = req.body;
+    console.log(taskId, goalId)
+   try {
+   const data = await Goals.findOneAndUpdate({_id: goalId}, { $push: { tasksRef: taskId  } },  {new: true})
+   return res.status(200).json(data);
+   } catch (error) {
+    next(error)
+   }
+}
 
 /*
     options:
@@ -208,5 +219,6 @@ res: list of all task with prefix match
 
 module.exports = {
     createGoal,
-    getGoals
+    getGoals,
+    addTaskInGoal
 }

@@ -21,11 +21,10 @@ const goalSchema = mongoose.Schema(
             type: Date,
             default: new Date(),
         },
-        tasksId: [{
-            _id: {
+        tasksRef: [{
                 type: [mongoose.Schema.Types.ObjectId],
                 ref: "Task"
-            },
+           
         }],
         // duration in days 
         duration: {
