@@ -85,7 +85,6 @@ function GoalForm() {
       goalData.selectedTime &&
       goalData.duration
     ) {
-      console.log(goalData);
       ToastAndroid.show("created Task", ToastAndroid.SHORT);
       setGoalData({
         name: "",
@@ -104,7 +103,6 @@ function GoalForm() {
     setTaskData((prev) => ({ ...prev, id: goalData.tasks.length + 1 }));
     let userTask = goalData.tasks;
     userTask.push(taskData);
-    console.log(taskData);
     setGoalData((prev) => ({ ...prev, tasks: userTask }));
     setTaskData({
       id: 0,

@@ -1,11 +1,10 @@
 import axios from "axios";
 import { API_URL } from "./config.js";
+import store from "./redux/store.js";
 
 const getConfig = (token) => ({
   headers: { Authorization: `Bearer ${token}` },
 });
-
-// const API_URL = 'https://192.168.222.33:5000'
 
 export const signup = (users) => axios.post(`${API_URL}/signup`, users);
 export const signin = (users, token) =>
@@ -23,3 +22,23 @@ export const updateTask = (data, token) => axios.put(`${API_URL}/task/${data.id}
 export const getUsernameSuggestion = (query) => axios.get(`${API_URL}/userSearch?q=${query}`);
 export const getTaskSuggestion = (query) => axios.get(`${API_URL}/task/taskSearch?q=${query}`);
 export const getSchedule = (query, token) => axios.get(`${API_URL}/task/schedule/${query}`, getConfig(token))
+export const getStreaks = (token) => axios.get(`${API_URL}/streaks`, getConfig(token))
+export const getRooms = (userId, token) =>
+  axios.get(`${API_URL}/user/rooms/${userId}`, getConfig(token));
+export const getHeatMapData = async (data) => {
+  try {
+    const report = await axios.post(
+      `${API_URL}/progress-report/heat-map`,
+      data
+    );
+    console.log(report);
+    return report;
+  } catch {
+    (err) => console.log(err);
+  }
+};
+export const getBarChatData = (data) =>
+  axios.get(`${API_URL}/progress-report/bar-chart`);
+export const getPieChatData = async (data) => {
+  axios.get(`${API_URL}/progress-report/pie-chart`);
+};

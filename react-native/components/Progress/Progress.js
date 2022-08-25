@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, StatusBar, StyleSheet, Dimensions } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-// import { NavigationContainer } from "@react-navigation/native";
 
 import Weekly from "./Weekly";
 import Monthly from "./Monthly";

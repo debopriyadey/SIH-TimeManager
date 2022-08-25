@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import CalendarHeatmap from "react-native-calendar-heatmap";
 import GoalCard from "./GoalCard";
+import { getHeatMapData } from "../../api";
+import { addDays } from "date-fns";
 
 function Monthly() {
+  const [date, setDate] = useState(new Date());
+  const dateObj = { startDate: date, endDate: addDays(date, 1) };
   const GoalData = [
     {
       id: 1,
@@ -48,6 +52,9 @@ function Monthly() {
       progress: 0.7,
     },
   ];
+  useEffect(() => {
+    getHeatMapData(dateObj).then((res) => console.log(res));
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>

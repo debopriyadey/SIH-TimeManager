@@ -141,13 +141,13 @@ export default function ParentControl({ navigation }) {
   };
 
   const handleSwitch = async (child) => {
-    console.log(child);
+    console.log("request data ", child);
     const data = {
       email: child.username,
       password: "",
     };
     const { data: response } = await api.signin(data, user.token);
-    console.log("Hey request fullfilled! ", response);
+    console.log("hey switch child response got! ", response);
     dispatch(saveSuperUserInfo(user));
     await AsyncStorage.setItem("superUserToken", user.token);
     await AsyncStorage.setItem("userToken", response.token);

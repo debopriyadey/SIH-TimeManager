@@ -7,6 +7,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { fetchTasks, socket } from "../../../socket/socketConnection";
+import { useSelector } from "react-redux";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 const dummyTasks = [
   {
@@ -28,22 +31,30 @@ const dummyTasks = [
 
 const Tasks = () => {
   const [lists, setLists] = useState({
-    all: [],
-    completed: [],
+    unfinished: new Map(),
+    completed: new Map(),
   });
   const [showModal, setShowModal] = useState(false);
+  const room = useSelector((state) => state.room);
+  const [loading, setLoading] = useState(true);
 
   useLayoutEffect(() => {
-    const tasks = {
-      all: [],
-      completed: [],
-    };
-    dummyTasks.forEach((task) => {
-      if (task.status === "pending") tasks.all.push(task);
-      else tasks.completed.push(task);
+    fetchTasks(room.roomId);
+    socket.on("tasks:all", (tasks) => {
+      const _tasks = {
+        unfinished: new Map(),
+        completed: new Map(),
+      };
+      setLoading(true);
+      tasks.forEach((task) => {
+        if (!task.status) _tasks.unfinished.set(task._id, task);
+        else _tasks.completed.set(task._id, task);
+      });
+      setLists(_tasks);
+      console.log(lists);
+      setLoading(false);
     });
-    setLists(tasks);
-  }, []);
+  }, [socket, room, setLists]);
 
   const containerStyle = {
     backgroundColor: "white",
@@ -53,8 +64,12 @@ const Tasks = () => {
     display: "flex",
     justifyContent: "flex-start",
     borderRadius: 20,
-    height: hp("50%"),
+    height: hp("60%"),
   };
+
+  if (loading) {
+    return <ActivityIndicator style={{ marginTop: 10 }} animating={true} />;
+  }
 
   return (
     <>
@@ -64,12 +79,17 @@ const Tasks = () => {
           onDismiss={() => setShowModal(false)}
           contentContainerStyle={containerStyle}
         >
-          <TaskModal />
+          <TaskModal setShowModal={setShowModal} />
         </Modal>
       </Portal>
       <View>
         {Object.entries(lists).map(([key, value], idx) => (
-          <TaskList key={idx} list={[key, value]} />
+          <TaskList
+            room={room}
+            key={idx}
+            list={[key, value]}
+            setLists={setLists}
+          />
         ))}
       </View>
       <TouchableOpacity style={styles.addTaskBtn}>

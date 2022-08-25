@@ -126,7 +126,6 @@ const SignInScreen = ({ navigation }) => {
         password,
         email,
       };
-      console.log("got payload ", payload);
       await api.signup(payload);
       setData((data) => ({
         ...data,
@@ -134,7 +133,7 @@ const SignInScreen = ({ navigation }) => {
       }));
       navigation.navigate("SignInScreen");
     } catch (error) {
-      console.log("error while signup ..", error.message, error);
+      console.log("error while signup ..", error.message);
       Alert.alert(
         "Wrong Input!",
         error.response?.data?.message ||

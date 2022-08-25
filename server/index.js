@@ -7,6 +7,7 @@ const authRoute = require("./routes/auth");
 const roomRoute = require("./routes/room");
 const goalRoute = require("./routes/goal")
 const taskRoute = require("./routes/taskBucket")
+const progressReportRoute = require("./routes/progressReport");
 const errorHandler = require("./middleware/errorHandler");
 const createSocketServer = require("./services/socket");
 const firebase_admin = require('firebase-admin');
@@ -47,6 +48,7 @@ app.use("/", authRoute);
 app.use("/room", roomRoute);
 app.use("/task", taskRoute); 
 app.use("/goal", goalRoute)
+app.use("/progress-report", progressReportRoute);
 app.use(errorHandler);
 
 firebase_admin.initializeApp({
@@ -54,11 +56,9 @@ firebase_admin.initializeApp({
 });
 
 const PORT = process.env.PORT || 5000;
-const dbURI = process.env.DB_URL ||  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
-
-
-
-
+const dbURI =
+  process.env.DB_URL ||
+  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })

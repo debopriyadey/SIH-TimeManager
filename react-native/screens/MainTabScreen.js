@@ -12,7 +12,7 @@ import { Button } from "react-native-paper";
 import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import ProgressReport from "./ProgressReport";
 import SessionScreen from "./SessionScreen";
-import RoomScreen from "./TaskRoom/RoomScreen";
+import RoomIndexScreen from "./TaskRoom/RoomIndexScreen";
 import Pomodoro from "./Pomodoro";
 import Schedule from "./../components/Schedule/Schedule";
 
@@ -117,7 +117,7 @@ const MainTabScreen = ({ navigation }) => (
     />
     <Tab.Screen
       name="Space"
-      component={RoomScreen}
+      component={RoomIndexScreen}
       options={{
         tabBarLabel: "Space",
         tabBarColor: "#694fad",

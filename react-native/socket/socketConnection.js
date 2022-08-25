@@ -29,6 +29,7 @@ const connectWithSocketServer = (userToken) => {
 
 const joinRoom = (roomCode, user) => {
   console.log(user);
+  console.log(roomCode);
   socket.emit("join-room", roomCode, user._id, (err) => {
     console.log(err);
   });
@@ -46,6 +47,22 @@ const sendMessage = (message, roomId) => {
   });
 };
 
+const createTask = (roomId, task) => {
+  socket.emit("task:create", roomId, task);
+};
+
+const fetchTasks = (roomId) => {
+  socket.emit("task:fetch", roomId);
+};
+
+const toggleTaskStatus = (task) => {
+  socket.emit("task:toggle", task);
+};
+
+const deleteUser = (userId, roomId) => {
+  socket.emit("room:remove-user", userId, roomId);
+};
+
 function mapUser(user) {
   return {
     _id: user._id,
@@ -54,4 +71,14 @@ function mapUser(user) {
   };
 }
 
-export { connectWithSocketServer, joinRoom, fetchMessage, sendMessage, socket };
+export {
+  connectWithSocketServer,
+  joinRoom,
+  fetchMessage,
+  sendMessage,
+  createTask,
+  fetchTasks,
+  toggleTaskStatus,
+  deleteUser,
+  socket,
+};

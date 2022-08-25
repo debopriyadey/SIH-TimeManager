@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchMessage, sendMessage } from "../../../socket/socketConnection";
 import { addMessage } from "../../../redux/slice/roomSlice";
 import { socket } from "../../../socket/socketConnection";
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
 import Message from "./ChatMessage";
 
@@ -13,16 +14,17 @@ export default function Chat() {
   const user = useSelector((state) => state.user);
   const room = useSelector((state) => state.room);
   const [messages, setMessages] = useState([]);
-
-  console.log("line 14", room);
+  const [loading, setLoading] = useState(true);
 
   useLayoutEffect(() => {
-    if (room?.roomId) {
+    if (room.roomId) {
+      setLoading(true);
       fetchMessage(room.roomId);
     }
     socket.on("messages:all", (data) => {
       const msgs = data.map(mapMessage);
       setMessages(msgs);
+      setLoading(false);
     });
   }, [room.roomId, socket]);
 
@@ -37,19 +39,7 @@ export default function Chat() {
     };
   }, [socket]);
 
-  // const onSend = useCallback(
-  //   (newMessages = []) => {
-  //     console.log(newMessages[0].text, room);
-  //     sendMessage(newMessages[0].text, room.roomId);
-  //     GiftedChat.append(messages, newMessages);
-  //     //fetchMessage(room.roomId);
-  //     setMessages((prevM) => GiftedChat.append(prevM, newMessages))
-  //   },
-  //   [room]
-  // );
   const onSend = (newMessages = []) => {
-    console.log(newMessages[0].text, room);
-    //setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
     sendMessage(newMessages[0].text, room.roomId);
   };
 
@@ -87,14 +77,20 @@ export default function Chat() {
     return <Message {...props} />;
   };
 
+  if(loading) {
+    return <ActivityIndicator style={{ marginTop: 10 }} animating={true} />
+  }
+
   return (
     <GiftedChat
+      loadEarlier={true}
       inverted={true}
       messages={messages}
       showAvatarForEveryMessage={true}
       onSend={(messages) => onSend(messages)}
       user={mapUser(user)}
       renderMessage={renderMessage}
+      alwaysShowSend={true}
     />
   );
 }
