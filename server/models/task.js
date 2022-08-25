@@ -46,6 +46,7 @@ const taskSchema = mongoose.Schema(
     },
     username: {
       type: String,
+      trim: true,
     },
     sharedWith: {
       type: [mongoose.Schema.Types.ObjectId],
@@ -53,13 +54,21 @@ const taskSchema = mongoose.Schema(
     },
     canView: {
       type: String,
-      enum: [SHARING_TYPE.EVERYONE, SHARING_TYPE.ONLY_WITH, SHARING_TYPE.NO_ONE],
-      default: SHARING_TYPE.NO_ONE
+      enum: [
+        SHARING_TYPE.EVERYONE,
+        SHARING_TYPE.ONLY_WITH,
+        SHARING_TYPE.NO_ONE,
+      ],
+      default: SHARING_TYPE.NO_ONE,
     },
     canEdit: {
       type: String,
-      enum: [SHARING_TYPE.EVERYONE, SHARING_TYPE.ONLY_WITH, SHARING_TYPE.NO_ONE],
-      default: SHARING_TYPE.NO_ONE
+      enum: [
+        SHARING_TYPE.EVERYONE,
+        SHARING_TYPE.ONLY_WITH,
+        SHARING_TYPE.NO_ONE,
+      ],
+      default: SHARING_TYPE.NO_ONE,
     },
     routines: [routine],
     isCompleted: {

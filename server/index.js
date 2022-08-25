@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const roomRoute = require("./routes/room");
-const progressReportRoute = require("./routes/progressReport");
 const errorHandler = require("./middleware/errorHandler");
 const createSocketServer = require("./services/socket");
 
@@ -42,7 +41,6 @@ app.use((req, res, next) => {
 // });
 app.use("/", authRoute);
 app.use("/room", roomRoute);
-app.use("/progress-report", progressReportRoute);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

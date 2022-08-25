@@ -6,14 +6,13 @@ const USER_TYPE = {
 const SHARING_TYPE = {
   EVERYONE: "everyone",
   ONLY_WITH: "only_with",
-  NO_ONE: "no_one",
+  NO_ONE: "none",
 };
 
 const TASK_TYPE = {
   GROUP_TASK: "group_task",
   SCHEDULE: "schedule_task",
   TASK_BUCKET: "task_bucket",
-  NORMAL_TASK: "normal",
 };
 
 const QUERY_FILTER = {
