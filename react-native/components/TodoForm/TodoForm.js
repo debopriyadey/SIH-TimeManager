@@ -17,7 +17,12 @@ import SliderView from "../Common/SliderView";
 import PickerView from "../Common/PickerView";
 import TimeDuration from "../Common/TimeDuration";
 import RepeatView from "./RepeatView";
+import { TASK_TYPE } from "../../constants";
+import { useSelector } from "react-redux";
+import * as api from "../../api";
 function TodoForm({ navigation }) {
+  const userToken = useSelector((state) => state.user?.token)
+
   let date = new Date();
   const Weekdays = [
     { id: 1, name: "Sun" },
@@ -103,7 +108,7 @@ function TodoForm({ navigation }) {
       days: [],
     });
   };
-  const handlePress = () => {
+  const handlePress = async() => {
     if (
       todoData.name &&
       todoData.desc &&
@@ -114,7 +119,24 @@ function TodoForm({ navigation }) {
       todoData.urgent &&
       todoData.importance
     ) {
-      console.log(todoData);
+
+    try {
+      let priority = todoData.urgent + todoData.importance;
+      priority = priority/2;
+      priority = priority === 0? 1: priority;
+      const reqData = {
+        title: todoData.name,
+        description: todoData.desc,
+        type: TASK_TYPE.SCHEDULE,
+        startTime: todoData.startTime,
+        endTime: todoData.endTime,
+        duration: todoData.duration,
+        tags: todoData.tags,
+        priority: priority
+      }
+       // create 
+       const { data: response } = await api.createTask(reqData, userToken);
+      console.log(response);
       setTodoData({
         name: "",
         desc: "",
@@ -131,6 +153,10 @@ function TodoForm({ navigation }) {
       });
       ToastAndroid.show("Task added", ToastAndroid.SHORT);
       navigation.navigate("Schedule");
+    } catch (error) {
+      console.log(error.message)
+      alert(error.message);
+    }
     } else {
       alert("Fill the required fields");
     }

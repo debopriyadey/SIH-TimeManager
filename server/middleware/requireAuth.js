@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 const Users = require("../models/users.js");
 
 const requiredLogin = (req, res, next) => {
-  console.log(req.headers, req.body)
+  console.log("in required login ", req.headers, req.body)
   if (req.body.password && !req.body.isNewChild) {
    return   next()
   }
   let token = "";
+  console.log("Here we need to verify ")
   token =  req.headers.authorization.split(" ")[1];
-  console.log(token)
   if (!token) return res.status(401).json({ message: "Token not found" });
   jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
     if (err) {

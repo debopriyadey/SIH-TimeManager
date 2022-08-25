@@ -42,6 +42,10 @@ const taskSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    priority: {
+      type: Number,
+      default: 0
+    },
     sharedWith: {
       type: [{
         _id: {

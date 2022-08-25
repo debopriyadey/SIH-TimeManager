@@ -4,7 +4,7 @@ const Users = require('../models/users');
 const url = require("url")
 
 const createTask = async (req, res, next) => {
-    const { title, type, description, startTime, duration, tags, sharedWith, canView, canEdit } = req.body;
+    const { title, type, description, startTime, duration, tags, sharedWith, canView, canEdit, priority  } = req.body;
     const {username, _id: creatorId} = req.user;
     if (!title ||  !description ||  !duration || !creatorId || !username) {
         return res.status(400).json({
@@ -23,6 +23,7 @@ const createTask = async (req, res, next) => {
         sharedWith,
         canView,
         canEdit,
+        priority
     });
 
     // if can view true then only can edit others tasks
@@ -42,7 +43,7 @@ const createTask = async (req, res, next) => {
     //   }
     // }
 
-    console.log(sharedWith)
+    console.log('shared with', sharedWith)
     const sharedWithIds = sharedWith?.map((x) => x._id) || [];
     try {
         const savedTask = await newTask.save();
@@ -112,6 +113,28 @@ const getTaskSuggestion = async(req, res, next) => {
     }
 }
 
+const getSchedule = async(req, res, next) => {
+    const { date } = req.params;
+    const givenDate = new Date(date);
+    // find all the task which start from date start and date end.
+    const startDateTime = givenDate.setUTCHours(0,0,0,0);
+    const endDateTime = givenDate.setUTCHours(23,59,59,999);
+    console.log(startDateTime, endDateTime)
+    try {
+        const data = await Tasks.find({
+            startTime: {
+                $gte: startDateTime,
+                $lte: endDateTime
+            }, 
+            creatorId: req.user._id,
+            type: TASK_TYPE.SCHEDULE
+
+        }).lean()
+        return res.status(200).json(data);
+    } catch (error) {
+        return next(error)
+    }
+}
 
 
 const updateTask = async (req, res, next) => {
@@ -163,5 +186,6 @@ module.exports = {
     createTask,
     getTasks,
     getTaskSuggestion,
-    updateTask
+    updateTask,
+    getSchedule
 }
