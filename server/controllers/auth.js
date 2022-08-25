@@ -225,7 +225,34 @@ const updateChild = async (req, res, next) => {
     });
   });
 };
+const getRooms = async (req, res, next) => {
+  try {
+    const user_id = req.params.id;
 
+    if (!user_id) {
+      res.status(400);
+      throw new Error("User id is required");
+    }
+
+    const user = await User.findById(user_id).populate({
+      path: "rooms",
+      populate: {
+        path: "users",
+        model: "User",
+        select: { name: 1, email: 1, _id: 1 },
+      },
+    });
+
+    if (!user) {
+      res.status(400);
+      throw new Error("User doesn't exist");
+    }
+
+    res.json(user.rooms);
+  } catch (error) {
+    console.log(error);
+  }
+};
 /*
 clicks on switch -> backend request with (child._id, parent._id) 
     find document with this fields 
