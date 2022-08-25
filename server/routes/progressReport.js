@@ -5,6 +5,6 @@ const requiredLogin = require("../middleware/requireAuth");
 
 router.post("/heat-map", progressReportControllers.getHeatMap);
 router.post("/pie-chart", progressReportControllers.getPieChart);
-router.post("/bar-chart", requiredLogin, progressReportControllers.getHeatMap);
+router.post("/bar-chart", progressReportControllers.getHeatMap);
 
 module.exports = router;

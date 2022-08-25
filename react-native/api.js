@@ -24,6 +24,8 @@ export const bucketSearch = (data) =>
   axios.get(`${API_URL}/bucketSearch/${data}`);
 export const createRoom = (data) =>
   axios.post(`${API_URL}/room/create`, data, getConfig(data.token));
+export const getRooms = (userId, token) =>
+  axios.get(`${API_URL}/user/rooms/${userId}`, getConfig(token));
 export const getHeatMapData = async (data) => {
   console.log(data + "line 28");
   try {

@@ -29,6 +29,7 @@ const connectWithSocketServer = (userToken) => {
 
 const joinRoom = (roomCode, user) => {
   console.log(user);
+  console.log(roomCode);
   socket.emit("join-room", roomCode, user._id, (err) => {
     console.log(err);
   });

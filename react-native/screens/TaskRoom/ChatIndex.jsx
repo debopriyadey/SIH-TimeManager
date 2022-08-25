@@ -72,6 +72,7 @@ const ChatIndex = ({ navigation }) => {
               },
             ]}
             onPress={() => openRoom(room)}
+            key={room._id}
           >
             <View style={[styles.card, shadow]}>
               <Text>{room.roomName}</Text>

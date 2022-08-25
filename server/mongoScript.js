@@ -1,5 +1,6 @@
 const Task = require("./models/task");
 const mongoose = require("mongoose");
+const { TASK_TYPE } = require("./constant");
 
 const dbURI =
   process.env.DB_URL ||
@@ -15,9 +16,9 @@ mongoose
 const createTask = async () => {
   const task = await Task.create({
     title: "Do homework",
-    endTime: new Date("2022-08-05"),
+    endTime: new Date("2022-08-25"),
     isCompleted: false,
-    type: "normal",
+    type: TASK_TYPE.,
   });
 
   console.log(task);
