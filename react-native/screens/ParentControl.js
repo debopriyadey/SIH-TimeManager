@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LottieView from "lottie-react-native";
 
 import * as Animatable from "react-native-animatable";
 import {
@@ -23,6 +24,7 @@ import { debounce } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { saveSuperUserInfo } from "../redux/slice/superUser";
 import { saveUserInfo } from "../redux/slice/userSlice";
+import SplashScreen from "./Loading";
 
 export default function ParentControl({ navigation }) {
   const dispatch = useDispatch();
@@ -33,7 +35,10 @@ export default function ParentControl({ navigation }) {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const [childData, setChildData] = React.useState([]);
+  const animation = React.useRef(null);
 
   const [addChild, setAddChild] = React.useState({
     _id: "",
@@ -114,7 +119,10 @@ export default function ParentControl({ navigation }) {
         name: addChild.name,
         password: addChild.password,
         restricted: addChild.restricted,
+        isNewChild: true,
+
       };
+      console.log("token of user is ", user.token)
       const response = await api.addChild(data, user.token);
       console.log("created child ", response.data);
       setChildData((childData) => [...childData, response.data]);
@@ -122,6 +130,7 @@ export default function ParentControl({ navigation }) {
 
       hideModal();
     } catch (error) {
+      console.log("got error while creating child ", error.message)
       setAddChild((addChild) => ({
         ...addChild,
         isLoading: false,
@@ -149,9 +158,7 @@ export default function ParentControl({ navigation }) {
     setAddChild({ ...child, isNewChild: false, password: "" });
     showModal();
   };
-  React.useEffect(() => {
-    console.log(addChild);
-  }, [addChild]);
+
 
   const handleUpdateChild = async () => {
     try {
@@ -204,6 +211,7 @@ export default function ParentControl({ navigation }) {
       try {
         console.log("Here is it.");
         const { data } = await api.getChilds(token);
+        setIsLoading(false);
         console.log(typeof data, data);
         setChildData(data);
       } catch (error) {
@@ -214,258 +222,274 @@ export default function ParentControl({ navigation }) {
   }, [user.token]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Provider
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-      >
-        <Portal
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Modal
-            visible={visible}
-            onDismiss={hideModal}
-            contentContainerStyle={styles.containerStyle}
-          >
-            <Text style={styles.heading}>
-              {addChild.isNewChild ? "New Child" : addChild.username}
-            </Text>
-            {addChild.isNewChild ? (
-              <Text style={styles.helperText}>logged in</Text>
-            ) : null}
-            <View>
-              <TextInput
-                mode="outlined"
-                label="Name"
-                style={styles.inputStyle}
-                value={addChild.name}
-                onChangeText={(val) => {
-                  setAddChild((addChild) => ({
-                    ...addChild,
-                    name: val,
-                    formSubmitError: "",
-                  }));
-                }}
-              />
-              <TextInput
-                mode="outlined"
-                label="Username"
-                style={styles.inputStyle}
-                value={addChild.username}
-                onChangeText={handleUsernameChange}
-                disabled={!addChild.isNewChild}
-              />
-              {addChild.usernameError ? (
-                <Animatable.View animation="fadeInLeft" duration={500}>
-                  <Text style={styles.errorMsg}>{addChild.usernameError}</Text>
-                </Animatable.View>
-              ) : null}
-              <TextInput
-                mode="outlined"
-                label="Password"
-                style={styles.inputStyle}
-                secureTextEntry={addChild.hidePassword}
-                value={addChild.password}
-                right={
-                  <Image
-                    source={require("../icons/search_blue.png")}
-                    resizeMode="contain"
-                    style={{
-                      width: 25,
-                      height: 25,
-                    }}
-                  />
-                }
-                onChangeText={(text) =>
-                  setAddChild((child) => ({
-                    ...child,
-                    password: text,
-                    formSubmitError: "",
-                  }))
-                }
-              />
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <Text style={styles.subHeading}>Control acess</Text>
-              <View style={{ padding: 10 }}>
-                <View style={styles.inlineView}>
-                  <Text>Update Account</Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={
-                      addChild.restricted.updateAcc ? "#3c40bd" : "#f4f3f4"
-                    }
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={() =>
-                      setAddChild((child) => ({
-                        ...child,
-                        formSubmitError: "",
-                        restricted: {
-                          ...child.restricted,
-                          updateAcc: !child.restricted.updateAcc,
-                        },
-                      }))
-                    }
-                    value={addChild.restricted.updateAcc}
-                  />
-                </View>
-                <View style={styles.inlineView}>
-                  <Text>Connect Counsel</Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={
-                      addChild.restricted.connectCounsel ? "#3c40bd" : "#f4f3f4"
-                    }
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={() =>
-                      setAddChild((child) => ({
-                        ...child,
-                        formSubmitError: "",
-                        restricted: {
-                          ...child.restricted,
-                          connectCounsel: !child.restricted.connectCounsel,
-                        },
-                      }))
-                    }
-                    value={addChild.restricted.connectCounsel}
-                  />
-                </View>
-                <View style={styles.inlineView}>
-                  <Text>Update Task Time </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={
-                      addChild.restricted.updateTask ? "#3c40bd" : "#f4f3f4"
-                    }
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={() =>
-                      setAddChild((child) => ({
-                        ...child,
-                        formSubmitError: "",
-                        restricted: {
-                          ...child.restricted,
-                          updateTask: !child.restricted.updateTask,
-                        },
-                      }))
-                    }
-                    value={addChild.restricted.updateTask}
-                  />
-                </View>
-                <View style={styles.inlineView}>
-                  <Text>Use Pomodoro </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={
-                      addChild.restricted.usePomodoro ? "#3c40bd" : "#f4f3f4"
-                    }
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={() =>
-                      setAddChild((child) => ({
-                        ...child,
-                        formSubmitError: "",
-                        restricted: {
-                          ...child.restricted,
-                          usePomodoro: !child.restricted.usePomodoro,
-                        },
-                      }))
-                    }
-                    value={addChild.restricted.usePomodoro}
-                  />
-                </View>
-              </View>
-            </View>
-            {addChild.formSubmitError ? (
-              <Animatable.View animation="fadeInLeft" duration={500}>
-                <Text style={styles.errorMsg}>{addChild.formSubmitError}</Text>
-              </Animatable.View>
-            ) : null}
-            <Button
-              mode="contained"
-              onPress={addChild.isNewChild ? handleAddChild : handleUpdateChild}
-              disabled={
-                addChild.usernameError ||
-                !addChild.password ||
-                !addChild.username
-              }
+    <>
+      {
+        isLoading ? (
+          <View style={{ flex: 1, alignItems: 'center', }}>
+            <LottieView
+        autoPlay
+        ref={animation}
+        style={{
+          width: 200,
+          height: 200,
+        }}
+        // Find more Lottie files at https://lottiefiles.com/featured
+        source={require("../assets/clocktime.json")}
+      />
+          </View>
+        ) : (
+          <SafeAreaView style={styles.container}>
+            <Provider
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
             >
-              {addChild.isNewChild ? "Add" : "Update Account"}
-            </Button>
-          </Modal>
-        </Portal>
-
-        <ScrollView style={{ flex: 1, flexDirection: "column" }}>
-          {childData.length ? (
-            childData.map((child) => (
-              <Card style={styles.resCard}>
-                <View
-                  style={[
-                    styles.inlineView,
-                    { justifyContent: "space-around" },
-                  ]}
+              <Portal
+                style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+              >
+                <Modal
+                  visible={visible}
+                  onDismiss={hideModal}
+                  contentContainerStyle={styles.containerStyle}
                 >
-                  <View
-                    style={{
-                      backgroundColor: "skyblue",
-                      margin: 3,
-                      padding: 7,
-                      borderRadius: 10,
-                      flex: 0.3,
-                      textAlign: "center",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                  <Text style={styles.heading}>
+                    {addChild.isNewChild ? "New Child" : addChild.username}
+                  </Text>
+                  {addChild.isNewChild ? (
+                    <Text style={styles.helperText}>logged in</Text>
+                  ) : null}
+                  <View>
+                    <TextInput
+                      mode="outlined"
+                      label="Name"
+                      style={styles.inputStyle}
+                      value={addChild.name}
+                      onChangeText={(val) => {
+                        setAddChild((addChild) => ({
+                          ...addChild,
+                          name: val,
+                          formSubmitError: "",
+                        }));
+                      }}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      label="Username"
+                      style={styles.inputStyle}
+                      value={addChild.username}
+                      onChangeText={handleUsernameChange}
+                      disabled={!addChild.isNewChild}
+                    />
+                    {addChild.usernameError ? (
+                      <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={styles.errorMsg}>{addChild.usernameError}</Text>
+                      </Animatable.View>
+                    ) : null}
+                    <TextInput
+                      mode="outlined"
+                      label="Password"
+                      style={styles.inputStyle}
+                      secureTextEntry={addChild.hidePassword}
+                      value={addChild.password}
+                      right={
+                        <Image
+                          source={require("../icons/search_blue.png")}
+                          resizeMode="contain"
+                          style={{
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      }
+                      onChangeText={(text) =>
+                        setAddChild((child) => ({
+                          ...child,
+                          password: text,
+                          formSubmitError: "",
+                        }))
+                      }
+                    />
+                  </View>
+                  <View style={{ marginTop: 10 }}>
+                    <Text style={styles.subHeading}>Control acess</Text>
+                    <View style={{ padding: 10 }}>
+                      <View style={styles.inlineView}>
+                        <Text>Update Account</Text>
+                        <Switch
+                          trackColor={{ false: "#767577", true: "#81b0ff" }}
+                          thumbColor={
+                            addChild.restricted.updateAcc ? "#3c40bd" : "#f4f3f4"
+                          }
+                          ios_backgroundColor="#3e3e3e"
+                          onValueChange={() =>
+                            setAddChild((child) => ({
+                              ...child,
+                              formSubmitError: "",
+                              restricted: {
+                                ...child.restricted,
+                                updateAcc: !child.restricted.updateAcc,
+                              },
+                            }))
+                          }
+                          value={addChild.restricted.updateAcc}
+                        />
+                      </View>
+                      <View style={styles.inlineView}>
+                        <Text>Connect Counsel</Text>
+                        <Switch
+                          trackColor={{ false: "#767577", true: "#81b0ff" }}
+                          thumbColor={
+                            addChild.restricted.connectCounsel ? "#3c40bd" : "#f4f3f4"
+                          }
+                          ios_backgroundColor="#3e3e3e"
+                          onValueChange={() =>
+                            setAddChild((child) => ({
+                              ...child,
+                              formSubmitError: "",
+                              restricted: {
+                                ...child.restricted,
+                                connectCounsel: !child.restricted.connectCounsel,
+                              },
+                            }))
+                          }
+                          value={addChild.restricted.connectCounsel}
+                        />
+                      </View>
+                      <View style={styles.inlineView}>
+                        <Text>Update Task Time </Text>
+                        <Switch
+                          trackColor={{ false: "#767577", true: "#81b0ff" }}
+                          thumbColor={
+                            addChild.restricted.updateTask ? "#3c40bd" : "#f4f3f4"
+                          }
+                          ios_backgroundColor="#3e3e3e"
+                          onValueChange={() =>
+                            setAddChild((child) => ({
+                              ...child,
+                              formSubmitError: "",
+                              restricted: {
+                                ...child.restricted,
+                                updateTask: !child.restricted.updateTask,
+                              },
+                            }))
+                          }
+                          value={addChild.restricted.updateTask}
+                        />
+                      </View>
+                      <View style={styles.inlineView}>
+                        <Text>Use Pomodoro </Text>
+                        <Switch
+                          trackColor={{ false: "#767577", true: "#81b0ff" }}
+                          thumbColor={
+                            addChild.restricted.usePomodoro ? "#3c40bd" : "#f4f3f4"
+                          }
+                          ios_backgroundColor="#3e3e3e"
+                          onValueChange={() =>
+                            setAddChild((child) => ({
+                              ...child,
+                              formSubmitError: "",
+                              restricted: {
+                                ...child.restricted,
+                                usePomodoro: !child.restricted.usePomodoro,
+                              },
+                            }))
+                          }
+                          value={addChild.restricted.usePomodoro}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  {addChild.formSubmitError ? (
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                      <Text style={styles.errorMsg}>{addChild.formSubmitError}</Text>
+                    </Animatable.View>
+                  ) : null}
+                  <Button
+                    mode="contained"
+                    onPress={addChild.isNewChild ? handleAddChild : handleUpdateChild}
+                    disabled={
+                      addChild.usernameError ||
+                      !addChild.password ||
+                      !addChild.username
+                    }
                   >
-                    <Avatar.Icon size={80} icon="search" />
-                  </View>
-                  <View style={{ flex: 0.8, padding: 5 }}>
-                    <View style={styles.inlineView}>
-                      <Text style={styles.heading}>{child.username}</Text>
-                      {child.logedin ? (
-                        <Badge style={{ backgroundColor: "#228B22" }}></Badge>
-                      ) : (
-                        <Badge style={{ backgroundColor: "#800000" }}></Badge>
-                      )}
-                    </View>
-                    <View style={{ marginVertical: 10 }}></View>
-                    <View
-                      style={[
-                        styles.inlineView,
-                        { justifyContent: "flex-start" },
-                      ]}
-                    >
-                      <Button
-                        mode="contained"
-                        style={styles.btn}
-                        onPress={() => handleDetails(child)}
-                      >
-                        <Text style={styles.btnText}>Detail</Text>
-                      </Button>
-                      <Button
-                        mode="contained"
-                        style={styles.btn}
-                        onPress={() => handleSwitch(child)}
-                      >
-                        <Text style={styles.btnText}>Switch</Text>
-                      </Button>
-                    </View>
-                  </View>
-                </View>
-              </Card>
-            ))
-          ) : (
-            <Text>
-              You don't have any child account.Click on ADD to create child
-              account
-            </Text>
-          )}
-        </ScrollView>
+                    {addChild.isNewChild ? "Add" : "Update Account"}
+                  </Button>
+                </Modal>
+              </Portal>
 
-        <View
-          style={[
-            styles.inlineView,
-            { justifyContent: "flex-end", marginTop: 20 },
-          ]}
-        >
-          {/* <Image
+              <ScrollView style={{ flex: 1, flexDirection: "column" }}>
+                {childData.length ? (
+                  childData.map((child) => (
+                    <Card style={styles.resCard}>
+                      <View
+                        style={[
+                          styles.inlineView,
+                          { justifyContent: "space-around" },
+                        ]}
+                      >
+                        <View
+                          style={{
+                            backgroundColor: "skyblue",
+                            margin: 3,
+                            padding: 7,
+                            borderRadius: 10,
+                            flex: 0.3,
+                            textAlign: "center",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Avatar.Icon size={80} icon="search" />
+                        </View>
+                        <View style={{ flex: 0.8, padding: 5 }}>
+                          <View style={styles.inlineView}>
+                            <Text style={styles.heading}>{child.username}</Text>
+                            {child.logedin ? (
+                              <Badge style={{ backgroundColor: "#228B22" }}></Badge>
+                            ) : (
+                              <Badge style={{ backgroundColor: "#800000" }}></Badge>
+                            )}
+                          </View>
+                          <View style={{ marginVertical: 10 }}></View>
+                          <View
+                            style={[
+                              styles.inlineView,
+                              { justifyContent: "flex-start" },
+                            ]}
+                          >
+                            <Button
+                              mode="contained"
+                              style={styles.btn}
+                              onPress={() => handleDetails(child)}
+                            >
+                              <Text style={styles.btnText}>Detail</Text>
+                            </Button>
+                            <Button
+                              mode="contained"
+                              style={styles.btn}
+                              onPress={() => handleSwitch(child)}
+                            >
+                              <Text style={styles.btnText}>Switch</Text>
+                            </Button>
+                          </View>
+                        </View>
+                      </View>
+                    </Card>
+                  ))
+                ) : (
+                  <Text>
+                    You don't have any child account.Click on ADD to create child
+                    account
+                  </Text>
+                )}
+              </ScrollView>
+
+              <View
+                style={[
+                  styles.inlineView,
+                  { justifyContent: "flex-end", marginTop: 20 },
+                ]}
+              >
+                {/* <Image
             source={require('../assets/addBtn.png')}
             resizeMode="contain"
             style={{
@@ -473,16 +497,19 @@ export default function ParentControl({ navigation }) {
               height: 40,
             }}
           /> */}
-          <Button
-            onPress={handleNewChild}
-            style={styles.addBtn}
-            color="#ffffff"
-          >
-            <Text>add</Text>
-          </Button>
-        </View>
-      </Provider>
-    </SafeAreaView>
+                <Button
+                  onPress={handleNewChild}
+                  style={styles.addBtn}
+                  color="#ffffff"
+                >
+                  <Text>add</Text>
+                </Button>
+              </View>
+            </Provider>
+          </SafeAreaView>
+        )
+      }
+    </>
   );
 }
 

@@ -76,7 +76,7 @@ function BucketTaskForm({ task, isUpdate, setData }) {
                     // create 
                     const { data: response } = await api.createTask(todoData, userToken);
                     setData((data) => [...data, response])
-                    console.log(response)
+                    console.log("task res: ", response)
                 }
 
             } catch (error) {
@@ -139,12 +139,16 @@ function BucketTaskForm({ task, isUpdate, setData }) {
                     <TextInput
                         value={todoData.duration}
                         style={styles.input}
-                        placeholder="Duration"
+                        placeholder="Duration (min)"
                         placeholderTextColor={styles.placeholder.color}
                         onChangeText={(val) =>
                             setTodoData((prev) => ({ ...prev, duration: val }))
                         }
                     />
+                    
+                   
+
+
 
                     <View style={styles.inlineView}>
                         <View style={{ width: widthPercentageToDP("40%") }}>

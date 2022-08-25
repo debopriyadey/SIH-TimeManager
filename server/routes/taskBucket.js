@@ -8,5 +8,6 @@ route.post('/',requiredLogin, controller.createTask);
 route.put('/:id', requiredLogin, controller.updateTask)
 // route.get('/search', requiredLogin, controller.getTask);
 route.get('/taskSearch', controller.getTaskSuggestion);
+route.get('/schedule/:date', requiredLogin, controller.getSchedule)
 
 module.exports=route;

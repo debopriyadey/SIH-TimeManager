@@ -107,7 +107,7 @@ const SignInScreen = ({ navigation }) => {
           Email/username
         </Text>
         <View style={styles.action}>
-          {/* <FontAwesome 
+          {/* <FontAwesome t
                     name="user-o"
                     color={colors.text}
                     size={20}
