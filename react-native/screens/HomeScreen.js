@@ -31,6 +31,7 @@ import {
 } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
+import { USER_TYPE } from "../constants";
 
 export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -244,6 +245,7 @@ export default function HomeScreen({ navigation }) {
             mode="contained"
             style={{ width: 230 }}
             onPress={() => navigation.navigate("SessionScreen")}
+            disabled ={user.type === USER_TYPE.CHILD && !user.restricted.connectCounsel}
           >
             Connect Now!
           </Button>

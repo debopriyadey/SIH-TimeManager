@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveSuperUserInfo } from "../redux/slice/superUser";
 import { saveUserInfo } from "../redux/slice/userSlice";
 import SplashScreen from "./Loading";
+import { USER_TYPE } from "../constants";
 
 export default function ParentControl({ navigation }) {
   const dispatch = useDispatch();
@@ -406,9 +407,7 @@ export default function ParentControl({ navigation }) {
                     mode="contained"
                     onPress={addChild.isNewChild ? handleAddChild : handleUpdateChild}
                     disabled={
-                      addChild.usernameError ||
-                      !addChild.password ||
-                      !addChild.username
+                      user.type === USER_TYPE.CHILD && !user.restricted.connectCounsel
                     }
                   >
                     {addChild.isNewChild ? "Add" : "Update Account"}

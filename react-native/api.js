@@ -22,4 +22,4 @@ export const createTask = (data, token) => axios.post(`${API_URL}/task`, data, g
 export const updateTask = (data, token) => axios.put(`${API_URL}/task/${data.id}`, data, getConfig(token))
 export const getUsernameSuggestion = (query) => axios.get(`${API_URL}/userSearch?q=${query}`);
 export const getTaskSuggestion = (query) => axios.get(`${API_URL}/task/taskSearch?q=${query}`);
-export const getSchedule = (query) => axios.get(`${API_URL}/task/schedule/${query}`, getConfig(data.token))
+export const getSchedule = (query, token) => axios.get(`${API_URL}/task/schedule/${query}`, getConfig(token))

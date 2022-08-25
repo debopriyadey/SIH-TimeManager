@@ -21,15 +21,30 @@ import Tasks from "../../model/Tasks";
 import ListItem, { Seperator } from "./ListItem";
 import WeekCalander from "./WeekCalander";
 import { getSchedule } from "../../api";
+import { useSelector } from "react-redux";
+import { Card, Paragraph, Title } from "react-native-paper";
+
+const data = []
 
 function Schedule({ navigation }) {
-  const [list, setList] = useState(Tasks);
+  const [Schedulelist, setList] = useState([]);
   const [date, setDate] = useState(new Date());
   const [weekDays, setWeekDays] = useState([]);
-  useEffect(async () => {
-    const date = new Date();
-    const dates = await getSchedule(date);
-    console.log(dates)
+
+  const userToken = useSelector((state) => state.user?.token)
+
+  const getScheduleFunc = async (date, userToken) => {
+    let schedule = await getSchedule(date, userToken)
+    console.log(schedule.data)
+    setList(schedule.data)
+  }
+
+  useEffect(() => {
+    getScheduleFunc(date, userToken)
+  }, [userToken, date])
+
+  useEffect(() => {
+    const dates = [];
     for (let index = 0; index < 7; index++) {
       const tempDate = addDays(date, index);
       const dateObj = {
@@ -67,13 +82,24 @@ function Schedule({ navigation }) {
           {isSameDay(new Date(), date) ? "Today" : format(date, "do MMMM")}
         </Text>
 
-        <FlatList
+        {/* <FlatList
           nestedScrollEnabled={true}
           data={list.filter((item) => isSameDay(new Date(item.date), date))}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <ListItem item={item} />}
-        />
+        /> */}
+        {Schedulelist.map((res) => (
+          <View style={styles.resCardCont}>
+            <Card style={styles.resCard}>
+              <Card.Content>
+                <Title>{res.title}</Title>
+                <Text>@{res.username}</Text>
+                <Paragraph>{res.description}</Paragraph>
+              </Card.Content>
+            </Card>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -109,6 +135,21 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+  },
+  inlineView: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '100%',
+    alignSelf: 'baseline',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingInline: 10,
+  },
+  resCardCont: {
+    margin: 8,
+  },
+  resCard: {
+    marginVertical: 5,
   },
 });
 export default Schedule;
