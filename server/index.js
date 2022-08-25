@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/auth");
 const roomRoute = require("./routes/room");
+const goalRoute = require("./routes/goal")
 const taskRoute = require("./routes/taskBucket")
 const errorHandler = require("./middleware/errorHandler");
 const createSocketServer = require("./services/socket");
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 app.use("/", authRoute);
 app.use("/room", roomRoute);
 app.use("/task", taskRoute); 
+app.use("/goal", goalRoute)
 app.use(errorHandler);
 
 firebase_admin.initializeApp({
