@@ -10,7 +10,7 @@ import TaskForm from '../components/TaskBucket/BucketTaskForm'
 // or any pure javascript modules available in npm
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal, Checkbox } from 'react-native-paper';
 import BucketList from '../components/TaskBucket/BucketList';
-import { SHARING_TYPE } from '../constants';
+import { SHARING_TYPE, QUERY_FILTER } from '../constants';
 
 export default function TaskBucket({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -72,6 +72,20 @@ export default function TaskBucket({ navigation }) {
         showModal()
     }
 
+    const selectFileter = (val) => {
+        let options = filters
+        let index
+
+        index = options.indexOf(val)
+        if (index >= 0) {
+            options.splice(index, 1)
+        } else {
+            options.push(val)
+        }
+        console.log(options);
+        setFilters(options)
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -119,9 +133,11 @@ export default function TaskBucket({ navigation }) {
                             />
                         }
                     />
-                    {filters.map((filter) => (
-                        <Chip icon="close" onPress={() => console.log('Pressed')}>{filter}</Chip>
-                    ))}
+                    <View style={[styles.inlineView, {justifyContent: 'flex-start', margin: 10}]}>
+                        {filters.map((filter) => (
+                            <Chip icon="close" onPress={() => selectFileter(filter)} style={{margin: 3, backgroundColor: '#BAD6FF'}}>{filter}</Chip>
+                        ))}
+                    </View>
 
                     {data.map((task) => (
                         <BucketList task={task} />
@@ -136,15 +152,57 @@ export default function TaskBucket({ navigation }) {
                         <TaskForm task={curr} setData={setData} />
                     </Modal>
                     <Modal visible={filterVisible} onDismiss={hideFilterModal} contentContainerStyle={containerStyle}>
-                        <View style={styles.checkboxContainer}>
-                            <Checkbox
-                                value={isSelected}
-                                onValueChange={setSelection}
-                                style={styles.checkbox}
-                            />
-                            <Text style={styles.label}>Do you like React Native?</Text>
-
-                            <Button>Apply</Button>
+                        <View>
+                            <View style={styles.checkboxContainer}>
+                                <Checkbox
+                                    status={filters.includes(QUERY_FILTER.ALL) ? 'checked' : 'unchecked'}
+                                    onPress={() => selectFileter(QUERY_FILTER.ALL)}
+                                    name='filters'
+                                    style={styles.checkbox}
+                                />
+                                <Text style={styles.label}>ALL</Text>
+                            </View>
+                            <View style={styles.checkboxContainer}>
+                                <Checkbox
+                                    status={filters.includes(QUERY_FILTER.SHARED_WITH_ME) ? 'checked' : 'unchecked'}
+                                    onPress={() => selectFileter(QUERY_FILTER.SHARED_WITH_ME)}
+                                    name='filters'
+                                    style={styles.checkbox}
+                                />
+                                <Text style={styles.label}>SHARED WITH ME</Text>
+                            </View>
+                            {
+                                filters.includes(QUERY_FILTER.SHARED_WITH_ME) &&
+                                <>
+                                    <View style={styles.checkboxContainer}>
+                                        <Checkbox
+                                            status={filters.includes(QUERY_FILTER.ONLY_VIEW) ? 'checked' : 'unchecked'}
+                                            onPress={() => selectFileter(QUERY_FILTER.ONLY_VIEW)}
+                                            name='filters'
+                                            style={styles.checkbox}
+                                        />
+                                        <Text style={styles.label}>ONLY VIEW</Text>
+                                    </View>
+                                    <View style={styles.checkboxContainer}>
+                                        <Checkbox
+                                            status={filters.includes(QUERY_FILTER.ONLY_EDIT) ? 'checked' : 'unchecked'}
+                                            onPress={() => selectFileter(QUERY_FILTER.ONLY_EDIT)}
+                                            name='filters'
+                                            style={styles.checkbox}
+                                        />
+                                        <Text style={styles.label}>ONLY EDIT</Text>
+                                    </View>
+                                </>
+                            }
+                            <View style={styles.checkboxContainer}>
+                                <Checkbox
+                                    status={filters.includes(QUERY_FILTER.OWNED_BY_ME) ? 'checked' : 'unchecked'}
+                                    onPress={() => selectFileter(QUERY_FILTER.OWNED_BY_ME)}
+                                    name='filters'
+                                    style={styles.checkbox}
+                                />
+                                <Text style={styles.label}>OWNED BY ME</Text>
+                            </View>
                         </View>
                     </Modal>
                 </Portal>

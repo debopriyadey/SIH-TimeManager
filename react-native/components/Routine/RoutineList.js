@@ -48,15 +48,15 @@ export default function RoutineList({ task }) {
                         </View>
                         <Paragraph>{task.desc}</Paragraph>
                         <View style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
-                            <Button mode="contained" style={styles.btn}>
+                            <Button mode="outlined" style={styles.btn}>
                                 <Text style={styles.btnText}>Schedule</Text>
                             </Button>
                             {(task.canEdit === "everyone" || (task.canEdit === "only_with" && task.sharedWith.includes(userId))) &&
-                                <Button mode="contained" style={styles.btn} onPress={() => createUpdate(task)}>
+                                <Button mode="outlined" style={styles.btn} onPress={() => createUpdate(task)}>
                                     <Text style={styles.btnText}>Update</Text>
                                 </Button>
                             }
-                            <Button mode="contained" style={styles.btn} onPress={() => createCopy(task)}>
+                            <Button mode="outlined" style={styles.btn} onPress={() => createCopy(task)}>
                                 <Text style={styles.btnText}>Create Copy</Text>
                             </Button>
                         </View>
@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     },
     btn: {
         padding: 0,
-        margin: 2
+        margin: 5,
+        borderRadius: 15,
     },
     btnText: {
         fontSize: wp("2%"),

@@ -9,6 +9,8 @@ const goalRoute = require("./routes/goal")
 const taskRoute = require("./routes/taskBucket")
 const errorHandler = require("./middleware/errorHandler");
 const createSocketServer = require("./services/socket");
+const firebase_admin = require('firebase-admin');
+const serviceAccount = require("./serviceAccountKey.json");
 
 const app = express();
 const httpServer = new http.Server(app);
@@ -46,6 +48,10 @@ app.use("/room", roomRoute);
 app.use("/task", taskRoute); 
 app.use("/goal", goalRoute)
 app.use(errorHandler);
+
+firebase_admin.initializeApp({
+  credential: firebase_admin.credential.cert(serviceAccount)
+});
 
 const PORT = process.env.PORT || 5000;
 const dbURI = process.env.DB_URL ||  "mongodb+srv://sih:sih@cluster0.smvmbq5.mongodb.net/?retryWrites=true&w=majority";

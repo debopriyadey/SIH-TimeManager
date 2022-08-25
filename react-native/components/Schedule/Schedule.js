@@ -20,13 +20,16 @@ import {
 import Tasks from "../../model/Tasks";
 import ListItem, { Seperator } from "./ListItem";
 import WeekCalander from "./WeekCalander";
+import { getSchedule } from "../../api";
 
 function Schedule({ navigation }) {
   const [list, setList] = useState(Tasks);
   const [date, setDate] = useState(new Date());
   const [weekDays, setWeekDays] = useState([]);
-  useEffect(() => {
-    const dates = [];
+  useEffect(async () => {
+    const date = new Date();
+    const dates = await getSchedule(date);
+    console.log(dates)
     for (let index = 0; index < 7; index++) {
       const tempDate = addDays(date, index);
       const dateObj = {
