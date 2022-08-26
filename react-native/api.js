@@ -45,3 +45,5 @@ export const getPieChatData = async (data) => {
 
 
 export const getUpcomingTask = (time, token) => axios.get(`${API_URL}/task/get_upcoming_task/${time}`, getConfig(token));
+export const changeStatus = (id, status, token) => axios.patch(`${API_URL}/task/change_status/${id}`,{"status": status}, getConfig(token))
+export const addGoals = (data, token) => axios.post(`${API_URL}/goal`, data, getConfig(token))

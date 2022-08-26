@@ -185,7 +185,7 @@ function GoalForm() {
               return <TaskCard task={task} key={i} />;
             })}
 
-          <View style={styles.addTask}>
+          {/* <View style={styles.addTask}>
             <Text style={{ fontSize: 15 }}>
               Add relevent tasks for your goal{" "}
             </Text>
@@ -204,7 +204,7 @@ function GoalForm() {
                 }
               }}
             />
-          </View>
+          </View> */}
           {FormVisible && (
             <TaskForm
               pickerPlaceholder="duration"

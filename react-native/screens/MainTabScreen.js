@@ -98,7 +98,7 @@ const MainTabScreen = ({ navigation }) => (
         ),
       }}
     />
-    <Tab.Screen
+    {/* <Tab.Screen
       name="Voice"
       component={DetailsScreen}
       options={{
@@ -114,7 +114,7 @@ const MainTabScreen = ({ navigation }) => (
         ),
         tabBarButton: (props) => <CustomTabButtom {...props} />,
       }}
-    />
+    /> */}
     <Tab.Screen
       name="Space"
       component={RoomIndexScreen}

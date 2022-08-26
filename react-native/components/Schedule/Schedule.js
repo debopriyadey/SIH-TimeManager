@@ -22,7 +22,8 @@ import ListItem, { Seperator } from "./ListItem";
 import WeekCalander from "./WeekCalander";
 import { getSchedule } from "../../api";
 import { useSelector } from "react-redux";
-import { Card, Paragraph, Title } from "react-native-paper";
+import { Button, Card, Paragraph, Title } from "react-native-paper";
+import * as api from '../../api';
 
 const data = []
 
@@ -57,6 +58,18 @@ function Schedule({ navigation }) {
     }
     setWeekDays(dates);
   }, []);
+
+  const changeStatus = async (res, status) => {
+    const { data } = await api.changeStatus(res._id, status, userToken)
+    console.log(data)
+    let tempList = Schedulelist
+    const index = tempList.indexOf(function (task) {
+      return task._id == res._id
+    })
+    tempList[index] = data;
+    setList(tempList)
+    console.log(Schedulelist)
+  }
 
   return (
     <View style={styles.background}>
@@ -93,9 +106,20 @@ function Schedule({ navigation }) {
           <View style={styles.resCardCont}>
             <Card style={styles.resCard}>
               <Card.Content>
-                <Title>{res.title}</Title>
-                <Text>@{res.username}</Text>
-                <Paragraph>{res.description}</Paragraph>
+                {/* {
+                  res.status == 'finished' ?
+                    <></> :
+                    <> */}
+                      <Title>{res.title}</Title>
+                      <Text>@{res.username}</Text>
+                      <Paragraph>{res.description}</Paragraph>
+                      {res.status == 'pending' ?
+                        <Button onPress={() => changeStatus(res, 'ongoing')}>Start</Button>
+                        : <Button onPress={() => changeStatus(res, 'finished')}>End</Button>
+                      }
+                    {/* </>
+                } */}
+
               </Card.Content>
             </Card>
           </View>

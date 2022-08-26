@@ -137,7 +137,7 @@ export default function HomeScreen({ navigation }) {
             </Card.Content>
           </Card>
         </View>
-        <View style={styles.inlineView}>
+        <View style={[styles.inlineView, {justifyContent: 'space-around'}]}>
           <Button onPress={() => navigation.navigate("TaskBucket")}>
             {" "}
             Bucket{" "}

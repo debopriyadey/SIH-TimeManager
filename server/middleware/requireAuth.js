@@ -8,6 +8,7 @@ const requiredLogin = (req, res, next) => {
   }
   let token = "";
   console.log("Here we need to verify ")
+  console.log(req.headers)
   token =  req.headers.authorization.split(" ")[1];
   if (!token) return res.status(401).json({ message: "Token not found" });
   jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
