@@ -42,3 +42,6 @@ export const getBarChatData = (data) =>
 export const getPieChatData = async (data) => {
   axios.get(`${API_URL}/progress-report/pie-chart`);
 };
+
+
+export const getUpcomingTask = (time, token) => axios.get(`${API_URL}/task/get_upcoming_task/${time}`, getConfig(token));

@@ -32,12 +32,24 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 import { USER_TYPE } from "../constants";
+import * as api from '../api'
 
 export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const user = useSelector((state) => state.user);
   const onChangeSearch = (query) => setSearchQuery(query);
+  const [upcomingTask, setUpcomingTask] = React.useState({});
+  const userToken = useSelector((state) => state.user?.token)
+  
 
+  React.useEffect(() => {
+    (async() => {
+      const currentTime = new Date();
+    const {data} = await api.getUpcomingTask(currentTime, userToken)
+    setUpcomingTask(data)
+  })()
+
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#3c40bd" barStyle="light-content" />
@@ -139,11 +151,11 @@ export default function HomeScreen({ navigation }) {
               </View>
               <View style={{ marginVertical: 10 }}></View>
               <View style={styles.inlineView}>
-                <Title>Card title</Title>
-                <Text style={styles.helperText}>12:00 pm</Text>
+                <Title>{upcomingTask.title}</Title>
+                <Text style={styles.helperText}>{new Date(upcomingTask.startTime).toLocaleDateString()} {new Date(upcomingTask.startTime).toLocaleTimeString()}</Text>
               </View>
               <Paragraph>
-                task desc to make good desccription for.....
+                {upcomingTask.description}
               </Paragraph>
             </Card.Content>
           </Card>
