@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import Constants from "expo-constants";
+import * as Linking from "expo-linking"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -253,14 +254,25 @@ export default function HomeScreen({ navigation }) {
           >
             for one on one Sessions
           </Text>
+          {/* <View style={[styles.inlineView, {justifyContent: 'flex-start'}]}> */}
           <Button
             mode="contained"
-            style={{ width: 230 }}
+            style={{ width: 80, margin: 5}}
             onPress={() => navigation.navigate("SessionScreen")}
             disabled ={user.type === USER_TYPE.CHILD && !user.restricted.connectCounsel}
           >
-            Connect Now!
+            <Text style={{fontSize: 10, padding: 30, margin: 20}}>View</Text>
           </Button>
+           <Button
+            mode="contained"
+            style={{ width: 80, margin: 5 }}
+            onPress={() => Linking.openURL('tel:+18 592 427 502')}
+            disabled ={user.type === USER_TYPE.CHILD && !user.restricted.connectCounsel}
+          >
+            <Text style={{fontSize: 10, padding: 30, margin: 20}}>Call</Text> 
+          </Button>
+
+          {/* </View> */}
         </ImageBackground>
         <View
           style={{

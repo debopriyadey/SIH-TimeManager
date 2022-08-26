@@ -4,6 +4,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
+import * as Linking from "expo-linking"
 
 // You can import from local files
 // or any pure javascript modules available in npm
@@ -34,8 +35,8 @@ function TabBar() {
                   justifyContent: 'center',
                 }}>
                 <Avatar.Icon size={40} icon="search" />
-                <Text style={styles.helperText}>26th July,</Text>
-                <Text style={styles.helperText}>4pm - 5pm</Text>
+                <Text style={styles.helperText}>24th July,</Text>
+                <Text style={styles.helperText}>6pm - 7pm</Text>
               </View>
               <View style={{ flex: 0.8, padding: 5 }}>
                 <Text style={styles.text}>Mental Health due to stress</Text>
@@ -75,14 +76,14 @@ function TabBar() {
                 }}>
                 <Avatar.Icon size={40} icon="search" />
                 <Text style={styles.helperText}>24th July,</Text>
-                <Text style={styles.helperText}>2pm - 4pm</Text>
+                <Text style={styles.helperText}>4pm - 5pm</Text>
               </View>
               <View style={{ flex: 0.8, padding: 5 }}>
                 <Text style={styles.text}>Mental Health due to stress</Text>
                 <Text style={styles.helperText}>taken by Dr. Anirudh</Text>
                 <View style={{ marginVertical: 10 }}></View>
                 <View style={styles.inlineView}>
-                  <Button mode="contained" style={{ width: 70 }}>
+                  <Button mode="contained" style={{ width: 70 }}     onPress={() => Linking.openURL('https://meet.google.com/ruy-exui-wkz')}>
                     Join
                   </Button>
                 </View>

@@ -88,7 +88,10 @@ const App = () => {
   };
 
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
-
+  useEffect(() => {
+    console.disableYellowBox = true;
+ 
+  }, []);
   return (
     <StoreProvider store={store}>
       <PaperProvider theme={theme}>
