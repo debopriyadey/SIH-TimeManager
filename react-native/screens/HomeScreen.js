@@ -39,7 +39,9 @@ export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const user = useSelector((state) => state.user);
   const onChangeSearch = (query) => setSearchQuery(query);
-  const [upcomingTask, setUpcomingTask] = React.useState({});
+  const [upcomingTask, setUpcomingTask] = React.useState({
+
+  });
   const userToken = useSelector((state) => state.user?.token)
   
 
@@ -47,6 +49,8 @@ export default function HomeScreen({ navigation }) {
     (async() => {
       const currentTime = new Date();
     const {data} = await api.getUpcomingTask(currentTime, userToken)
+    console.log("upcoming ", data)
+    if(data)
     setUpcomingTask(data)
   })()
 
