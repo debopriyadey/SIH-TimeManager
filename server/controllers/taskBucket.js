@@ -2,6 +2,7 @@ const { TASK_TYPE } = require('../constant.js');
 const Tasks = require('../models/task.js');
 const Users = require('../models/users');
 const url = require("url")
+var mongoose = require('mongoose');
 
 const createTask = async (req, res, next) => {
     const { title, type, description, startTime, duration, tags, sharedWith, canView, canEdit, priority, taskDays } = req.body;
@@ -106,7 +107,7 @@ const getTaskSuggestion = async (req, res, next) => {
     const title = queryData.q;
     console.log(title)
     try {
-        const data = await Tasks.find({ title: new RegExp(`^${title}`, 'i') }).select('title').lean()
+        const data = await Tasks.find({ title: new RegExp(`^${title}`, 'i') }).lean()
         return res.status(200).json(data);
     } catch (error) {
         return next(error)
@@ -172,7 +173,8 @@ const updateTask = async (req, res, next) => {
     }
 
     try {
-        const task = await Tasks.findOne({ _id: taskId })
+        console.log(taskId)
+        const task = await Tasks.findOne({ _id: mongoose.Types.ObjectId(taskId) })
         const previousUsers = task.sharedWith;
         const removedUsers = previousUsers.filter(x => !newUsers.includes(x));
         const addedUsers = newUsers.filter(x => !previousUsers.includes(x));

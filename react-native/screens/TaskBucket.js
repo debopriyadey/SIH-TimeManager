@@ -11,6 +11,8 @@ import TaskForm from '../components/TaskBucket/BucketTaskForm'
 import { Searchbar, Avatar, Button, Card, Title, Paragraph, Chip, Portal, Provider, Modal, Checkbox } from 'react-native-paper';
 import BucketList from '../components/TaskBucket/BucketList';
 import { SHARING_TYPE, QUERY_FILTER } from '../constants';
+import * as api from '../api'
+
 
 export default function TaskBucket({ navigation }) {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -19,10 +21,10 @@ export default function TaskBucket({ navigation }) {
     const [searchResult, setSearchResult] = React.useState([]);
     const [isSelected, setSelection] = React.useState(false);
 
-    const getSearchResult = debounce(async (username) => {
+    const getSearchResult = debounce(async (val) => {
         try {
-            const { data } = await api.bucketSearch(username);
-            setSearchResult(data);
+            const { data } = await api.getTaskSuggestion(val);
+            setData(data);
             console.log(data)
         } catch (error) {
             console.log(error)
@@ -32,20 +34,13 @@ export default function TaskBucket({ navigation }) {
     const handleSearchChange = (val) => {
         setSearchQuery(val);
         console.log(val)
-        // getSearchResult(val);
+        getSearchResult(val);
     }
-    const userId = '12345688'
-
-    // const data = [{
-    //     title: "Coding",
-    //     description: "Something about the task",
-    //     duration: "30",
-    //     username: "debo",
-    //     canEdit: 'only_with',
-    //     canView: 'only_with',
-    //     creator: '12345688',
-    //     sharedWith: ['1234', '2345']
-    // }]
+    
+    React.useEffect(() => {
+        getSearchResult('');
+    }, [])
+    
 
     const [data, setData] = React.useState([])
     const [visible, setVisible] = React.useState(false);

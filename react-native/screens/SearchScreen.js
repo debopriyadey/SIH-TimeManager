@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { debounce } from '../utils'
+import * as api from '../api'
 
 // You can import from local files
 // or any pure javascript modules available in npm
@@ -11,8 +13,30 @@ import { Searchbar, Avatar, Button, Card, Title, Paragraph } from 'react-native-
 
 export default function SearchScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [type, setType] = React.useState('')
+  const [data, setData] = React.useState([])
 
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const getSearchResult = debounce(async (val) => {
+    try {
+      if (type == 'group') {
+        const { data } = await api.getTaskSuggestion(val);
+        setData(data);
+        console.log('group')
+      }
+      if (type == 'task') {
+        const { data } = await api.getTaskSuggestion(val);
+        setData(data);
+        console.log(data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }, 200);
+
+  const handleSearchChange = (val) => {
+    setSearchQuery(val);
+    getSearchResult(val);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,7 +56,7 @@ export default function SearchScreen({ navigation }) {
         </View>
         <Searchbar
           placeholder="Search"
-          onChangeText={onChangeSearch}
+          onChangeText={handleSearchChange}
           value={searchQuery}
           icon={
             () => <Image
@@ -46,69 +70,42 @@ export default function SearchScreen({ navigation }) {
           }
         />
         <View style={[styles.inlineView, { justifyContent: 'space-around', marginTop: 20 }]}>
-          <Image
-            source={require('../assets/groupsImg.png')}
-            resizeMode="cover"
-            style={{
-              width: wp('45%'),
-              height: hp('16%'),
-            }}
-          />
-          <Image
-            source={require('../assets/taskImg.png')}
-            resizeMode="cover"
-            style={{
-              width: wp('45%'),
-              height: hp('16%'),
-            }}
-          />
-        </View>
-        <Text style={styles.heading}>Select Your Sort</Text>
-        <View style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
-          <Button
-            style={{ margin: 5 }}
-            mode="outlined"
-            onPress={() => console.log('Pressed')}>
-            All
-          </Button>
-          <Button
-            style={{ margin: 5 }}
-            mode="outlined"
-            onPress={() => console.log('Pressed')}>
-            Recent
-          </Button>
-          <Button
-            style={{ margin: 5 }}
-            mode="outlined"
-            onPress={() => console.log('Pressed')}>
-            Priority
-          </Button>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => setType('group')}
+          >
+            <Image
+              source={require('../assets/groupsImg.png')}
+              resizeMode="cover"
+              style={{
+                width: wp('45%'),
+                height: hp('16%'),
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => setType('task')}
+          >
+            <Image
+              source={require('../assets/taskImg.png')}
+              resizeMode="cover"
+              style={{
+                width: wp('45%'),
+                height: hp('16%'),
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.resCardCont}>
-          <Card style={styles.resCard}>
-            <Card.Content>
-              <Title>Card title</Title>
-              <Paragraph>Card content</Paragraph>
-            </Card.Content>
-          </Card>
-          <Card style={styles.resCard}>
-            <Card.Content>
-              <Title>Card title</Title>
-              <Paragraph>Card content</Paragraph>
-            </Card.Content>
-          </Card>
-          <Card style={styles.resCard}>
-            <Card.Content>
-              <Title>Card title</Title>
-              <Paragraph>Card content</Paragraph>
-            </Card.Content>
-          </Card>
-          <Card style={styles.resCard}>
-            <Card.Content>
-              <Title>Card title</Title>
-              <Paragraph>Card content</Paragraph>
-            </Card.Content>
-          </Card>
+          {data.map((res) => (
+            <Card style={styles.resCard}>
+              <Card.Content>
+                <Title>{res.title}</Title>
+                <Paragraph>{res.description}</Paragraph>
+              </Card.Content>
+            </Card>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>

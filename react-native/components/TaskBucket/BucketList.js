@@ -47,7 +47,7 @@ export default function BucketList({ task }) {
                             <Title>{task.title}</Title>
                             <Text>@{task.username}</Text>
                         </View>
-                        <Paragraph>{task.desc}</Paragraph>
+                        <Paragraph>{task.description}</Paragraph>
                         <View style={[styles.inlineView, { justifyContent: 'flex-start' }]}>
                             <Button mode="contained" style={styles.btn}>
                                 <Text style={styles.btnText}>Schedule</Text>

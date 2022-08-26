@@ -267,8 +267,8 @@ const Pomodoro = ({ navigation }) => {
                     }} >
                         Reset
                     </Button>
-                    <Button mode="contained" style={styles.button} onPress={handleNotifications} >
-                        notification
+                    <Button mode="contained" style={styles.button} onPress={() => navigation.navigate('Focus')} >
+                        Enter Focus Mode
                     </Button>
                 </View>
             </Provider>

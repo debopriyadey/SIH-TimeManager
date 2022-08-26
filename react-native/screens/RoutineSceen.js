@@ -20,7 +20,7 @@ export default function RoutineScreen({ navigation }) {
 
     const getSearchResult = debounce(async (username) => {
         try {
-            const { data } = await api.bucketSearch(username);
+            const { data } = await api.getTaskSuggestion(username);
             setSearchResult(data);
             console.log(data)
         } catch (error) {

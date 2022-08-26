@@ -178,7 +178,7 @@ function BucketTaskForm({ task, isUpdate, setData }) {
                         </View>
                     </View>
                     {
-                        todoData.canEdit === SHARING_TYPE.ONLY_WITH &&
+                        todoData.canView === SHARING_TYPE.ONLY_WITH ||  todoData.canEdit === SHARING_TYPE.ONLY_WITH &&
                         <View style={styles.inlineView}>
                             <Text style={{ fontSize: 18 }}> Shared With </Text>
                             <TouchableOpacity onPress={showSharedModal}>
