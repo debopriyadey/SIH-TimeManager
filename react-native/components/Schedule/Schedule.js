@@ -113,10 +113,10 @@ function Schedule({ navigation }) {
                       <Title>{res.title}</Title>
                       <Text>@{res.username}</Text>
                       <Paragraph>{res.description}</Paragraph>
-                      {res.status == 'pending' ?
+                      {/* {res.status == 'pending' ?
                         <Button onPress={() => changeStatus(res, 'ongoing')}>Start</Button>
                         : <Button onPress={() => changeStatus(res, 'finished')}>End</Button>
-                      }
+                      } */}
                     {/* </>
                 } */}
 

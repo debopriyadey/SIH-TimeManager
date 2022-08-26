@@ -71,7 +71,7 @@ export function DrawerContent(props) {
               </View>
             </View>
 
-            <View style={styles.row}>
+            {/* <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
                   80
@@ -84,7 +84,7 @@ export function DrawerContent(props) {
                 </Paragraph>
                 <Caption style={styles.caption}>Followers</Caption>
               </View>
-            </View>
+            </View> */}
           </View>
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem

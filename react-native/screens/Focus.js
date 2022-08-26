@@ -116,7 +116,7 @@ const Focus = ({ navigation }) => {
         <View>
           <Text style={styles.music_title}>{currMusic.title}</Text>
           <Text style={[styles.focus_time, { textAlign: "center" }]}>
-            43:20:10
+            00:00:00
           </Text>
         </View>
       </View>
