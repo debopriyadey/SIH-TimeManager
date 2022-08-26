@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Switch, FlatList, StyleSheet } from "react-native";
+import { getDateValue } from "../../utils";
 import DayRepeat from "../Common/DayRepeat";
 
 function RepeatView({ todoData, Weekdays, setTodoData }) {
@@ -14,13 +15,13 @@ function RepeatView({ todoData, Weekdays, setTodoData }) {
           onValueChange={(newValue) => {
             if (newValue === true) {
               const tempDays = [
-                "Sun",
-                "Mon",
-                "Tue",
-                "Wed",
-                "Thu",
-                "Fri",
-                "Sat",
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
               ];
               setTodoData((prev) => ({
                 ...prev,
@@ -42,14 +43,17 @@ function RepeatView({ todoData, Weekdays, setTodoData }) {
             return (
               <DayRepeat
                 name={item.name}
-                selected={todoData.days.includes(item.name) ? true : false}
+                selected={todoData.days.includes(getDateValue(item.name)) ? true : false}
                 onPress={(name) => {
+                  console.log(name)
+                  let day = getDateValue(name)
+
                   const tempDays = [...todoData.days];
-                  if (todoData.days.includes(name)) {
-                    const od = tempDays.filter((day) => day !== name);
+                  if (tempDays.includes(day)) {
+                    const od = tempDays.filter((d) => d !== day);
                     setTodoData((prev) => ({ ...prev, days: od }));
                   } else {
-                    tempDays.push(name);
+                    tempDays.push(day);
                     setTodoData((prev) => ({
                       ...prev,
                       days: tempDays,

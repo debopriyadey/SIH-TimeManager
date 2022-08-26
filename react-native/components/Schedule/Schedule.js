@@ -76,7 +76,7 @@ function Schedule({ navigation }) {
           onChange={(newDate) => setDate(newDate)}
         />
       </View>
-      <View style={styles.taskView}>
+      <ScrollView style={styles.taskView}>
         <Text style={{ fontSize: 20, margin: 10 }}>
           Tasks of -{" "}
           {isSameDay(new Date(), date) ? "Today" : format(date, "do MMMM")}
@@ -100,7 +100,7 @@ function Schedule({ navigation }) {
             </Card>
           </View>
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 }

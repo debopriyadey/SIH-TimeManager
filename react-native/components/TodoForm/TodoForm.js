@@ -119,9 +119,9 @@ function TodoForm({ navigation }) {
       todoData.urgent &&
       todoData.importance
     ) {
-
+      
     try {
-      let priority = todoData.urgent + todoData.importance;
+      let priority = +todoData.urgent +todoData.importance;
       priority = priority/2;
       priority = priority === 0? 1: priority;
       const reqData = {
@@ -132,8 +132,11 @@ function TodoForm({ navigation }) {
         endTime: todoData.endTime,
         duration: todoData.duration,
         tags: todoData.tags,
-        priority: priority
+        priority: priority,
+        taskDays: todoData.days
+
       }
+      console.log(" we are adding new task with this data! ", reqData)
        // create 
        const { data: response } = await api.createTask(reqData, userToken);
       console.log(response);
