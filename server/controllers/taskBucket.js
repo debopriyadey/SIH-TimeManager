@@ -160,6 +160,18 @@ const getUpcomingTask = async (req, res, next) => {
     }
 }
 
+const changeTaskStatus = async (req, res, next) => {
+    const {id} = req.params;
+    const {status} = req.body
+    try {
+        const data = await Tasks.findOneAndUpdate({_id: id}, {status}, {new: true});
+        return res.status(200).json(data);
+    } catch (error) {
+        next(error)
+    }
+
+}
+
 
 const updateTask = async (req, res, next) => {
     const { id: taskId } = req.params;
@@ -212,5 +224,6 @@ module.exports = {
     getTaskSuggestion,
     updateTask,
     getSchedule,
-    getUpcomingTask
+    getUpcomingTask,
+    changeTaskStatus
 }

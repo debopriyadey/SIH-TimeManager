@@ -10,5 +10,6 @@ route.put('/:id', requiredLogin, controller.updateTask)
 route.get('/taskSearch', controller.getTaskSuggestion);
 route.get('/schedule/:date', requiredLogin, controller.getSchedule)
 route.get('/get_upcoming_task/:date', requiredLogin, controller.getUpcomingTask)
+route.patch('/change_status/:id', requiredLogin, controller.changeTaskStatus)
 
 module.exports=route;

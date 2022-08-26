@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { SHARING_TYPE, TASK_TYPE } = require("../constant");
+const { SHARING_TYPE, TASK_TYPE, TASK_STATUS } = require("../constant");
 const routine = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   routineName: String,
@@ -90,6 +90,14 @@ const taskSchema = mongoose.Schema(
     isLateCompleted: {
       type: Boolean,
       default: false,
+    },
+    status: {
+      type: String,
+      enum: [
+        TASK_STATUS.COMPLETE,
+        TASK_STATUS.ON_GOING,
+        TASK_STATUS.PENDING
+      ]
     },
     creatorId: {
       type: mongoose.Schema.Types.ObjectId,
