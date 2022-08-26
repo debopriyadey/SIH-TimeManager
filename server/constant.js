@@ -23,9 +23,16 @@ const QUERY_FILTER = {
   OWNED_BY_ME: "owned_by_me",
 };
 
+const TASK_STATUS = {
+  PENDING: 'pending',
+  ON_GOING: 'on_going',
+  COMPLETE: 'complete'
+}
+
 module.exports = {
   USER_TYPE,
   SHARING_TYPE,
   TASK_TYPE,
   QUERY_FILTER,
+  TASK_STATUS
 };
