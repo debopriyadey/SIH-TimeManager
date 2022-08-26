@@ -34,8 +34,8 @@ function TabBar() {
                   justifyContent: 'center',
                 }}>
                 <Avatar.Icon size={40} icon="search" />
-                <Text style={styles.helperText}>24th July,</Text>
-                <Text style={styles.helperText}>2pm - 4pm</Text>
+                <Text style={styles.helperText}>26th July,</Text>
+                <Text style={styles.helperText}>4pm - 5pm</Text>
               </View>
               <View style={{ flex: 0.8, padding: 5 }}>
                 <Text style={styles.text}>Mental Health due to stress</Text>
