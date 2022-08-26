@@ -98,6 +98,7 @@ const taskSchema = mongoose.Schema(
     username: {
       type: String,
     },
+    taskDays: [Number],
     sharedWith: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
