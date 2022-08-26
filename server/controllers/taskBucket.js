@@ -140,6 +140,27 @@ const getSchedule = async (req, res, next) => {
 }
 
 
+const getUpcomingTask = async (req, res, next) => {
+    const { date } = req.params;
+    const givenDate = new Date(date);
+    // find all the task which start from date start and date end.
+    try {
+        const data = await Tasks.findOne({
+                startTime: {
+                    $gte: givenDate,
+                }
+            ,
+            creatorId: req.user._id,
+            type: TASK_TYPE.SCHEDULE
+
+        }).lean()
+        return res.status(200).json(data);
+    } catch (error) {
+        return next(error)
+    }
+}
+
+
 const updateTask = async (req, res, next) => {
     const { id: taskId } = req.params;
     const { title, type, description, startTime, duration, tags, sharedWith: newUsers, canView, canEdit } = req.body;
@@ -190,5 +211,6 @@ module.exports = {
     getTasks,
     getTaskSuggestion,
     updateTask,
-    getSchedule
+    getSchedule,
+    getUpcomingTask
 }
